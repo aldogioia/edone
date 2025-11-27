@@ -1,0 +1,110 @@
+header {
+  height: 100svh;
+  width: 100%;
+  position: relative;
+  color: var(--text-on-black-strong);
+  background: #000;
+}
+
+nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 16pt 32pt;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 99;
+}
+
+h1 {
+  display: flex;
+  align-items: center;
+  gap: 4pt;
+  font-size: clamp(1.25rem, 1vw + 1rem, 1.5rem);
+}
+
+h1 > img {
+  height: 24pt;
+}
+
+ul {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8pt;
+}
+
+li {
+  list-style: none;
+}
+
+figure {
+  position: relative;
+  display: flex;
+  align-items: end;
+  height: 100%;
+  width: 100%;
+  padding: 32pt;
+}
+
+figure > img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  opacity: .6;
+}
+
+figcaption {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  z-index: 1;
+}
+
+figcaption > h5 {
+  margin-bottom: 8pt;
+}
+
+figcaption > p {
+  max-width: 43ch;
+  margin: 6pt 0;
+}
+
+figcaption > button {
+  margin: 6pt 0 12pt 0;
+}
+
+figcaption > div {
+  display: flex;
+  gap: 16pt;
+  padding: 16pt 0;
+  width: fit-content;
+  border-top: 1px solid var(--fill);
+}
+
+figcaption > div > p {
+  font-size: clamp(1rem, 0.5vw + 1rem, 1.25rem);
+  color: var(--text-on-black-weak);
+}
+
+figcaption > div > p > span {
+  color: var(--brand-strong);
+}
+
+
+@media (max-width: 568px) {
+  ul {
+    display: none;
+  }
+
+  nav, figure {
+    padding: 8pt;
+  }
+}
