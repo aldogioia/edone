@@ -29,10 +29,41 @@
   </figure>
 </header>
 <main>
-  <section>
+  <section class="service-section">
     <h4>I nostri Servizi</h4>
     <h5>Trattamenti d'Eccellenza</h5>
     <p>Ogni servizio è un viaggio sensoriale progettato per rigenerare corpo e mente, utilizzando solo le migliori tecnologie e prodotti del settore</p>
+    <div class="service-grid">
+      <app-service
+        [description]="'Descrizione del servizio qui'"
+        [duration]="'60'"
+        [imgUrl]="'hero.jpg'"
+        [name]="'Nome del Servizio'"
+        [price]="'80'">
+      </app-service>
+      <app-service
+        [description]="'Descrizione del servizio qui'"
+        [duration]="'60'"
+        [imgUrl]="'hero.jpg'"
+        [name]="'Nome del Servizio'"
+        [price]="'80'">
+      </app-service>
+      <app-service
+        [description]="'Descrizione del servizio qui'"
+        [duration]="'60'"
+        [imgUrl]="'hero.jpg'"
+        [name]="'Nome del Servizio'"
+        [price]="'80'">
+      </app-service>
+      <app-service
+        [description]="'Descrizione del servizio qui'"
+        [duration]="'60'"
+        [imgUrl]="'hero.jpg'"
+        [name]="'Nome del Servizio'"
+        [price]="'80'">
+      </app-service>
+    </div>
+    <button class="accent">Scarica l'app per tutti i servizi</button>
   </section>
   <section></section>
   <section></section>
