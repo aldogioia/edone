@@ -1,5 +1,12 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 64pt;
+  width: 100%;
+}
+
 header {
-  height: 100svh;
+  height: 100lvh;
   width: 100%;
   position: relative;
   color: var(--text-on-black-strong);
@@ -23,10 +30,18 @@ h1 {
   align-items: center;
   gap: 4pt;
   font-size: clamp(1.25rem, 1vw + 1rem, 1.5rem);
+  color: var(--text-on-black-strong);
 }
 
 h1 > img {
   height: 24pt;
+  padding: 4.5pt 2pt;
+  border-radius: 50%;
+  background: var(--brand-strong);
+}
+
+h5 {
+  color: var(--brand-strong);
 }
 
 ul {
@@ -104,28 +119,54 @@ figcaption > div > p > span {
 }
 
 
-.service-section {
-  padding-top: 128px;
-  padding-left: 48px;
-  padding-right: 48px;
+section {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: 32pt;
+  padding: 16pt;
+}
+
+.title-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8pt;
+}
+
+.title-section > h4 {
+  padding: 4pt 8pt;
+  border-radius: 16pt;
+  font-size: 12pt;
+  display: flex;
+  align-items: center;
+  gap: 4pt;
+  background: var(--brand-fill);
+  stroke: var(--brand-strong);
+  border: 1px solid var(--brand-stroke-weak);
+}
+
+.title-section > h5 {
+  color: var(--text-strong);
 }
 
 .service-section > p {
+  max-width: 60ch;
   text-align: center;
 }
 
 .service-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24pt;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16pt;
   width: 100%;
-  margin: 32px 0;
-  height: 100%;
+}
+
+@media (max-width: 832px) {
+  .service-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 
 
@@ -134,15 +175,12 @@ figcaption > div > p > span {
     display: none;
   }
 
-  nav, figure {
+  nav, figure, section {
     padding: 8pt;
   }
-}
 
-@media (max-width: 568px) {
   .service-grid {
-    grid-template-columns: 1fr;
-    gap: 16pt;
+    gap: 8pt;
   }
 }
 

@@ -13,7 +13,7 @@
   --stroke-on-black-strong: #F2FAFB73;
   --stroke-on-black-weak: #F2FAFB33;
 
-  --fill: #FAF8FC1A;
+  --fill: #FAF8FC0D;
 
   --brand-strong: #00D492;
   --brand-weak: #00D492C7;
@@ -34,16 +34,13 @@ h1, h2 {
   color: var(--text-strong);
 }
 
-h1, h2, h3, h4, h5 {
+h3, h4, h5, button {
   font-weight: 400;
   color: var(--text-strong);
 }
 
-p, button {
-  font-weight: 300;
-}
-
 p {
+  font-weight: 300;
   color: var(--text-weak);
 }
 
@@ -77,12 +74,8 @@ h5, button {
   letter-spacing: 0.01em;
 }
 
-h5 {
-  color: var(--brand-strong);
-}
-
 p {
-  font-size: clamp(1.25rem, 1vw + 1rem, 1.5rem);
+  font-size: clamp(0.75rem, 2.5cqw + 0.25rem, 1.25rem);
   letter-spacing: 0.02em;
 }
 
@@ -92,7 +85,7 @@ button {
   gap: 8pt;
   padding: 8pt 16pt;
   border-radius: 24pt;
-  border: 1px solid var(--fill);
+  border: 1px solid var(--stroke-on-black-weak);
   background: var(--fill);
   backdrop-filter: blur(2pt);
   color: var(--text-on-black-strong);

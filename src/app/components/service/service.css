@@ -4,11 +4,15 @@ figure {
   height: 100%;
   width: 100%;
   padding: 16pt;
-  aspect-ratio: 1/0.8;
+  aspect-ratio: 14/9;
   background: #000;
   border-radius: 24px;
-
+  overflow: hidden;
   container-type: inline-size;
+}
+
+figure:hover {
+  box-shadow: 2px 2px 12px #00000080;
 }
 
 figure > img {
@@ -20,6 +24,11 @@ figure > img {
   object-fit: cover;
   opacity: .8;
   border-radius: 24px;
+  transition: .3s ease;
+}
+
+figure:hover > img {
+  scale: 1.05;
 }
 
 figcaption {
@@ -32,15 +41,13 @@ figcaption {
   z-index: 1;
 }
 
-
 .service-icon {
-  width: clamp(28px, 8cqw, 40px);
-  height: clamp(28px, 8cqw, 40px);
   padding: clamp(4px, 2cqw, 8px);
+  width: fit-content;
   border-radius: 50%;
-  background-color: var(--stroke-on-black-strong);
-  opacity: .6;
-  border: 1px solid var(--stroke-on-black-strong);
+  background-color: var(--fill);
+  border: 1px solid var(--stroke-on-black-weak);
+  backdrop-filter: blur(2pt);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -51,42 +58,16 @@ figcaption {
   height: clamp(16px, 5cqw, 24px);
 }
 
-
-h4 {
+h5 {
   color: var(--text-on-black-strong);
 }
-
 
 .service-info {
   width: 100%;
 }
 
-.price-and-duration {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.price-and-duration > .element {
-  display: flex;
-  gap: 8px;
-}
-
 .service-description {
   color: var(--text-on-black-weak);
-}
-
-
-h4 {
-  font-size: clamp(1rem, 2.5cqw + 0.5rem, 2rem);
-}
-
-h5 {
-  font-size: clamp(0.8rem, 1.8cqw + 0.4rem, 1.25rem);
-}
-
-p {
-  font-size: clamp(0.75rem, 2.5cqw + 0.25rem, 1.25rem);
 }
 
 
