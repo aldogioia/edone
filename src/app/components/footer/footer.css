@@ -1,8 +1,14 @@
 :host {
   display: flex;
+  align-items: center;
   flex-direction: column;
   gap: 16pt;
   background: #0A0A0A;
+}
+
+section {
+  max-width: 1280pt;
+  width: 100%;
 }
 
 section:first-of-type {
@@ -76,8 +82,12 @@ h1 > img {
   border-radius: 8pt;
   text-decoration: none;
   background: var(--fill);
-  border: 1px solid var(--stroke-weak);
+  border: 1px solid var(--stroke-on-black-weak);
   stroke: var(--text-on-black-strong);
+}
+
+.social hugeicons-icon {
+  display: flex;
 }
 
 .box > a {

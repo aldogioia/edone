@@ -1,0 +1,34 @@
+:host {
+  display: flex;
+  align-items: center;
+  gap: 8pt;
+}
+
+.app-store {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4pt;
+  background: var(--text-strong);
+  border-radius: 8pt;
+  padding: 8pt;
+  cursor: pointer;
+}
+
+.app-store > svg {
+  fill: var(--text-on-black-strong);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+}
+
+.info > span {
+  font-size: 10pt;
+  color: var(--text-on-black-weak);
+}
+
+.info > p {
+  color: var(--text-on-black-strong);
+}

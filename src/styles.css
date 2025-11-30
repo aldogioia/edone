@@ -9,9 +9,9 @@
   --text-on-black-weak: #F2FAFBA6;
 
   --stroke-strong: #20202073;
-  --stroke-weak: #20202033;
+  --stroke-weak: #20202026;
   --stroke-on-black-strong: #F2FAFB73;
-  --stroke-on-black-weak: #F2FAFB33;
+  --stroke-on-black-weak: #F2FAFB26;
 
   --fill: #FAF8FC0D;
 
@@ -77,6 +77,10 @@ h5, button {
 p {
   font-size: clamp(0.75rem, 2.5cqw + 0.25rem, 1.25rem);
   letter-spacing: 0.02em;
+}
+
+svg {
+  stroke-width: 2px;
 }
 
 button {

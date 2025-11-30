@@ -5,6 +5,8 @@
   width: 100%;
 }
 
+
+/*------------HERO--------------*/
 header {
   height: 100lvh;
   width: 100%;
@@ -28,36 +30,16 @@ nav {
 h1 {
   display: flex;
   align-items: center;
-  gap: 4pt;
+  gap: 8pt;
   font-size: clamp(1.25rem, 1vw + 1rem, 1.5rem);
   color: var(--text-on-black-strong);
 }
 
 h1 > img {
-  height: 24pt;
-  padding: 4.5pt 2pt;
-  border-radius: 50%;
-  background: var(--brand-strong);
+  height: 51px;
 }
 
-h5 {
-  color: var(--brand-strong);
-}
-
-ul {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 8pt;
-}
-
-li {
-  list-style: none;
-}
-
-figure {
+.hero {
   position: relative;
   display: flex;
   align-items: end;
@@ -66,7 +48,7 @@ figure {
   padding: 32pt;
 }
 
-figure > img {
+.hero > img {
   position: absolute;
   top: 0;
   left: 0;
@@ -81,14 +63,22 @@ figcaption {
   flex-direction: column;
   width: 100%;
   z-index: 1;
+  gap: 16pt;
 }
 
-figcaption > h4 {
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8pt;
+}
+
+.wrap > h4 {
   color: var(--text-on-black-strong);
 }
 
-figcaption > h5 {
+.wrap > h5 {
   margin-bottom: 8pt;
+  color: var(--brand-strong);
 }
 
 figcaption > p {
@@ -101,7 +91,7 @@ figcaption > button {
   margin: 6pt 0 12pt 0;
 }
 
-figcaption > div {
+.stats {
   display: flex;
   gap: 16pt;
   padding: 16pt 0;
@@ -109,22 +99,23 @@ figcaption > div {
   border-top: 1px solid var(--fill);
 }
 
-figcaption > div > p {
+.stats > p {
   font-size: clamp(1rem, 0.5vw + 1rem, 1.25rem);
   color: var(--text-on-black-weak);
 }
 
-figcaption > div > p > span {
+.stats > p > span {
   color: var(--brand-strong);
 }
 
 
+/*------------SEZIONI--------------*/
 section {
-  width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 32pt;
+  width: 100%;
+  max-width: 1280pt;
   padding: 16pt;
 }
 
@@ -133,6 +124,10 @@ section {
   flex-direction: column;
   align-items: center;
   gap: 8pt;
+}
+
+.title-section.left {
+  align-items: start;
 }
 
 .title-section > h4 {
@@ -151,6 +146,12 @@ section {
   color: var(--text-strong);
 }
 
+
+/*------------SERVIZI--------------*/
+.service-section{
+  align-items: center;
+}
+
 .service-section > p {
   max-width: 60ch;
   text-align: center;
@@ -163,12 +164,75 @@ section {
   width: 100%;
 }
 
+/*------------APP--------------*/
+.app-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.sub-section {
+  display: flex;
+  flex-direction: column;
+  gap: 32pt;
+  max-width: 450pt;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 8pt;
+  width: fit-content;
+}
+
+.mock {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16pt;
+  height: fit-content;
+  padding: 16pt;
+}
+
+.mock::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(0, 212, 146, 0.20) 0%, rgba(0, 187, 167, 0.20) 100%);
+  filter: blur(64px);
+}
+
+.mock > img {
+  max-height: 500pt;
+  width: 100%;
+}
+
+.mock > .app-stores {
+  display: none;
+}
+
 @media (max-width: 832px) {
   .service-grid {
     grid-template-columns: repeat(1, 1fr);
   }
-}
 
+  .app-section {
+    flex-direction: column;
+  }
+
+  .sub-section > .app-stores {
+    display: none;
+  }
+
+  .mock > .app-stores {
+    display: flex;
+  }
+}
 
 @media (max-width: 568px) {
   ul {

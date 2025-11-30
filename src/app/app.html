@@ -4,20 +4,15 @@
       <img src="img.png" alt="Logo">
       Edoné
     </h1>
-
-    <ul>
-      <li>Servizi</li>
-      <li>Chi siamo</li>
-      <li>Contatti</li>
-    </ul>
-
     <button>La nostra App</button>
   </nav>
-  <figure>
+  <figure class="hero">
     <img src="hero.jpg" alt="Hero image">
     <figcaption>
-      <h4>La Tua Bellezza</h4>
-      <h5>Naturalmente Radiosa</h5>
+      <div class="wrap">
+        <h4>La Tua Bellezza</h4>
+        <h5>Naturalmente Radiosa</h5>
+      </div>
       <p>Un'oasi di benessere dove ogni trattamento è pensato per esaltare la tua naturale bellezza in un ambiente elegante e rilassante.</p>
       <button class="accent">Scarica la nostra App</button>
       <div class="stats">
@@ -39,28 +34,28 @@
       <app-service
         [description]="'Descrizione del servizio qui'"
         [duration]="'60'"
-        [imgUrl]="'hero.jpg'"
+        [imgUrl]="'laserHairRemoval.jpeg'"
         [name]="'Nome del Servizio'"
         [price]="'80'">
       </app-service>
       <app-service
         [description]="'Descrizione del servizio qui'"
         [duration]="'60'"
-        [imgUrl]="'hero.jpg'"
+        [imgUrl]="'lashLift.jpeg'"
         [name]="'Nome del Servizio'"
         [price]="'80'">
       </app-service>
       <app-service
         [description]="'Descrizione del servizio qui'"
         [duration]="'60'"
-        [imgUrl]="'hero.jpg'"
+        [imgUrl]="'manicure.jpeg'"
         [name]="'Nome del Servizio'"
         [price]="'80'">
       </app-service>
       <app-service
         [description]="'Descrizione del servizio qui'"
         [duration]="'60'"
-        [imgUrl]="'hero.jpg'"
+        [imgUrl]="'massage.jpeg'"
         [name]="'Nome del Servizio'"
         [price]="'80'">
       </app-service>
@@ -68,7 +63,29 @@
     <button class="accent">Scarica l'app per tutti i servizi</button>
   </section>
   <section></section>
-  <section></section>
+  <section class="app-section">
+    <div class="sub-section">
+      <div class="title-section left">
+        <h4><hugeicons-icon [icon]="HoldPhoneIcon"></hugeicons-icon> La nostra App</h4>
+        <h5>La tua beauty routine a portata di tap!</h5>
+      </div>
+      <p>Scarica l'app di Edoné e porta con te un'esperienza premium. Prenota trattamenti, gestisci appuntamenti e accedi a vantaggi esclusivi ovunque tu sia.</p>
+      <div class="features">
+        @for (feature of features; let i = $index; track i) {
+          <app-app-feature
+            [icon]="feature.icon"
+            [title]="feature.title"
+            [description]="feature.description"
+          ></app-app-feature>
+        }
+      </div>
+      <app-app-stores class="app-stores"></app-app-stores>
+    </div>
+    <figure class="mock">
+      <img src="iphone.png" alt="Mock up">
+      <app-app-stores class="app-stores"></app-app-stores>
+    </figure>
+  </section>
   <section></section>
 </main>
 <footer>

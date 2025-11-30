@@ -1,0 +1,36 @@
+:host {
+  display: flex;
+  align-items: flex-start;
+  gap: 16pt;
+  border: 1px solid var(--brand-stroke-weak);
+  transition: .3s ease-in-out;
+  max-width: 200pt;
+  border-radius: 8pt;
+  padding: 8pt;
+}
+
+:host:hover {
+  border: 1px solid var(--brand-stroke-strong);
+}
+
+:host:hover > hugeicons-icon {
+  stroke: var(--brand-strong);
+}
+
+hugeicons-icon {
+  padding: 4pt;
+  border-radius: 8pt;
+  background: var(--brand-fill);
+  stroke: var(--brand-weak);
+  border: 1px solid var(--brand-stroke-weak);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: .3s ease-in-out;
+}
+
+div {
+  display: flex;
+  flex-direction: column;
+  gap: 4pt;
+}
