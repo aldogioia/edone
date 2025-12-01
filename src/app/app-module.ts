@@ -6,6 +6,7 @@ import { App } from './app';
 import { Footer } from './components/footer/footer';
 import {HugeiconsIconComponent} from '@hugeicons/angular';
 import { Service } from './components/service/service';
+import { Rating } from './components/rating/rating';
 import { AppFeature } from './components/app-feature/app-feature';
 import { AppStores } from './components/app-stores/app-stores';
 
@@ -13,6 +14,8 @@ import { AppStores } from './components/app-stores/app-stores';
   declarations: [
     App,
     Service,
+    Footer,
+    Rating,
     Footer,
     AppFeature,
     AppStores

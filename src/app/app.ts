@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {
   Appointment02Icon, GiftIcon,
   HoldPhoneIcon,

@@ -1,0 +1,38 @@
+:host {
+  background-color: var(--background);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 24px;
+  width: min(100%, 100vw);
+  aspect-ratio: 1 / 1;
+  opacity: .8;
+}
+
+.user-rating {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stars {
+  display: flex;
+  gap: 8px;
+}
+
+.stars > svg {
+  width: clamp(16px, 2cqw, 24px);
+  height: clamp(16px, 2cqw, 24px);
+}
+
+img {
+  width: clamp(56px, 5cqw, 80px);
+  height: clamp(56px, 5cqw, 80px);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+
+
+

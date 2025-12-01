@@ -152,7 +152,11 @@ section {
   align-items: center;
 }
 
-.service-section > p {
+.service-section {
+  padding: 112px 48px;
+}
+
+.service-section > p, .ratings-section > p {
   max-width: 60ch;
   text-align: center;
 }
@@ -216,6 +220,30 @@ section {
   display: none;
 }
 
+/*------------VALUTAZIONI--------------*/
+.ratings-section {
+  background: linear-gradient(
+    135deg,
+    #ECFDF5 0%,
+    #F0FDFA 50%,
+    #FFF1F2 100%
+  );
+
+  padding: 112pt 48pt;
+}
+
+.ratings-section > .title-section > h4 {
+  background-color: var(--background);
+  opacity: .7;
+}
+
+.ratings-list {
+  display: flex;
+  gap: 16pt;
+  width: 100%;
+}
+
+
 @media (max-width: 832px) {
   .service-grid {
     grid-template-columns: repeat(1, 1fr);
@@ -245,6 +273,10 @@ section {
 
   .service-grid {
     gap: 8pt;
+  }
+
+  .ratings-list {
+    flex-direction: column;
   }
 }
 
