@@ -10,6 +10,11 @@
   opacity: .8;
 }
 
+:host:hover {
+  scale: 1.05;
+  box-shadow: 1px 1px 6px #00000080;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -30,7 +35,7 @@
   width: clamp(16px, 4cqw, 24px);
   aspect-ratio: 0.5;
   height: auto;
-  opacity: .5;
+  opacity: .4;
 }
 
 .stars {
