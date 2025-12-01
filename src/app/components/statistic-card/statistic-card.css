@@ -1,0 +1,32 @@
+:host {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.square {
+  width: 56px;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: linear-gradient(
+    135deg,
+    var(--brand-strong) 0%,
+    #00BBA7 100%
+  );
+}
+
+.square svg {
+  width: 28px;
+  height: 28px;
+  stroke: var(--fill);
+}
+
+p > span {
+  color: var(--brand-strong);
+}
+
+

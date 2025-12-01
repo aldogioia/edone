@@ -108,6 +108,10 @@ figcaption > button {
   color: var(--brand-strong);
 }
 
+h5.green {
+  color: var(--brand-strong);
+}
+
 
 /*------------SEZIONI--------------*/
 section {
@@ -144,6 +148,11 @@ section {
 
 .title-section > h5 {
   color: var(--text-strong);
+}
+
+.title-section.light-background > h4 {
+  background-color: var(--background);
+  opacity: .7;
 }
 
 
@@ -232,17 +241,59 @@ section {
   padding: 112pt 48pt;
 }
 
-.ratings-section > .title-section > h4 {
-  background-color: var(--background);
-  opacity: .7;
-}
-
 .ratings-list {
   display: flex;
   gap: 16pt;
   width: 100%;
 }
 
+/*------------CHI SIAMO--------------*/
+.who-we-are-section {
+  padding: 112pt 48pt;
+  display: flex;
+  align-items: start;
+  background: linear-gradient(
+    135deg,
+    #ECFDF5 0%,
+    #FFFFFF 50%,
+    #FFF1F2 100%
+  );
+}
+
+.who-we-are-section > .content {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.who-we-are-section > .content > img {
+  border-radius: 48px;
+  max-width: 350pt;
+  aspect-ratio: 1 / 1.2;
+  object-fit: cover;
+  width: clamp(180pt, 30vw, 350pt);
+}
+
+.who-we-are-section > .content > .text {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.stat-cards {
+  padding: 16px;
+  width: 100%;
+  display: flex;
+  justify-content: left;
+  gap: 64px;
+}
+
+/*------------MEDIA QUERY--------------*/
 
 @media (max-width: 832px) {
   .service-grid {
@@ -264,7 +315,9 @@ section {
   .ratings-list {
     flex-direction: column;
   }
+
 }
+
 
 @media (max-width: 568px) {
   ul {
@@ -278,5 +331,6 @@ section {
   .service-grid {
     gap: 8pt;
   }
+
 }
 
