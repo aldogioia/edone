@@ -260,6 +260,10 @@ section {
   .mock > .app-stores {
     display: flex;
   }
+
+  .ratings-list {
+    flex-direction: column;
+  }
 }
 
 @media (max-width: 568px) {
@@ -273,10 +277,6 @@ section {
 
   .service-grid {
     gap: 8pt;
-  }
-
-  .ratings-list {
-    flex-direction: column;
   }
 }
 
