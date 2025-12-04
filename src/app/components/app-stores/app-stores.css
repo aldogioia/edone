@@ -32,3 +32,16 @@
 .info > p {
   color: var(--text-on-black-strong);
 }
+
+@media (max-width: 480px) {
+  :host {
+    flex-direction: column;
+    gap: 8pt;
+  }
+
+  .app-store {
+    width: 100%;
+    justify-content: center;
+  }
+
+}

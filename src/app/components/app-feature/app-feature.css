@@ -3,7 +3,7 @@
   align-items: flex-start;
   gap: 16pt;
   border: 1px solid var(--brand-stroke-weak);
-  transition: .3s ease-in-out;
+  transition: transform .3s ease, border .3s ease;
   max-width: 200pt;
   border-radius: 8pt;
   padding: 8pt;
@@ -11,6 +11,7 @@
 
 :host:hover {
   border: 1px solid var(--brand-stroke-strong);
+  transform: translate(0, -4pt);
 }
 
 :host:hover > hugeicons-icon {
@@ -33,4 +34,11 @@ div {
   display: flex;
   flex-direction: column;
   gap: 4pt;
+}
+
+
+@media (max-width: 480px) {
+  :host {
+    max-width: 100%;
+  }
 }

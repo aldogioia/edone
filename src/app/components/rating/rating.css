@@ -7,6 +7,7 @@
   border-radius: 24px;
   width: min(100%, 100vw);
   opacity: .8;
+  transition: transform .3s ease, border .3s ease;
 }
 
 .header {
@@ -47,6 +48,11 @@ img {
   height: clamp(56px, 5cqw, 80px);
   border-radius: 50%;
   object-fit: cover;
+}
+
+:host:hover {
+  transform: translate(0, -10px);
+  border: 1px solid var(--brand-strong);
 }
 
 

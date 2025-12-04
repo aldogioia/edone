@@ -130,3 +130,11 @@ section:last-of-type::after {
     gap: 16pt;
   }
 }
+
+@media (max-width: 480px) {
+
+  section:first-of-type {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+}

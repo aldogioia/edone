@@ -9,7 +9,7 @@ import { Service } from './components/service/service';
 import { Rating } from './components/rating/rating';
 import { AppFeature } from './components/app-feature/app-feature';
 import { AppStores } from './components/app-stores/app-stores';
-import { StatisticCard } from './components/statistic-card/statistic-card';
+
 
 @NgModule({
   declarations: [
@@ -19,8 +19,7 @@ import { StatisticCard } from './components/statistic-card/statistic-card';
     Rating,
     Footer,
     AppFeature,
-    AppStores,
-    StatisticCard
+    AppStores
   ],
   imports: [
     BrowserModule,
