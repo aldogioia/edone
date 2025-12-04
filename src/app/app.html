@@ -64,38 +64,36 @@
   </section>
 
   <section class="who-we-are-section">
-    <div class="content">
-      <div class="text">
-        <div class="title-section light-background">
-          <h4>Chi Siamo</h4>
-        </div>
-        <div class="sub-title">
-          <h5>Dove la bellezza</h5>
-          <h5 class="green">Incontra l'arte</h5>
-        </div>
-        <p>Dal 2010 creiamo esperienze di bellezza uniche, dove ogni trattamento è un viaggio sensoriale pensato per esaltare la tua naturale bellezza.</p>
-        <p>Il nostro team di esperte certificate utilizza solo prodotti premium e tecnologie all'avanguardia in un ambiente raffinato che ti farà sentire speciale ad ogni visita.</p>
+    <div class="text">
+      <div class="title-section light-background">
+        <h4>Chi Siamo</h4>
       </div>
-      <img src="hero.jpg" alt="Who we are">
+      <div class="sub-title">
+        <h5>Dove la bellezza</h5>
+        <h5 class="green">Incontra l'arte</h5>
+      </div>
+      <p>Dal 2010 creiamo esperienze di bellezza uniche, dove ogni trattamento è un viaggio sensoriale pensato per esaltare la tua naturale bellezza.</p>
+      <p>Il nostro team di esperte certificate utilizza solo prodotti premium e tecnologie all'avanguardia in un ambiente raffinato che ti farà sentire speciale ad ogni visita.</p>
+      <div class="stat-cards">
+        <app-statistic-card
+          [name]="'Anni'"
+          [value]="'15+'">
+        </app-statistic-card>
+        <app-statistic-card
+          [name]="'Clienti'"
+          [value]="'2k+'">
+        </app-statistic-card>
+        <app-statistic-card
+          [name]="'Trattamenti'"
+          [value]="'20k+'">
+        </app-statistic-card>
+        <app-statistic-card
+          [name]="'Rating'"
+          [value]="'4.7'">
+        </app-statistic-card>
+      </div>
     </div>
-    <div class="stat-cards">
-      <app-statistic-card
-        [name]="'Anni'"
-        [value]="'15+'">
-      </app-statistic-card>
-      <app-statistic-card
-        [name]="'Clienti'"
-        [value]="'2k+'">
-      </app-statistic-card>
-      <app-statistic-card
-        [name]="'Trattamenti'"
-        [value]="'20k+'">
-      </app-statistic-card>
-      <app-statistic-card
-        [name]="'Rating'"
-        [value]="'4.7'">
-      </app-statistic-card>
-    </div>
+    <img src="hero.jpg" alt="Who we are">
   </section>
 
   <section class="ratings-section">
