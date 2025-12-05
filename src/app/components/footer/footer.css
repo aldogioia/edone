@@ -137,4 +137,7 @@ section:last-of-type::after {
     grid-template-columns: repeat(1, 1fr);
   }
 
+  section:last-of-type > p:last-of-type {
+    text-align: center;
+  }
 }

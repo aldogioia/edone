@@ -10,8 +10,6 @@ export class Rating {
   rating = input.required<number>();
   text = input.required<string>();
   name = input.required<string>();
-  work = input.required<string>();
-  imgUrl = input.required<string>();
 
   get stars() {
     return Array.from({ length: this.rating() });

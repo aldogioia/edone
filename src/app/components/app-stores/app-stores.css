@@ -37,6 +37,7 @@
   :host {
     flex-direction: column;
     gap: 8pt;
+    width: 100%;
   }
 
   .app-store {

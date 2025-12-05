@@ -7,10 +7,11 @@ figure {
   border-radius: 24px;
   overflow: hidden;
   container-type: inline-size;
+  transition: .3s ease-in-out;
 }
 
 figure:hover {
-  box-shadow: 2px 2px 12px #00000080;
+  box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.3);
 }
 
 figure > img {
@@ -51,6 +52,7 @@ figcaption {
   display: flex;
   align-items: center;
   justify-content: center;
+  fill: none;
 }
 
 .service-icon svg {

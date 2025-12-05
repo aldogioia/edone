@@ -1,10 +1,15 @@
 :host {
   display: flex;
   flex-direction: column;
-  gap: 64pt;
+  gap: 96pt;
   width: 100%;
 }
 
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 64pt;
+}
 
 /*------------HERO--------------*/
 header {
@@ -27,16 +32,9 @@ nav {
   z-index: 99;
 }
 
-h1 {
-  display: flex;
-  align-items: center;
-  gap: 8pt;
-  font-size: clamp(1.25rem, 1vw + 1rem, 1.5rem);
-  color: var(--text-on-black-strong);
-}
-
-h1 > img {
-  height: 51px;
+nav > img {
+  height: 50px;
+  filter: invert(100%);
 }
 
 .hero {
@@ -323,7 +321,16 @@ section {
 
 @media (max-width: 768px) {
   .ratings-section, .who-we-are-section, .service-section {
-    padding: 64pt 16pt;
+    padding: 16pt;
+  }
+
+  .hero {
+    padding: 16pt;
+  }
+
+  .hero button {
+    width: 100%;
+    justify-content: center;
   }
 }
 
@@ -333,12 +340,16 @@ section {
     display: none;
   }
 
-  nav, figure, section {
+  nav, figure {
     padding: 8pt;
   }
 
   .service-grid {
     gap: 8pt;
+  }
+
+  .title-section.left {
+    text-align: left;
   }
 
   .ratings-list {
