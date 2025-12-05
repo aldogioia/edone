@@ -29,6 +29,10 @@
   font-family: "Inter", sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 h1, h2 {
   font-weight: 500;
   color: var(--text-strong);
@@ -83,7 +87,8 @@ svg {
   stroke-width: 2px;
 }
 
-button {
+a.button {
+  text-decoration: none;
   display: flex;
   align-items: center;
   gap: 8pt;
@@ -98,10 +103,10 @@ button {
   transition: .3s ease-in-out;
 }
 
-button.accent {
+a.button.accent {
   background: var(--brand-strong);
 }
 
-button.accent:hover {
+a.button.accent:hover {
   background: var(--brand-weak);
 }

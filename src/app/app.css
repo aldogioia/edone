@@ -255,9 +255,9 @@ section {
 .who-we-are-section {
   padding: 112pt 32pt;
   display: flex;
-  flex-direction: row;
-  align-items: start;
-  justify-content: space-between;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   background: linear-gradient(
     135deg,
@@ -269,19 +269,22 @@ section {
 
 .who-we-are-section > img {
   border-radius: 24px;
-  max-width: 250pt;
+  max-width: 350pt;
   aspect-ratio: 1 / 1.2;
   object-fit: cover;
   width: clamp(180pt, 30vw, 350pt);
 }
 
 .who-we-are-section > .text {
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: start;
   justify-content: space-between;
   gap: 24px;
+}
+
+.text > p {
+  max-width: 60ch;
 }
 
 
