@@ -1,0 +1,23 @@
+<p> ICONA </p> <!-- todo -->
+<div class="header">
+  <h3>Centro Estetico Edonè</h3>
+  <p>Accedi al tuo account amministratore</p>
+</div>
+<form [formGroup]="loginForm" (ngSubmit)="login()">
+  <div class="form-control">
+    <label for="telephone">Telefono</label>
+    <input id="telephone" type="tel" [formControl]="loginForm.controls.telephone" placeholder="Telefono">
+    @if (loginForm.get('telephone')?.invalid && loginForm.get('telephone')?.touched) {
+      <p class="error">Inserisci un numero di telefono valido</p>
+    }
+  </div>
+  <div class="form-control">
+    <label for="password">Password</label>
+    <input id="password" type="password" [formControl]="loginForm.controls.password" placeholder="Password">
+    @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+      <p class="error">La password deve essere lunga almeno 8 caratteri e contenere almeno un numero</p>
+    }
+  </div>
+  <input id="login-btn" type="submit" value="Accedi">
+  <p class="forget-password">Hai dimenticato la password?</p>
+</form>

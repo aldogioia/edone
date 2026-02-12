@@ -9,6 +9,10 @@ import { Service } from './components/service/service';
 import { Rating } from './components/rating/rating';
 import { AppFeature } from './components/app-feature/app-feature';
 import { AppStores } from './components/app-stores/app-stores';
+import { Login } from './screen/login/login';
+import {provideRouter} from '@angular/router';
+import {ReactiveFormsModule} from '@angular/forms';
+import { Home } from './screen/home/home';
 
 
 @NgModule({
@@ -19,12 +23,15 @@ import { AppStores } from './components/app-stores/app-stores';
     Rating,
     Footer,
     AppFeature,
-    AppStores
+    AppStores,
+    Login,
+    Home
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HugeiconsIconComponent
+    HugeiconsIconComponent,
+    ReactiveFormsModule
   ],
   providers: [
     provideBrowserGlobalErrorListeners()

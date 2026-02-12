@@ -1,0 +1,62 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 24pt;
+  height: 100%;
+  width: 100%;
+
+  background-color: var(--background);
+}
+
+.header {
+  text-align: center;
+  vertical-align: center;
+}
+
+.header > h3 {
+  color: var(--brand-strong)
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16pt;
+  justify-content: center;
+
+  border: 1px solid var(--stroke-weak);
+  border-radius: 12pt;
+  padding: 24pt;
+  background-color: var(--background);
+
+  width: 60%;
+  max-width: 580px;
+}
+
+#login-btn {
+  background-color: var(--brand-weak);
+  color: var(--text-on-black-strong);
+  border: none;
+}
+
+
+#login-btn:hover {
+  background-color: var(--brand-strong);
+  color: var(--text-on-black-strong);
+  cursor: pointer;
+}
+
+.forget-password {
+  color: var(--brand-strong);
+  text-align: center;
+}
+
+.forget-password:hover{
+  cursor: pointer;
+}
+
+.error {
+  color: var(--error-strong);
+}
