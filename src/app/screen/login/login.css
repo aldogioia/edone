@@ -10,13 +10,60 @@
   background-color: var(--background);
 }
 
+.back-icon {
+  position: absolute;
+  top: 24pt;
+  left: 24pt;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.back-icon > svg {
+  width: 40px;
+  height: 40px;
+}
+
+.back-icon > svg > path {
+  fill: transparent;
+  stroke: var(--stroke-weak);
+  transition: all .3s ease-in-out;
+}
+
+.back-icon:hover > svg > path{
+  fill: transparent;
+  stroke: var(--stroke-strong);
+}
+
+.login-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background-color: var(--admin-brand-strong);
+  border-radius: 20%;
+}
+
+.login-icon > svg  {
+  width: 40px;
+  height: 40px;
+}
+
+.login-icon > svg > path {
+  fill: transparent;
+  stroke: var(--background);
+}
+
 .header {
   text-align: center;
   vertical-align: center;
 }
 
 .header > h3 {
-  color: var(--brand-strong)
+  color: var(--admin-brand-strong)
 }
 
 form {
@@ -36,20 +83,20 @@ form {
 }
 
 #login-btn {
-  background-color: var(--brand-weak);
+  background-color: var(--admin-brand-strong);
   color: var(--text-on-black-strong);
   border: none;
 }
 
 
 #login-btn:hover {
-  background-color: var(--brand-strong);
+  background-color: var(--admin-brand-weak);
   color: var(--text-on-black-strong);
   cursor: pointer;
 }
 
 .forget-password {
-  color: var(--brand-strong);
+  color: var(--admin-brand-strong);
   text-align: center;
 }
 

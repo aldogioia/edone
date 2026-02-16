@@ -4,7 +4,8 @@ import {Login} from './screen/login/login';
 import {Home} from './screen/home/home';
 
 const routes: Routes = [
-  { path: '', component: Home }
+  { path: '', component: Home, title: 'Home Page'},
+  { path: 'admin/login', component: Login, title: 'Admin Login' }
 ];
 
 @NgModule({

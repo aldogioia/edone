@@ -22,8 +22,14 @@
   --brand-fill: #00D4920D;
 
   --error-strong: #E74C3C;
-  --error-weak: #E74C3C1A; /* Versione trasparente per lo sfondo o l'alone */
+  --error-weak: #E74C3C1A;
   --error-stroke: #E74C3C73;
+
+  /* Admin */
+  /* --admin-brand-strong: #0f766e;
+  --admin-brand-weak: #0d9488; */
+  --admin-brand-strong: #059669;
+  --admin-brand-weak: #10b981;
 }
 
 * {
@@ -177,7 +183,7 @@ input[type="password"]:focus {
 
 input[type="tel"]::placeholder,
 input[type="password"]::placeholder {
-  color: var(--text-weak, #a0a0a0);
+  color: var(--text-weak);
   font-size: 10pt;
 }
 
