@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   templateUrl: './customers-page.html',
   styleUrls: [
     './customers-page.css',
-    '../../../.././public/css/list.css'
+    '../../../../../public/css/list.css'
   ],
 })
 export class CustomersPage {

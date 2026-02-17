@@ -13,9 +13,9 @@ import {AppStores} from './customers/components/app-stores/app-stores';
 import {Login} from './admin/screens/login/login';
 import {Home} from './customers/screen/home/home';
 import {ListItem} from './admin/components/list-item/list-item';
-import {CustomersPage} from './admin/customers-page/customers-page';
 import {ToolsPage} from './admin/screens/tools-page/tools-page';
 import {AdminHome} from './admin/admin-home/admin-home';
+import {CustomersPage} from './admin/screens/customers-page/customers-page';
 
 @NgModule({
   declarations: [
