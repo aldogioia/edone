@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "deploy": "ng build --base-href=/ && echo www.centroesteticoedonè.com > dist/website/browser/CNAME && npx angular-cli-ghpages --dir=dist/website/browser"
   },
   "prettier": {
     "printWidth": 100,
