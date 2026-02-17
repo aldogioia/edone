@@ -1,0 +1,17 @@
+<section class="list-section">
+  <h4 class="header">Utenti</h4>
+  <div class="content">
+    <div class="search-bar">
+      <input type="text" placeholder="Cerca utenti...">
+      <button class="add-btn">Nuovo Utente</button>
+    </div>
+    <div class="list">
+      @for (item of items; track item.id) {
+        <app-list-item [title]="item.name" [type]="'customer'">
+          <p>+39 {{ item.phoneNumber }}</p>
+        </app-list-item>
+      }
+    </div>
+  </div>
+</section>
+

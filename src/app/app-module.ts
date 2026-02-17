@@ -10,10 +10,12 @@ import { Rating } from './components/rating/rating';
 import { AppFeature } from './components/app-feature/app-feature';
 import { AppStores } from './components/app-stores/app-stores';
 import { Login } from './screen/login/login';
-import {provideRouter} from '@angular/router';
 import {ReactiveFormsModule} from '@angular/forms';
 import { Home } from './screen/home/home';
-
+import { ListItem } from './admin-components/list-item/list-item';
+import { CustomersPage } from './screen/customers-page/customers-page';
+import { ToolsPage } from './screen/tools-page/tools-page';
+import { AdminHome } from './screen/admin-home/admin-home';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,11 @@ import { Home } from './screen/home/home';
     AppFeature,
     AppStores,
     Login,
-    Home
+    Home,
+    ListItem,
+    CustomersPage,
+    ToolsPage,
+    AdminHome,
   ],
   imports: [
     BrowserModule,

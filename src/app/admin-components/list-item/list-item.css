@@ -1,0 +1,56 @@
+:host {
+  display: flex;
+  justify-content: space-between;
+  height: fit-content;
+  max-width: 600px;
+  align-items: start;
+  background-color: white;
+
+  border: 1px solid var(--stroke-weak);
+  padding: 16pt;
+  border-radius: 12pt;
+
+  transition: box-shadow .3s ease-in-out;
+}
+
+:host:hover{
+  box-shadow: 0 8px 15px -4px rgba(0, 0, 0, 0.25);
+}
+
+.content {
+  display: flex;
+  gap: 8pt;
+}
+
+.content > hugeicons-icon {
+  width: 32pt;
+  height: 32pt;
+  border-radius: 100%;
+  background-color: var(--admin-brand-weak);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  stroke: white;
+}
+
+.content > .item {
+  display: flex;
+  flex-direction: column;
+  gap: 8pt;
+}
+
+button {
+  padding: 4pt 8pt;
+  border: none;
+  border-radius: 8pt;
+  font-size: 10pt;
+
+  background-color: var(--btn-weak);
+  transition: all .3s ease-in-out;
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: var(--btn-strong);
+}
+

@@ -1,0 +1,20 @@
+:host {
+  width: 100%;
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.availability {
+  display: flex;
+  gap: 4pt;
+  background-color: var(--admin-brand-light);
+
+  padding: 8pt;
+  border-radius: 8pt;
+}
+
+.availability > p.green {
+  color: var(--admin-brand-strong);
+  font-weight: bold;
+}

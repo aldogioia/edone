@@ -1,0 +1,63 @@
+:host {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+nav {
+  width: fit-content;
+  height: 100%;
+  padding: 16pt;
+  display: flex;
+  flex-direction: column;
+  gap: 24pt;
+  min-width: 250px;
+}
+
+nav > h5 {
+  color: var(--admin-brand-weak);
+  font-weight: bold;
+}
+
+nav > ul {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  gap: 8pt;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+nav > ul::-webkit-scrollbar {
+  display: none;
+}
+
+nav > ul > li {
+  list-style: none;
+  padding: 8pt;
+  border-radius: 8pt;
+  transition: all .3s ease-in-out;
+}
+
+nav > ul > li.active {
+  background-color: var(--admin-brand-light);
+}
+
+nav > ul > li:hover {
+  background-color: var(--btn-weak);
+  cursor: pointer;
+}
+
+nav > ul > li > a {
+  text-decoration: none;
+  color: var(--text-strong);
+  width: 100%;
+}
+
+.page {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}

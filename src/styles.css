@@ -26,10 +26,14 @@
   --error-stroke: #E74C3C73;
 
   /* Admin */
-  /* --admin-brand-strong: #0f766e;
-  --admin-brand-weak: #0d9488; */
+  --admin-background: #fcfcfc;
+
   --admin-brand-strong: #059669;
   --admin-brand-weak: #10b981;
+  --admin-brand-light: #c4f6e0;
+
+  --btn-strong: #20202026;
+  --btn-weak: #20202016;
 }
 
 * {
@@ -156,6 +160,7 @@ form > .form-control > p {
 }
 
 input[type="tel"],
+input[type="text"],
 input[type="password"],
 input[type="submit"]{
   width: 100%;
