@@ -1,20 +1,39 @@
 <section class="list-section">
-  <h4 class="header">Utenti</h4>
-  <div class="content">
-    <div class="search-bar">
-      <input type="text" placeholder="Cerca utenti...">
-      <button class="add-btn">Nuovo Utente</button>
-    </div>
-    <div class="list">
-      @for (item of items; track item.id) {
-        <app-list-item [title]="item.name" [type]="'customer'">
-          <p>+39 {{ item.phoneNumber }}</p>
-        </app-list-item>
-      }
+  <div class="header">
+    <h2>Utenti</h2>
+    <div class="search-section">
+      <input type="search" placeholder="Cerca per nome o numero...">
+      <button class="primary" (click)="isFormOpen=!isFormOpen">Nuovo Utente</button>
     </div>
   </div>
+  <div class="list">
+    @for (item of items; track item.id) {
+      <app-list-item [title]="item.name" [type]="'customer'">
+        <p class="text-small">{{ item.phoneNumber }}</p>
+      </app-list-item>
+    }
+  </div>
 </section>
-<form>
+<form [class.open]="isFormOpen" class="side-form">
+  <div class="header">
+    <h2>Nuovo Utente</h2>
+  </div>
 
+  <div class="form-groups">
+    <div class="form-group">
+      <label for="name">Nome</label>
+      <input id="name" type="text" placeholder="Nome">
+    </div>
+    <div class="form-group">
+      <label for="surname">Cognome</label>
+      <input id="surname" type="text" placeholder="Cognome">
+    </div>
+    <div class="form-group">
+      <label for="phone">Numero di Telefono</label>
+      <input id="phone" type="tel" placeholder="Numero di telefono">
+    </div>
+  </div>
+
+  <button class="primary" type="submit">Aggiungi</button>
 </form>
 

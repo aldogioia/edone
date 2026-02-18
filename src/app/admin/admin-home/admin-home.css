@@ -8,14 +8,16 @@
 nav {
   width: fit-content;
   height: 100%;
-  padding: 16pt;
+  padding: 10pt 8pt;
   display: flex;
   flex-direction: column;
   gap: 24pt;
   min-width: 250px;
+  background: var(--admin-background);
+  border-right: 1px solid var(--stroke-weak);
 }
 
-nav > h5 {
+nav > h3 {
   color: var(--admin-brand-weak);
   font-weight: bold;
 }
@@ -57,7 +59,7 @@ nav > ul > li > a {
 }
 
 .page {
-  flex: 1;
   display: flex;
-  min-height: 0;
+  gap: 0;
+  width: 100%;
 }

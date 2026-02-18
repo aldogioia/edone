@@ -6,7 +6,9 @@ import { Component } from '@angular/core';
   templateUrl: './tools-page.html',
   styleUrls: [
     './tools-page.css',
-    '../../../../../public/css/list.css'
+    '../../../../../public/css/form.css',
+    '../../../../../public/css/layout.css',
+    '../../../../../public/css/typography.css'
   ],
 })
 export class ToolsPage {

@@ -1,0 +1,77 @@
+h1, h2 {
+  font-weight: 500;
+  color: var(--text-strong);
+}
+
+h3, h4, h5, button {
+  font-weight: 400;
+  color: var(--text-strong);
+}
+
+p, label {
+  font-weight: 300;
+  color: var(--text-weak);
+}
+
+h1 {
+  font-size: clamp(2.5rem, 5vw + 1rem, 5rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw + 1rem, 3.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+h3 {
+  font-size: clamp(1.75rem, 3vw + 1rem, 2.5rem);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+h4 {
+  font-size: clamp(1.5rem, 2vw + 1rem, 2rem);
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+h5 {
+  font-size: clamp(1rem, 0.5vw + 1rem, 1.25rem);
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+
+p, button, label {
+  font-size: clamp(0.9rem, 2.5cqw + 0.25rem, 1.2rem);
+  letter-spacing: 0.02em;
+}
+
+svg {
+  stroke-width: 2px;
+}
+
+a.button {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8pt;
+  padding: 8pt 16pt;
+  border-radius: 24pt;
+  border: 1px solid var(--stroke-on-black-weak);
+  background: var(--fill);
+  backdrop-filter: blur(2pt);
+  color: var(--text-on-black-strong);
+  width: fit-content;
+  cursor: pointer;
+  transition: .3s ease-in-out;
+}
+
+a.button.accent {
+  background: var(--brand-strong);
+}
+
+a.button.accent:hover {
+  background: var(--brand-weak);
+}

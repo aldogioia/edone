@@ -1,9 +1,5 @@
-
-<div class="content">
-  <hugeicons-icon [icon]="icon()"></hugeicons-icon>
-  <div class="item">
-    <h5>{{ title() }}</h5>
-    <ng-content></ng-content>
-  </div>
+<hugeicons-icon [icon]="icon()"></hugeicons-icon>
+<div class="item-info">
+  <p>{{ title() }}</p>
+  <ng-content></ng-content>
 </div>
-<button> Modifica </button>

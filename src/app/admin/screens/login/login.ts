@@ -7,7 +7,10 @@ import {PasswordService} from '../../../service/password-service';
   selector: 'app-login',
   standalone: false,
   templateUrl: './login.html',
-  styleUrl: './login.css',
+  styleUrls: [
+    './login.css',
+    '../../../../../public/css/form.css'
+  ],
 })
 export class Login {
   private formBuilder = inject(FormBuilder);

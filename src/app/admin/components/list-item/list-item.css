@@ -1,56 +1,56 @@
 :host {
+  position: relative;
   display: flex;
-  justify-content: space-between;
-  height: fit-content;
-  max-width: 600px;
-  align-items: start;
-  background-color: white;
+  gap: 8pt;
+  width: 100%;
+  flex: 1 1 calc(50% - 4pt);
+  min-width: min(250px, 100%);
+  align-items: self-start;
+  background-color: var(--fill-dark);
 
   border: 1px solid var(--stroke-weak);
-  padding: 16pt;
-  border-radius: 12pt;
+  padding: 8pt;
+  border-radius: 8pt;
 
   transition: box-shadow .3s ease-in-out;
+  cursor: pointer;
 }
 
 :host:hover{
-  box-shadow: 0 8px 15px -4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 32px -12px rgba(0, 0, 0, 0.1);
 }
 
-.content {
-  display: flex;
-  gap: 8pt;
+:host:hover:after {
+  content: 'Modifica';
+  position: absolute;
+  top: 8pt;
+  right: 8pt;
+  font-size: 0.75rem;
+  color: var(--admin-brand-strong);
 }
 
-.content > hugeicons-icon {
-  width: 32pt;
-  height: 32pt;
-  border-radius: 100%;
-  background-color: var(--admin-brand-weak);
+hugeicons-icon {
+  width: 24pt;
+  height: 24pt;
   display: flex;
   justify-content: center;
   align-items: center;
-  stroke: white;
+  background: var(--brand-fill);
+  border-radius: 50%;
+  stroke: var(--admin-brand-strong);
 }
 
-.content > .item {
+.item-info {
+  padding-top: 5px;
   display: flex;
   flex-direction: column;
-  gap: 8pt;
 }
 
-button {
-  padding: 4pt 8pt;
-  border: none;
-  border-radius: 8pt;
-  font-size: 10pt;
+@media (min-width: 800px) {
+  :host {
+    max-width: calc(50% - 4pt);
+  }
 
-  background-color: var(--btn-weak);
-  transition: all .3s ease-in-out;
 }
 
-button:hover {
-  cursor: pointer;
-  background-color: var(--btn-strong);
-}
 

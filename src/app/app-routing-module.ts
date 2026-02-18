@@ -7,20 +7,19 @@ import {CustomersPage} from './admin/screens/customers-page/customers-page';
 import {ToolsPage} from './admin/screens/tools-page/tools-page';
 
 const routes: Routes = [
-  { path: '', component: Home, title: 'Home Page'},
+  { path: '', redirectTo: 'admin', pathMatch: 'full' }, // TODO: Change to home after development
+  { path: 'home', component: Home, title: 'Home Page'},
   { path: 'admin/login', component: Login, title: 'Admin Login' },
   {
     path: 'admin',
     component: AdminHome,
     title: 'Admin Home',
     children: [
-      { path: 'customers', component: CustomersPage},
-      { path: 'tools', component: ToolsPage},
+      { path: '', redirectTo: 'customers', pathMatch: 'full' },
+      { path: 'customers', component: CustomersPage, title: 'Customer Page'},
+      { path: 'tools', component: ToolsPage, title: 'Tools Page'},
     ]
   },
-
-
-
 ];
 
 @NgModule({

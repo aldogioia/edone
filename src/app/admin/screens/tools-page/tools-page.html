@@ -1,19 +1,20 @@
 <section class="list-section">
-  <h4 class="header">Macchinari</h4>
-  <div class="content">
-    <div class="search-bar">
-      <input type="text" placeholder="Cerca macchinari...">
-      <button class="add-btn">Nuovo Macchinario</button>
+
+  <div class="header">
+    <h2>Macchinari</h2>
+    <div class="search-section">
+      <input type="search" placeholder="Cerca per nome...">
+      <button class="primary">Nuovo Macchinario</button>
     </div>
-    <div class="list">
-      @for (item of items; track item.id) {
-        <app-list-item [title]="item.name" [type]="'tool'">
-          <div class="availability">
-            <p>Quantità:</p>
-            <p class="green">{{ item.availability }}</p>
-          </div>
-        </app-list-item>
-      }
-    </div>
+  </div>
+  <div class="list">
+    @for (item of items; track item.id) {
+      <app-list-item [title]="item.name" [type]="'tool'">
+        <div class="availability">
+          <p class="text-small">Quantità:</p>
+          <p class="text-small green">{{ item.availability }}</p>
+        </div>
+      </app-list-item>
+    }
   </div>
 </section>
