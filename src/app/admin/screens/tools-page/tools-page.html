@@ -4,7 +4,7 @@
     <h2>Macchinari</h2>
     <div class="search-section">
       <input type="search" placeholder="Cerca per nome...">
-      <button class="primary">Nuovo Macchinario</button>
+      <button class="primary" (click)="isFormOpen = !isFormOpen">Nuovo Macchinario</button>
     </div>
   </div>
   <div class="list">
@@ -18,3 +18,22 @@
     }
   </div>
 </section>
+
+<form [class.open]="isFormOpen" class="side-form">
+  <div class="header">
+    <h2>Nuovo Macchinario</h2>
+  </div>
+
+  <div class="form-groups">
+    <div class="form-group">
+      <label for="name">Nome</label>
+      <input id="name" type="text" placeholder="Nome Macchinario">
+    </div>
+    <div class="form-group">
+      <label for="availability">Disponibilità</label>
+      <input id="availability" type="number" placeholder="Disponibilità">
+    </div>
+  </div>
+
+  <button class="primary" type="submit">Aggiungi</button>
+</form>

@@ -16,6 +16,7 @@ import {ListItem} from './admin/components/list-item/list-item';
 import {ToolsPage} from './admin/screens/tools-page/tools-page';
 import {AdminHome} from './admin/admin-home/admin-home';
 import {CustomersPage} from './admin/screens/customers-page/customers-page';
+import { RoomsPage } from './admin/screens/rooms-page/rooms-page';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import {CustomersPage} from './admin/screens/customers-page/customers-page';
     CustomersPage,
     ToolsPage,
     AdminHome,
+    RoomsPage,
   ],
   imports: [
     BrowserModule,

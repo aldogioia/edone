@@ -12,6 +12,8 @@ import { Component } from '@angular/core';
   ],
 })
 export class ToolsPage {
+  isFormOpen = false;
+
   items = [
     {id: '1', name: 'Hammer', availability: 10},
     {id: '2', name: 'Screwdriver', availability: 10},

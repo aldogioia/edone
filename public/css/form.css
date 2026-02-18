@@ -57,6 +57,21 @@ input::placeholder {
   opacity: 0.7;
 }
 
+input[type="checkbox"] {
+  accent-color: var(--admin-brand-weak);
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--stroke-strong);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all .3s ease-in-out;
+}
+
+input[type="checkbox"]:checked {
+  border-color: var(--admin-brand-weak);
+  background-color: var(--admin-brand-weak);
+}
+
 /* Focus state - Importante per accessibilità e UX */
 input:focus, select:focus, textarea:focus {
   border-color: var(--brand-strong);
