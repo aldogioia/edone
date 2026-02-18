@@ -1,32 +1,13 @@
-form > .form-control {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 480px;
-  gap: 6pt;
-  align-items: center;
-}
-
-form > .form-control > label {
-  width: 100%;
-  text-align: start;
-}
-
-form > .form-control > p {
-  width: 100%;
-  text-align: start;
-  color: var(--error-strong);
-  background-color: var(--error-weak);
-  padding: 12pt;
-  border-radius: 8pt;
-  border: 1px solid var(--error-stroke);
-}
-
 .form-groups, .form-group {
   display: flex;
   flex-direction: column;
   width: 100%;
   gap: 16pt;
+}
+
+.form-groups p.error, .form-group p.error {
+  color: var(--error-strong);
+  width: 100%;
 }
 
 .form-group {

@@ -19,7 +19,7 @@
   </div>
 </section>
 
-<form [class.open]="isFormOpen" class="side-form">
+<form [formGroup]="createToolForm" [class.open]="isFormOpen" class="side-form" (ngSubmit)="createTool()">
   <div class="header">
     <h2>Nuovo Macchinario</h2>
   </div>
@@ -27,11 +27,23 @@
   <div class="form-groups">
     <div class="form-group">
       <label for="name">Nome</label>
-      <input id="name" type="text" placeholder="Nome Macchinario">
+      <input id="name" [formControl]="createToolForm.controls.name" type="text" placeholder="Nome Macchinario">
+      @if (checkToolNameError()) {
+        <p class="error">Il nome è obbligatorio</p>
+      }
     </div>
     <div class="form-group">
       <label for="availability">Disponibilità</label>
-      <input id="availability" type="number" placeholder="Disponibilità">
+      <input
+        id="availability"
+        [formControl]="createToolForm.controls.availability"
+        type="number"
+        placeholder="Disponibilità"
+        step="1"
+        min="1">
+      @if (checkToolAvailabilityError()) {
+        <p class="error">La disponibilità deve essere un numero intero positivo</p>
+      }
     </div>
   </div>
 

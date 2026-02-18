@@ -18,7 +18,7 @@
   <p>Accedi al tuo account amministratore</p>
 </div>
 <form [formGroup]="pageIndex === 0 ? loginForm : pageIndex === 1 ? requestResetForm : resetForm" (ngSubmit)="onSubmit()">
-  <div class="form-control">
+  <div class="form-group">
     <label for="telephone">{{ pageIndex == 2 ? "Token" : "Telefono"}}</label>
     <input id="telephone" type="tel" [formControl]="telephoneField" placeholder="Telefono">
     @if (checkTelephoneFieldError()) {
@@ -27,16 +27,16 @@
   </div>
 
   @if (pageIndex != 1){
-    <div class="form-control">
+    <div class="form-group">
       <label for="password">Password</label>
       <input id="password" type="password" [formControl]="passwordField" placeholder="Password">
-      @if (checkTelephoneFieldError()) {
+      @if (checkPasswordFieldError()) {
         <p class="error">La password deve essere lunga almeno 8 caratteri e contenere almeno un numero</p>
       }
     </div>
   }
 
-  <input id="login-btn" type="submit" value="{{ pageIndex == 0 ? 'Accedi' : pageIndex == 1 ? 'Invia codice di verifica' : 'Resetta password' }}">
+  <button class="primary" type="submit">{{ pageIndex == 0 ? 'Accedi' : pageIndex == 1 ? 'Invia codice di verifica' : 'Resetta password' }}</button>
   @if (pageIndex === 0) {
     <p (click)="onPasswordForgetClick()" class="forget-password">Hai dimenticato la password?</p>
   }
