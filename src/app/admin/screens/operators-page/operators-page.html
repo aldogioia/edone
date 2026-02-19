@@ -1,0 +1,75 @@
+<section class="list-section">
+  <div class="header">
+    <h2>Operatori</h2>
+    <div class="search-section">
+      <input
+        [formControl]="searchControl"
+        type="search"
+        placeholder="Cerca per nome o cognome...">
+
+      <button class="secondary icon-btn" (click)="forceRefreshList()" title="Aggiorna lista">
+        <hugeicons-icon [icon]="Refresh01Icon"></hugeicons-icon>
+      </button>
+
+      <button class="primary" (click)="openCreateForm()">Nuovo Operatore</button>
+    </div>
+  </div>
+
+  <div class="list">
+    @for (item of filteredOperators; track item.id) {
+      <app-list-item [title]="item.name + ' ' + item.surname" [type]="'operator'" (click)="openEditForm(item)" style="cursor: pointer;">
+        <p class="text-small">{{ item.phoneNumber }}</p>
+      </app-list-item>
+    }
+    @empty {
+      @if (!isLoading) {
+        <p class="empty-state">Nessun operatore trovato.</p>
+      }
+    }
+
+    @if (isLoading) {
+      <div class="loading">Caricamento in corso...</div>
+    }
+  </div>
+</section>
+
+<form [formGroup]="operatorForm" (ngSubmit)="onSubmit()" [class.open]="isFormOpen" class="side-form">
+  <div class="header">
+    <h2>{{ isEditMode ? 'Modifica Operatore' : 'Nuovo Operatore' }}</h2>
+    <button type="button" (click)="closeForm()" class="close-btn">✕</button>
+  </div>
+
+  <div class="form-groups">
+    <input type="hidden" formControlName="id">
+
+    <div class="form-group">
+      <label for="name">Nome</label>
+      <input formControlName="name" id="name" type="text" placeholder="Nome">
+    </div>
+
+    <div class="form-group">
+      <label for="surname">Cognome</label>
+      <input formControlName="surname" id="surname" type="text" placeholder="Cognome">
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Numero di Telefono</label>
+      <input formControlName="phoneNumber" id="phone" type="tel" placeholder="Numero di telefono">
+    </div>
+
+    <div class="form-group">
+      <label for="imageFile">Immagine Profilo</label>
+      <input type="file" id="imageFile" (change)="onFileSelected($event)" accept="image/*">
+    </div>
+  </div>
+
+  <div class="form-group actions">
+    <button class="primary" type="submit" [disabled]="operatorForm.invalid || isLoading">
+      {{ isEditMode ? 'Salva Modifiche' : 'Aggiungi' }}
+    </button>
+
+    @if (isEditMode) {
+      <button type="button" class="danger" (click)="deleteOperator($event)">Elimina</button>
+    }
+  </div>
+</form>

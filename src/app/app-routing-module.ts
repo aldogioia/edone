@@ -7,6 +7,7 @@ import {CustomersPage} from './admin/screens/customers-page/customers-page';
 import {ToolsPage} from './admin/screens/tools-page/tools-page';
 import {RoomsPage} from './admin/screens/rooms-page/rooms-page';
 import {authGuard} from './security/auth-guard';
+import {OperatorsPage} from './admin/screens/operators-page/operators-page';
 
 const routes: Routes = [
   { path: '', redirectTo: 'admin', pathMatch: 'full' }, // TODO: Change to home after development
@@ -19,7 +20,8 @@ const routes: Routes = [
     title: 'Admin Home',
     children: [
       { path: '', redirectTo: 'customers', pathMatch: 'full' },
-      { path: 'customers', component: CustomersPage, title: 'Customer Page'},
+      { path: 'customers', component: CustomersPage, title: 'Customers Page'},
+      { path: 'operators', component: OperatorsPage, title: 'Operators Page'},
       { path: 'tools', component: ToolsPage, title: 'Tools Page'},
       { path: 'rooms', component: RoomsPage, title: 'Rooms Page' },
     ]
