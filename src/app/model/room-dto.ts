@@ -5,3 +5,14 @@ export interface RoomDto {
   name: string;
   services: SummaryServiceDto[];
 }
+
+export interface CreateRoomDto {
+  name: string;
+  services: string[];
+}
+
+export interface UpdateRoomDto {
+  id: string;
+  name: string;
+  services: string[];
+}

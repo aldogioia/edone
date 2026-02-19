@@ -20,3 +20,8 @@ export interface UpdateToolDto {
   name: string;
   availability: number;
 }
+
+export interface SummaryToolDto {
+  id: string;
+  name: string;
+}

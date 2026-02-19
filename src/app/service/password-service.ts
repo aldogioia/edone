@@ -1,4 +1,4 @@
-import {inject, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {Environment} from '../utils/Enviroment';
@@ -7,8 +7,9 @@ import {Environment} from '../utils/Enviroment';
   providedIn: 'root',
 })
 export class PasswordService {
-  private http = inject(HttpClient);
   private baseUrl = Environment.getInstance().apiUrl + 'password';
+
+  constructor(private http: HttpClient) {}
 
   requestReset(telephone: string): Observable<any> {
     const url = `${this.baseUrl}/sign-in?phoneNumber=${telephone}`;

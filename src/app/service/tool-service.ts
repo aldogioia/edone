@@ -1,55 +1,59 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {CreateToolDto, ToolDto, UpdateToolDto} from '../model/tool-dto';
-import {BehaviorSubject, tap} from 'rxjs';
+import {BehaviorSubject, Observable, tap} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {Environment} from '../utils/Enviroment';
+import {OperatorDto} from '../model/operator-dto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ToolService {
   private baseUrl = Environment.getInstance().apiUrl + 'tool';
-  private toolsCache$: BehaviorSubject<ToolDto[] | null> = new BehaviorSubject<ToolDto[] | null>(null)
+
+  private toolsSubject = new BehaviorSubject<ToolDto[]>([]);
+  public tools$ = this.toolsSubject.asObservable();
+
+  private hasLoaded = false;
 
   constructor(private http: HttpClient) {}
 
-  private loadTools(){
-    return this.http.get<ToolDto[]>(this.baseUrl)
-  }
-
-  getTools(forceRefresh: boolean = false) {
-    if(forceRefresh || this.toolsCache$.value === null) {
-      this.loadTools().subscribe(
-        tools => this.toolsCache$.next(tools),
-      )
+  loadAllTools(forceRefresh: boolean = false): Observable<ToolDto[]> {
+    if (this.hasLoaded && !forceRefresh) {
+      return this.tools$;
     }
 
-    return this.toolsCache$.asObservable().pipe(
-      map(tools => tools ?? [])
-    )
+    return this.http.get<ToolDto[]>(`${this.baseUrl}`).pipe(
+      tap(tools => {
+        this.hasLoaded = true;
+        this.toolsSubject.next(tools);
+      })
+    );
   }
+
+  refreshCache(): Observable<ToolDto[]> {
+    return this.loadAllTools(true);
+  }
+
 
   createTool(dto: CreateToolDto) {
     return this.http.post<ToolDto>(this.baseUrl, dto).pipe(
-      tap((newTool: ToolDto) => {
-        const currentTools = this.toolsCache$.value
-        if(currentTools)
-          this.toolsCache$.next([...currentTools, newTool])
+      tap(newTool =>{
+        const currentTools = this.toolsSubject.value;
+        this.toolsSubject.next([...currentTools, newTool]);
       })
     );
   }
 
   updateTool(dto: UpdateToolDto){
-    return this.http.put(this.baseUrl, dto).pipe(
-      tap(() => {
-        const currentTools = this.toolsCache$.value
-        if(currentTools) {
-          const newToolsList = currentTools.map(
-            tool => tool.id === dto.id ? dto : tool
-          )
-
-          this.toolsCache$.next(newToolsList)
+    return this.http.put<ToolDto>(this.baseUrl, dto).pipe(
+      tap((res: ToolDto) => {
+        const currentTools = this.toolsSubject.getValue()
+        const index = currentTools.findIndex(tool => tool.id === res.id)
+        if(index !== -1) {
+          currentTools[index] = res
+          this.toolsSubject.next([...currentTools])
         }
       })
     )
@@ -60,14 +64,9 @@ export class ToolService {
       params: { toolId }
     }).pipe(
       tap(() => {
-        const currentTools = this.toolsCache$.value
-        if(currentTools) {
-          const newToolsList = currentTools.filter(
-            tool => tool.id !== toolId
-          )
-
-          this.toolsCache$.next(newToolsList)
-        }
+        const currentTools = this.toolsSubject.getValue();
+        const updatedTools = currentTools.filter(tool => tool.id !== toolId);
+        this.toolsSubject.next(updatedTools);
       })
     );
   }

@@ -1,8 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {noOnlySpacesValidator} from '../../../validators/no-only-space-validator';
 import {ToolService} from '../../../service/tool-service';
 import {CreateToolDto, ToolDto} from '../../../model/tool-dto';
+import {Subject, combineLatest, takeUntil} from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
 
 @Component({
   selector: 'app-tools-page',
@@ -15,34 +17,56 @@ import {CreateToolDto, ToolDto} from '../../../model/tool-dto';
     '../../../../../public/css/typography.css'
   ],
 })
-export class ToolsPage implements OnInit{
+export class ToolsPage implements OnInit, OnDestroy{
   protected tools: ToolDto[] = [];
   protected searchedTools: ToolDto[] = [];
 
   toolForm!: FormGroup;
-  searchControl!: FormControl;
+  searchControl: FormControl = new FormControl('');
 
   isFormOpen = false;
   isEditMode = false;
   isLoading = false;
 
+  private destroy$ = new Subject<void>();
+
   constructor(
     private toolService: ToolService,
     private formBuilder: FormBuilder,
+    private cdr: ChangeDetectorRef
   ) {
-    this.searchControl = this.formBuilder.control('')
     this.initForm()
   }
 
   ngOnInit(): void {
     this.loadTools()
+    this.setupSearchAndDataStream()
+  }
 
-    this.searchControl.valueChanges.subscribe(search => {
-      const value = search?.toLowerCase() || '';
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
-      this.searchedTools = this.tools.filter(tool =>
-        tool.name.toLowerCase().includes(value));
-    });
+  private setupSearchAndDataStream() {
+    combineLatest([
+      this.toolService.tools$,
+      this.searchControl.valueChanges.pipe(startWith(''))
+    ]).pipe(
+      takeUntil(this.destroy$),
+      map(([tools, search]) => {
+        this.tools = tools;
+        const value = search?.toLowerCase() || '';
+        return tools.filter(tool =>
+          tool.name.toLowerCase().includes(value));
+      })
+    ).subscribe({
+      next: filteredTools =>  {
+        this.searchedTools = filteredTools;
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      }
+    })
   }
 
   private initForm() {
@@ -57,15 +81,11 @@ export class ToolsPage implements OnInit{
     if(this.isLoading) return;
     this.isLoading = true;
 
-    this.toolService.getTools().subscribe({
-      next: (tools) => {
-        this.tools = tools;
-        this.searchedTools = tools;
-        this.isLoading = false;
-      },
+    this.toolService.loadAllTools().subscribe({
       error: (err) => {
         console.error('Error loading tools:', err);
         this.isLoading = false;
+        this.cdr.detectChanges();
       }
     })
   }
@@ -124,12 +144,12 @@ export class ToolsPage implements OnInit{
       }
       this.toolService.updateTool(updateDto).subscribe({
         next: () => {
-          // this.refreshListAfterChange(); todo vedere se serve
           this.isLoading = false;
           this.closeForm()
         },
         error: (err) => {
           this.isLoading = false;
+          alert('Errore durante l\'aggiornamento del macchinario. Verifica che il nome non sia già in uso e riprova.');
           console.error('Error updating tool:', err);
         }
       })
@@ -145,6 +165,7 @@ export class ToolsPage implements OnInit{
         },
         error: (err) => {
           this.isLoading = false;
+          alert('Errore durante la creazione del macchinario. Verifica che il nome non sia già in uso e riprova.');
           console.error('Error creating tool:', err);
         }
       })
