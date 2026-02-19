@@ -3,12 +3,12 @@
   <div class="header">
     <h2>Macchinari</h2>
     <div class="search-section">
-      <input type="search" placeholder="Cerca per nome...">
+      <input [formControl]="searchControl" type="search" placeholder="Cerca per nome...">
       <button class="primary" (click)="openCreateForm()">Nuovo Macchinario</button>
     </div>
   </div>
   <div class="list">
-    @for (tool of tools; track tool.id) {
+    @for (tool of searchedTools; track tool.id) {
       <app-list-item [title]="tool.name" [type]="'tool'" (click)="openEditForm(tool)">
         <div class="availability">
           <p class="text-small">Quantità:</p>
@@ -48,7 +48,7 @@
         type="number"
         placeholder="Disponibilità"
         step="1"
-        min="1">
+        min="{{ isEditMode ? 0 : 1}}">
       @if (checkToolAvailabilityError()) {
         <p class="error">La disponibilità deve essere un numero intero positivo</p>
       }

@@ -1,5 +1,5 @@
-import {ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {noOnlySpacesValidator} from '../../../validators/no-only-space-validator';
 import {ToolService} from '../../../service/tool-service';
 import {CreateToolDto, ToolDto} from '../../../model/tool-dto';
@@ -16,8 +16,11 @@ import {CreateToolDto, ToolDto} from '../../../model/tool-dto';
   ],
 })
 export class ToolsPage implements OnInit{
-
   protected tools: ToolDto[] = [];
+  protected searchedTools: ToolDto[] = [];
+
+  toolForm!: FormGroup;
+  searchControl!: FormControl;
 
   isFormOpen = false;
   isEditMode = false;
@@ -26,16 +29,20 @@ export class ToolsPage implements OnInit{
   constructor(
     private toolService: ToolService,
     private formBuilder: FormBuilder,
-    private cdr: ChangeDetectorRef
   ) {
+    this.searchControl = this.formBuilder.control('')
     this.initForm()
   }
 
-
-  toolForm!: FormGroup;
-
   ngOnInit(): void {
     this.loadTools()
+
+    this.searchControl.valueChanges.subscribe(search => {
+      const value = search?.toLowerCase() || '';
+
+      this.searchedTools = this.tools.filter(tool =>
+        tool.name.toLowerCase().includes(value));
+    });
   }
 
   private initForm() {
@@ -49,19 +56,16 @@ export class ToolsPage implements OnInit{
   loadTools() {
     if(this.isLoading) return;
     this.isLoading = true;
-    this.cdr.detectChanges()
 
-    this.toolService.getAllTools().subscribe({
-      next: (data) => {
-        this.tools = data;
+    this.toolService.getTools().subscribe({
+      next: (tools) => {
+        this.tools = tools;
+        this.searchedTools = tools;
         this.isLoading = false;
-        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error loading tools:', err);
-        alert('Errore durante il caricamento degli strumenti. Riprova più tardi.');
         this.isLoading = false;
-        this.cdr.detectChanges();
       }
     })
   }
@@ -122,7 +126,9 @@ export class ToolsPage implements OnInit{
           // this.refreshListAfterChange(); todo vedere se serve
           this.closeForm()
         },
-        error: (err) => { console.error('Error updating tool:', err); }
+        error: (err) => {
+          console.error('Error updating tool:', err);
+        }
       })
     } else {
       const createDto: CreateToolDto = {
@@ -130,17 +136,36 @@ export class ToolsPage implements OnInit{
         availability: formValue.availability
       }
       this.toolService.createTool(createDto).subscribe({
-        next: (newTool) => {
-          this.tools = [...this.tools, newTool];
+        next: () => {
           this.closeForm()
         },
-        error: (err) => { console.error('Error creating tool:', err); }
+        error: (err) => {
+          console.error('Error creating tool:', err);
+        }
       })
     }
   }
 
   deleteTool(event: Event) {
+    event.stopPropagation();
 
+    if(!confirm('Sei sicuro di voler eliminare questo macchinario?')) return;
+
+    const toolId = this.toolForm.get('id')?.value;
+    if(!toolId) return;
+
+    this.isLoading = true;
+
+    this.toolService.deleteTool(toolId).subscribe({
+      next: () => {
+        this.closeForm()
+        this.isLoading = false
+      },
+      error: (err) => {
+        console.error('Error deleting tool:', err);
+        this.isLoading = false
+      }
+    })
   }
 
   closeForm() {
