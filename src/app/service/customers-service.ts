@@ -8,12 +8,13 @@ import {
   UpdateCustomerDto,
   Page
 } from '../model/customer-dto';
+import {Environment} from '../utils/Enviroment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CustomersService {
-  private baseUrl = 'http://localhost:8080/api/v1/customer';
+  private baseUrl = Environment.getInstance().apiUrl + 'customer';
 
   constructor(private http: HttpClient) {}
 

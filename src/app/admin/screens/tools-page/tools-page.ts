@@ -111,8 +111,9 @@ export class ToolsPage implements OnInit{
   }
 
   onSubmit() {
-    if(!this.toolForm.valid) return
+    if(!this.toolForm.valid || this.isLoading) return
 
+    this.isLoading = true;
     const formValue = this.toolForm.value;
 
     if(this.isEditMode){
@@ -124,9 +125,11 @@ export class ToolsPage implements OnInit{
       this.toolService.updateTool(updateDto).subscribe({
         next: () => {
           // this.refreshListAfterChange(); todo vedere se serve
+          this.isLoading = false;
           this.closeForm()
         },
         error: (err) => {
+          this.isLoading = false;
           console.error('Error updating tool:', err);
         }
       })
@@ -137,9 +140,11 @@ export class ToolsPage implements OnInit{
       }
       this.toolService.createTool(createDto).subscribe({
         next: () => {
+          this.isLoading = false;
           this.closeForm()
         },
         error: (err) => {
+          this.isLoading = false;
           console.error('Error creating tool:', err);
         }
       })

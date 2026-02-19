@@ -7,12 +7,13 @@ import {
   CreateOperatorDto,
   UpdateOperatorDto
 } from '../model/operator-dto';
+import {Environment} from '../utils/Enviroment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OperatorsService {
-  private baseUrl = 'http://localhost:8080/api/v1/operator';
+  private baseUrl = Environment.getInstance().apiUrl + 'operator';
 
   private operatorsSubject = new BehaviorSubject<OperatorDto[]>([]);
   public operators$ = this.operatorsSubject.asObservable();

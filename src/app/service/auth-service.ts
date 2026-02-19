@@ -2,12 +2,13 @@ import {Injectable} from '@angular/core';
 import {Observable, tap, throwError} from 'rxjs';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {TokenHandler} from '../security/token-handler';
+import {Environment} from '../utils/Enviroment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private baseUrl = 'http://localhost:8080/api/v1/auth';
+  private baseUrl = Environment.getInstance().apiUrl + 'auth';
 
   constructor(
     private http: HttpClient,

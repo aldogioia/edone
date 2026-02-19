@@ -3,12 +3,13 @@ import {HttpClient} from '@angular/common/http';
 import {CreateToolDto, ToolDto, UpdateToolDto} from '../model/tool-dto';
 import {BehaviorSubject, tap} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {Environment} from '../utils/Enviroment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ToolService {
-  private baseUrl = 'http://localhost:8080/api/v1/tool';
+  private baseUrl = Environment.getInstance().apiUrl + 'tool';
   private toolsCache$: BehaviorSubject<ToolDto[] | null> = new BehaviorSubject<ToolDto[] | null>(null)
 
   constructor(private http: HttpClient) {}
