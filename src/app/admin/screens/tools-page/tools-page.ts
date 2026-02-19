@@ -146,11 +146,13 @@ export class ToolsPage implements OnInit, OnDestroy{
         next: () => {
           this.isLoading = false;
           this.closeForm()
+          this.cdr.detectChanges();
         },
         error: (err) => {
           this.isLoading = false;
           alert('Errore durante l\'aggiornamento del macchinario. Verifica che il nome non sia già in uso e riprova.');
           console.error('Error updating tool:', err);
+          this.cdr.detectChanges();
         }
       })
     } else {
@@ -162,11 +164,13 @@ export class ToolsPage implements OnInit, OnDestroy{
         next: () => {
           this.isLoading = false;
           this.closeForm()
+          this.cdr.detectChanges();
         },
         error: (err) => {
           this.isLoading = false;
           alert('Errore durante la creazione del macchinario. Verifica che il nome non sia già in uso e riprova.');
           console.error('Error creating tool:', err);
+          this.cdr.detectChanges();
         }
       })
     }
@@ -186,10 +190,12 @@ export class ToolsPage implements OnInit, OnDestroy{
       next: () => {
         this.closeForm()
         this.isLoading = false
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error deleting tool:', err);
         this.isLoading = false
+        this.cdr.detectChanges();
       }
     })
   }

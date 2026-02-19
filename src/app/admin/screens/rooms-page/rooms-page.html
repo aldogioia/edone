@@ -3,42 +3,65 @@
   <div class="header">
     <h2>Stanze</h2>
     <div class="search-section">
-      <input type="search" placeholder="Cerca per nome...">
-      <button class="primary" (click)="isFormOpen = !isFormOpen">Nuova Stanza</button>
+      <input [formControl]="searchControl" type="search" placeholder="Cerca per nome...">
+      <button class="primary" (click)="openCreateForm()">Nuova Stanza</button>
     </div>
   </div>
   <div class="list">
-    @for (item of items; track item.id) {
-      <app-list-item [title]="item.name" [type]="'room'">
-        <p class="text-small">Servizi disponibili ({{item.services.length}})</p>
+    @for (room of searchedRooms; track room.id) {
+      <app-list-item [title]="room.name" [type]="'room'" (click)="openEditForm(room)">
+        <p class="text-small">Servizi disponibili ({{room.services.length}})</p>
       </app-list-item>
+    } @empty {
+      @if (!isLoadingRooms){
+        <p class="empty-state">Nessuna stanza trovata</p>
+      }
+    }
+
+    @if (isLoadingRooms) {
+      <div class="loading">Caricamento in corso...</div>
     }
   </div>
 </section>
 @if (isFormOpen) {
-  <form [class.open]="isFormOpen" class="side-form">
+  <form [formGroup]="roomForm" [class.open]="isFormOpen" class="side-form" (ngSubmit)="onSubmit()">
     <div class="header">
-      <h2>Nuova Stanza</h2>
+      <h2>{{ isEditMode ? 'Modifica Stanza' : 'Nuova Stanza' }}</h2>
+      <button type="button" (click)="closeForm()" class="close-btn">✕</button>
     </div>
 
     <div class="form-groups">
+      <input type="hidden" formControlName="id">
+
       <div class="form-group">
         <label for="name">Nome</label>
-        <input id="name" type="text" placeholder="Nome Stanza">
+        <input id="name" type="text" placeholder="Nome Stanza" formControlName="name">
       </div>
       <div class="form-group">
         <label for="services">Servizi</label>
         <div id="services" class="services">
           @for (service of services; track service.id) {
             <div class="checkbox">
-              <input type="checkbox" id="{{service.id}}" name="services" value="{{service.id}}">
+              <input
+                type="checkbox"
+                id="{{service.id}}"
+                [checked]="isServiceSelected(service.id)"
+                (change)="onServiceToggle(service.id, $event)">
               <label for="{{service.id}}">{{service.name}}</label>
             </div>
+          } @empty {
+            @if (!isLoadingServices) { <p class="text-small">Nessun servizio disponibile</p> }
           }
+          @if (isLoadingServices) { <div class="loading">Caricamento in corso...</div> }
         </div>
       </div>
     </div>
 
-    <button class="primary" type="submit">Aggiungi</button>
+    <div class="form-group">
+      <button class="primary" type="submit">{{ isEditMode ? 'Salva Modifiche' : 'Aggiungi' }}</button>
+      @if (isEditMode) {
+        <button class="danger" (click)="deleteRoom($event)">Elimina</button>
+      }
+    </div>
   </form>
 }
