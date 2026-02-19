@@ -1,0 +1,44 @@
+<section class="list-section">
+
+  <div class="header">
+    <h2>Stanze</h2>
+    <div class="search-section">
+      <input type="search" placeholder="Cerca per nome...">
+      <button class="primary" (click)="isFormOpen = !isFormOpen">Nuova Stanza</button>
+    </div>
+  </div>
+  <div class="list">
+    @for (item of items; track item.id) {
+      <app-list-item [title]="item.name" [type]="'room'">
+        <p class="text-small">Servizi disponibili ({{item.services.length}})</p>
+      </app-list-item>
+    }
+  </div>
+</section>
+@if (isFormOpen) {
+  <form [class.open]="isFormOpen" class="side-form">
+    <div class="header">
+      <h2>Nuova Stanza</h2>
+    </div>
+
+    <div class="form-groups">
+      <div class="form-group">
+        <label for="name">Nome</label>
+        <input id="name" type="text" placeholder="Nome Stanza">
+      </div>
+      <div class="form-group">
+        <label for="services">Servizi</label>
+        <div id="services" class="services">
+          @for (service of services; track service.id) {
+            <div class="checkbox">
+              <input type="checkbox" id="{{service.id}}" name="services" value="{{service.id}}">
+              <label for="{{service.id}}">{{service.name}}</label>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <button class="primary" type="submit">Aggiungi</button>
+  </form>
+}

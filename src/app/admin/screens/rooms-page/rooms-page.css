@@ -1,0 +1,26 @@
+:host {
+  width: 100%;
+  display: flex;
+}
+
+.services {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 8pt;
+}
+
+.services > .checkbox {
+  display: flex;
+  align-items: center;
+  gap: 4pt;
+  border: 1px solid var(--stroke-strong);
+  padding: 4pt 8pt;
+  border-radius: 8pt;
+  transition: all .2s ease-in-out;
+}
+
+.services > .checkbox:has(input:checked) {
+  background-color: var(--admin-brand-light);
+  border-color: var(--admin-brand-weak);
+}

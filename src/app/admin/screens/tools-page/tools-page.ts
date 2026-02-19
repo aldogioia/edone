@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
+import {FormBuilder, Validators} from '@angular/forms';
+import {noOnlySpacesValidator} from '../../../validators/no-only-space-validator';
+import {ToolService} from '../../../service/tool-service';
 
 @Component({
   selector: 'app-tools-page',
@@ -12,6 +15,51 @@ import { Component } from '@angular/core';
   ],
 })
 export class ToolsPage {
+  constructor(private toolService: ToolService) {}
+
+  private formBuilder = inject(FormBuilder);
+
+  createToolForm = this.formBuilder.group({
+    name: ['', [
+      Validators.required,
+      Validators.minLength(1),
+      Validators.maxLength(50),
+      noOnlySpacesValidator()
+    ]],
+    availability: [1, [
+      Validators.required,
+      Validators.min(1)
+    ]]
+  })
+
+  isFormOpen = false;
+
+  checkToolNameError() {
+    return this.createToolForm.get('name')?.invalid && this.createToolForm.get('name')?.touched
+  }
+
+  checkToolAvailabilityError() {
+    return this.createToolForm.get('availability')?.invalid && this.createToolForm.get('availability')?.touched
+  }
+
+  createTool() {
+    if(this.createToolForm.valid) {
+      this.toolService.createTool(this.createToolForm.value.name!, this.createToolForm.value.availability!).subscribe({
+          next: () => {
+            this.isFormOpen = false;
+            this.createToolForm.reset();
+            alert('Tool creato con successo!');
+          },
+          error: (err) => {
+            console.error('Error creating tool:', err);
+            alert('Errore durante la creazione dello strumento. Riprova più tardi.');
+          }
+      })
+    } else {
+      this.createToolForm.markAllAsTouched();
+    }
+  }
+
   items = [
     {id: '1', name: 'Hammer', availability: 10},
     {id: '2', name: 'Screwdriver', availability: 10},

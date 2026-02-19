@@ -18,6 +18,7 @@ import {AdminHome} from './admin/admin-home/admin-home';
 import {CustomersPage} from './admin/screens/customers-page/customers-page';
 import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import {tokenInterceptor} from './security/token-interceptor';
+import { RoomsPage } from './admin/screens/rooms-page/rooms-page';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import {tokenInterceptor} from './security/token-interceptor';
     CustomersPage,
     ToolsPage,
     AdminHome,
+    RoomsPage,
   ],
   imports: [
     BrowserModule,

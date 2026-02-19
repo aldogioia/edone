@@ -5,6 +5,7 @@ import {Login} from './admin/screens/login/login';
 import {AdminHome} from './admin/admin-home/admin-home';
 import {CustomersPage} from './admin/screens/customers-page/customers-page';
 import {ToolsPage} from './admin/screens/tools-page/tools-page';
+import {RoomsPage} from './admin/screens/rooms-page/rooms-page';
 import {authGuard} from './security/auth-guard';
 
 const routes: Routes = [
@@ -20,6 +21,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'customers', pathMatch: 'full' },
       { path: 'customers', component: CustomersPage, title: 'Customer Page'},
       { path: 'tools', component: ToolsPage, title: 'Tools Page'},
+      { path: 'rooms', component: RoomsPage, title: 'Rooms Page' },
     ]
   },
 ];

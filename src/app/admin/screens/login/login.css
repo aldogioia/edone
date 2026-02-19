@@ -82,19 +82,6 @@ form {
   max-width: 580px;
 }
 
-#login-btn {
-  background-color: var(--admin-brand-strong);
-  color: var(--text-on-black-strong);
-  border: none;
-}
-
-
-#login-btn:hover {
-  background-color: var(--admin-brand-weak);
-  color: var(--text-on-black-strong);
-  cursor: pointer;
-}
-
 .forget-password {
   color: var(--admin-brand-strong);
   text-align: center;
@@ -104,6 +91,3 @@ form {
   cursor: pointer;
 }
 
-.error {
-  color: var(--error-strong);
-}

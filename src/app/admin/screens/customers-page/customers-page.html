@@ -1,13 +1,13 @@
 <section class="list-section">
   <div class="header">
-    <h2>Utenti</h2>
+    <h2>Clienti</h2>
     <div class="search-section">
       <input
         [formControl]="searchControl"
         type="search"
         placeholder="Cerca per nome...">
 
-      <button class="primary" (click)="openCreateForm()">Nuovo Utente</button>
+      <button class="primary" (click)="openCreateForm()">Nuovo Cliente</button>
     </div>
   </div>
 
@@ -37,7 +37,7 @@
 
 <form [formGroup]="customerForm" (ngSubmit)="onSubmit()" [class.open]="isFormOpen" class="side-form">
   <div class="header">
-    <h2>{{ isEditMode ? 'Modifica Utente' : 'Nuovo Utente' }}</h2>
+    <h2>{{ isEditMode ? 'Modifica Cliente' : 'Nuovo Cliente' }}</h2>
     <button type="button" (click)="closeForm()" class="close-btn">✕</button>
   </div>
 
