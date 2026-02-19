@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {CreateToolDto, ToolDto, UpdateToolDto} from '../model/tool-dto';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -9,12 +12,19 @@ export class ToolService {
 
   constructor(private http: HttpClient) {}
 
-  createTool(name: string, availability: number) {
-    const data = {
-      name: name,
-      availability: availability
-    }
+  getAllTools(): Observable<ToolDto[]> {
+    return this.http.get<ToolDto[]>(`${this.baseUrl}`).pipe(
+      map(list => list.map(item => new ToolDto(item)))
+    );
+  }
 
-    return this.http.post(`${this.baseUrl}`, data);
+  createTool(dto: CreateToolDto): Observable<ToolDto> {
+    return this.http.post(`${this.baseUrl}`, dto).pipe(
+      map(data => new ToolDto(data))
+    );
+  }
+
+  updateTool(dto: UpdateToolDto): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}`, dto);
   }
 }

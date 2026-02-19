@@ -4,30 +4,38 @@
     <h2>Macchinari</h2>
     <div class="search-section">
       <input type="search" placeholder="Cerca per nome...">
-      <button class="primary" (click)="isFormOpen = !isFormOpen">Nuovo Macchinario</button>
+      <button class="primary" (click)="openCreateForm()">Nuovo Macchinario</button>
     </div>
   </div>
   <div class="list">
-    @for (item of items; track item.id) {
-      <app-list-item [title]="item.name" [type]="'tool'">
+    @for (tool of tools; track tool.id) {
+      <app-list-item [title]="tool.name" [type]="'tool'" (click)="openEditForm(tool)">
         <div class="availability">
           <p class="text-small">Quantità:</p>
-          <p class="text-small green">{{ item.availability }}</p>
+          <p class="text-small green">{{ tool.availability }}</p>
         </div>
       </app-list-item>
     }
+    @empty {
+      @if (!isLoading) { <p class="empty-state">Nessun Macchinario trovato.</p> }
+    }
+
+    @if (isLoading) { <div class="loading">Caricamento in corso...</div> }
   </div>
 </section>
 
-<form [formGroup]="createToolForm" [class.open]="isFormOpen" class="side-form" (ngSubmit)="createTool()">
+<form [formGroup]="toolForm" [class.open]="isFormOpen" class="side-form" (ngSubmit)="onSubmit()">
   <div class="header">
-    <h2>Nuovo Macchinario</h2>
+    <h2>{{ isEditMode ? 'Modifica Macchinario' : 'Nuovo Macchinario' }}</h2>
+    <button type="button" (click)="closeForm()" class="close-btn">✕</button>
   </div>
 
   <div class="form-groups">
+    <input type="hidden" formControlName="id">
+
     <div class="form-group">
       <label for="name">Nome</label>
-      <input id="name" [formControl]="createToolForm.controls.name" type="text" placeholder="Nome Macchinario">
+      <input id="name" formControlName="name" type="text" placeholder="Nome Macchinario">
       @if (checkToolNameError()) {
         <p class="error">Il nome è obbligatorio</p>
       }
@@ -36,7 +44,7 @@
       <label for="availability">Disponibilità</label>
       <input
         id="availability"
-        [formControl]="createToolForm.controls.availability"
+        formControlName="availability"
         type="number"
         placeholder="Disponibilità"
         step="1"
@@ -47,5 +55,12 @@
     </div>
   </div>
 
-  <button class="primary" type="submit">Aggiungi</button>
+  <div class="form-group">
+    <button class="primary" type="submit" [disabled]="toolForm.invalid || isLoading">
+      {{ isEditMode ? 'Salva Modifiche' : 'Aggiungi' }}
+    </button>
+    @if (isEditMode) {
+      <button class="danger" (click)="deleteTool($event)">Elimina</button>
+    }
+  </div>
 </form>

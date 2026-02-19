@@ -1,7 +1,8 @@
-import {Component, inject} from '@angular/core';
-import {FormBuilder, Validators} from '@angular/forms';
+import {ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {noOnlySpacesValidator} from '../../../validators/no-only-space-validator';
 import {ToolService} from '../../../service/tool-service';
+import {CreateToolDto, ToolDto} from '../../../model/tool-dto';
 
 @Component({
   selector: 'app-tools-page',
@@ -14,61 +15,136 @@ import {ToolService} from '../../../service/tool-service';
     '../../../../../public/css/typography.css'
   ],
 })
-export class ToolsPage {
-  constructor(private toolService: ToolService) {}
+export class ToolsPage implements OnInit{
 
-  private formBuilder = inject(FormBuilder);
-
-  createToolForm = this.formBuilder.group({
-    name: ['', [
-      Validators.required,
-      Validators.minLength(1),
-      Validators.maxLength(50),
-      noOnlySpacesValidator()
-    ]],
-    availability: [1, [
-      Validators.required,
-      Validators.min(1)
-    ]]
-  })
+  protected tools: ToolDto[] = [];
 
   isFormOpen = false;
+  isEditMode = false;
+  isLoading = false;
+
+  constructor(
+    private toolService: ToolService,
+    private formBuilder: FormBuilder,
+    private cdr: ChangeDetectorRef
+  ) {
+    this.initForm()
+  }
+
+
+  toolForm!: FormGroup;
+
+  ngOnInit(): void {
+    this.loadTools()
+  }
+
+  private initForm() {
+    this.toolForm = this.formBuilder.group({
+      id: [null],
+      name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50), noOnlySpacesValidator()]],
+      availability: [1, [Validators.required, Validators.min(1)]]
+    })
+  }
+
+  loadTools() {
+    if(this.isLoading) return;
+    this.isLoading = true;
+    this.cdr.detectChanges()
+
+    this.toolService.getAllTools().subscribe({
+      next: (data) => {
+        this.tools = data;
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error loading tools:', err);
+        alert('Errore durante il caricamento degli strumenti. Riprova più tardi.');
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      }
+    })
+  }
+
+  openCreateForm() {
+    this.isFormOpen = true;
+    this.isEditMode = false;
+
+    this.toolForm.get('availability')?.setValidators([
+      Validators.required,
+      Validators.min(1)
+    ]);
+
+    this.toolForm.get('availability')?.updateValueAndValidity();
+
+    this.toolForm.reset({ availability: 1 });
+  }
+
+  openEditForm(tool: ToolDto) {
+    this.isFormOpen = true;
+    this.isEditMode = true;
+
+    this.toolForm.get('availability')?.setValidators([
+      Validators.required,
+      Validators.min(0)
+    ]);
+
+    this.toolForm.get('availability')?.updateValueAndValidity();
+
+    this.toolForm.patchValue({
+      id: tool.id,
+      name: tool.name,
+      availability: tool.availability
+    });
+  }
 
   checkToolNameError() {
-    return this.createToolForm.get('name')?.invalid && this.createToolForm.get('name')?.touched
+    return this.toolForm.get('name')?.invalid && this.toolForm.get('name')?.touched
   }
 
   checkToolAvailabilityError() {
-    return this.createToolForm.get('availability')?.invalid && this.createToolForm.get('availability')?.touched
+    return this.toolForm.get('availability')?.invalid && this.toolForm.get('availability')?.touched
   }
 
-  createTool() {
-    if(this.createToolForm.valid) {
-      this.toolService.createTool(this.createToolForm.value.name!, this.createToolForm.value.availability!).subscribe({
-          next: () => {
-            this.isFormOpen = false;
-            this.createToolForm.reset();
-            alert('Tool creato con successo!');
-          },
-          error: (err) => {
-            console.error('Error creating tool:', err);
-            alert('Errore durante la creazione dello strumento. Riprova più tardi.');
-          }
+  onSubmit() {
+    if(!this.toolForm.valid) return
+
+    const formValue = this.toolForm.value;
+
+    if(this.isEditMode){
+      const updateDto = {
+        id: formValue.id,
+        name: formValue.name,
+        availability: formValue.availability
+      }
+      this.toolService.updateTool(updateDto).subscribe({
+        next: () => {
+          // this.refreshListAfterChange(); todo vedere se serve
+          this.closeForm()
+        },
+        error: (err) => { console.error('Error updating tool:', err); }
       })
     } else {
-      this.createToolForm.markAllAsTouched();
+      const createDto: CreateToolDto = {
+        name: formValue.name,
+        availability: formValue.availability
+      }
+      this.toolService.createTool(createDto).subscribe({
+        next: (newTool) => {
+          this.tools = [...this.tools, newTool];
+          this.closeForm()
+        },
+        error: (err) => { console.error('Error creating tool:', err); }
+      })
     }
   }
 
-  items = [
-    {id: '1', name: 'Hammer', availability: 10},
-    {id: '2', name: 'Screwdriver', availability: 10},
-    {id: '3', name: 'Screwdriver', availability: 10},
-    {id: '4', name: 'Screwdriver', availability: 10},
-    {id: '5', name: 'Screwdriver', availability: 10},
-    {id: '6', name: 'Screwdriver', availability: 10},
-    {id: '7', name: 'Screwdriver', availability: 10},
-    {id: '8', name: 'Screwdriver', availability: 10},
-    {id: '9', name: 'Screwdriver', availability: 10}
-  ]
+  deleteTool(event: Event) {
+
+  }
+
+  closeForm() {
+    this.isFormOpen = false;
+    this.toolForm.reset();
+  }
 }
