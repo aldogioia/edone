@@ -30,7 +30,16 @@ form > .form-control > p {
 }
 
 .form-group {
-  gap: 4pt;
+  gap: 2pt;
+}
+
+label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-strong);
+  letter-spacing: 0.01em;
+  padding-left: 4pt;
 }
 
 input[type="text"],
@@ -57,13 +66,11 @@ input::placeholder {
   opacity: 0.7;
 }
 
-/* Focus state - Importante per accessibilità e UX */
 input:focus, select:focus, textarea:focus {
   border-color: var(--brand-strong);
-  box-shadow: 0 0 0 3px var(--brand-fill); /* Alone colorato leggero */
+  box-shadow: 0 0 0 3px var(--brand-fill);
 }
 
-/* Input disabilitati */
 input:disabled {
   background-color: var(--stroke-weak);
   cursor: not-allowed;
@@ -71,8 +78,6 @@ input:disabled {
 }
 
 
-/* --- BUTTONS --- */
-/* Unifico button e a.button */
 button,
 .button {
   display: inline-flex;
@@ -130,5 +135,4 @@ button.danger,
 button.danger:hover,
 .button.danger:hover {
   background-color: var(--error-stroke);
-  color: var(--text-on-black-strong);
 }

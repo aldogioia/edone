@@ -2,38 +2,70 @@
   <div class="header">
     <h2>Utenti</h2>
     <div class="search-section">
-      <input type="search" placeholder="Cerca per nome o numero...">
-      <button class="primary" (click)="isFormOpen=!isFormOpen">Nuovo Utente</button>
+      <input
+        [formControl]="searchControl"
+        type="search"
+        placeholder="Cerca per nome...">
+
+      <button class="primary" (click)="openCreateForm()">Nuovo Utente</button>
     </div>
   </div>
+
   <div class="list">
-    @for (item of items; track item.id) {
-      <app-list-item [title]="item.name" [type]="'customer'">
+    @for (item of customers; track item.id) {
+      <app-list-item [title]="item.name + ' ' + item.surname" [type]="'customer'" (click)="openEditForm(item)">
         <p class="text-small">{{ item.phoneNumber }}</p>
       </app-list-item>
     }
+    @empty {
+      @if (!isLoading) {
+        <p class="empty-state">Nessun utente trovato.</p>
+      }
+    }
+
+    @if (isLoading) {
+      <div class="loading">Caricamento in corso...</div>
+    }
+
+    @if (!isLoading && !isLastPage && !isSearching && customers.length > 0) {
+      <div class="load-more-container">
+        <button class="secondary" (click)="loadMore()">Carica altro</button>
+      </div>
+    }
   </div>
 </section>
-<form [class.open]="isFormOpen" class="side-form">
+
+<form [formGroup]="customerForm" (ngSubmit)="onSubmit()" [class.open]="isFormOpen" class="side-form">
   <div class="header">
-    <h2>Nuovo Utente</h2>
+    <h2>{{ isEditMode ? 'Modifica Utente' : 'Nuovo Utente' }}</h2>
+    <button type="button" (click)="closeForm()" class="close-btn">✕</button>
   </div>
 
   <div class="form-groups">
+    <input type="hidden" formControlName="id">
+
     <div class="form-group">
       <label for="name">Nome</label>
-      <input id="name" type="text" placeholder="Nome">
+      <input formControlName="name" id="name" type="text" placeholder="Nome">
     </div>
+
     <div class="form-group">
       <label for="surname">Cognome</label>
-      <input id="surname" type="text" placeholder="Cognome">
+      <input formControlName="surname" id="surname" type="text" placeholder="Cognome">
     </div>
+
     <div class="form-group">
       <label for="phone">Numero di Telefono</label>
-      <input id="phone" type="tel" placeholder="Numero di telefono">
+      <input formControlName="phoneNumber" id="phone" type="tel" placeholder="Numero di telefono">
     </div>
   </div>
 
-  <button class="primary" type="submit">Aggiungi</button>
+  <div class="form-group">
+    <button class="primary" type="submit" [disabled]="customerForm.invalid || isLoading">
+      {{ isEditMode ? 'Salva Modifiche' : 'Aggiungi' }}
+    </button>
+    @if (isEditMode) {
+      <button class="danger" (click)="deleteCustomer($event)">Elimina</button>
+    }
+  </div>
 </form>
-

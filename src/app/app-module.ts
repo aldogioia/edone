@@ -16,6 +16,8 @@ import {ListItem} from './admin/components/list-item/list-item';
 import {ToolsPage} from './admin/screens/tools-page/tools-page';
 import {AdminHome} from './admin/admin-home/admin-home';
 import {CustomersPage} from './admin/screens/customers-page/customers-page';
+import {provideHttpClient, withInterceptors} from '@angular/common/http';
+import {tokenInterceptor} from './security/token-interceptor';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,10 @@ import {CustomersPage} from './admin/screens/customers-page/customers-page';
     ReactiveFormsModule
   ],
   providers: [
-    provideBrowserGlobalErrorListeners()
+    provideBrowserGlobalErrorListeners(),
+    provideHttpClient(
+      withInterceptors([tokenInterceptor]),
+    )
   ],
   bootstrap: [App]
 })

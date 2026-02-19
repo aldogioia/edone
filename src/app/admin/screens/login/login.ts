@@ -2,6 +2,7 @@ import {Component, inject} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {AuthService} from '../../../service/auth-service';
 import {PasswordService} from '../../../service/password-service';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -19,14 +20,17 @@ export class Login {
   // 1 -> Password Forget
   // 2 -> Insert Token for Password Reset
   pageIndex = 0
+  loading = false;
 
   constructor(
     private authService: AuthService,
-    private passwordService: PasswordService
+    private passwordService: PasswordService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   loginForm = this.formBuilder.group({
-    telephone: ['', [
+    phoneNumber: ['', [
       Validators.required,
       Validators.minLength(10),
       Validators.maxLength(10),
@@ -39,7 +43,7 @@ export class Login {
   })
 
   requestResetForm = this.formBuilder.group({
-    telephone: ['', [
+    phoneNumber: ['', [
       Validators.required,
       Validators.minLength(10),
       Validators.maxLength(10),
@@ -58,10 +62,10 @@ export class Login {
     ]]
   })
 
-  telephoneField = this.pageIndex === 0 ?
-    this.loginForm.controls.telephone :
+  phoneNumberField = this.pageIndex === 0 ?
+    this.loginForm.controls.phoneNumber :
     this.pageIndex == 1 ?
-      this.requestResetForm.controls.telephone :
+      this.requestResetForm.controls.phoneNumber :
       this.resetForm.controls.token
 
   passwordField = this.pageIndex === 0 ?
@@ -70,9 +74,9 @@ export class Login {
 
   checkTelephoneFieldError() {
     if(this.pageIndex === 0)
-      return (this.loginForm.get('telephone')?.invalid && this.loginForm.get('telephone')?.touched)
+      return (this.loginForm.get('phoneNumber')?.invalid && this.loginForm.get('phoneNumber')?.touched)
     else if(this.pageIndex === 1)
-      return (this.requestResetForm.get('telephone')?.invalid && this.requestResetForm.get('telephone')?.touched)
+      return (this.requestResetForm.get('phoneNumber')?.invalid && this.requestResetForm.get('phoneNumber')?.touched)
     else
       return (this.resetForm.get('token')?.invalid && this.resetForm.get('token')?.touched)
   }
@@ -85,17 +89,24 @@ export class Login {
   }
 
   private login() {
-    if(this.loginForm.valid) {
-      this.authService.signIn(this.loginForm.value.telephone!, this.loginForm.value.password!).subscribe({
-        next: (response) => {
-          // todo salvare i token
-          alert("Login effettuato con successo")
+    if (this.loginForm.valid && !this.loading) {
+      this.loading = true;
+
+      this.authService.signIn(
+        this.loginForm.value.phoneNumber!,
+        this.loginForm.value.password!
+      ).subscribe({
+        next: () => {
+          this.loading = false;
+          this.router.navigateByUrl(
+            this.route.snapshot.queryParams['returnUrl'] || '/admin'
+          ).then();
         },
-        error: (error) => {
-          console.log(error);
-          alert('Login failed: ' + error.message);
+        error: () => {
+          alert('Credenziali non valide o errore di rete');
+          this.loading = false;
         }
-      })
+      });
     } else {
       this.loginForm.markAllAsTouched();
     }
@@ -103,7 +114,7 @@ export class Login {
 
   private requestReset() {
     if(this.requestResetForm.valid){
-      this.passwordService.requestReset(this.requestResetForm.value.telephone!).subscribe({
+      this.passwordService.requestReset(this.requestResetForm.value.phoneNumber!).subscribe({
         next: () => {
           this.pageIndex = 2;
           this.requestResetForm.reset()

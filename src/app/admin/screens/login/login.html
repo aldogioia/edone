@@ -1,6 +1,6 @@
 @if (pageIndex != 0) {
   <div class="back-icon" (click)="onBack()">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
       <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2.33333" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </div>
@@ -20,7 +20,7 @@
 <form [formGroup]="pageIndex === 0 ? loginForm : pageIndex === 1 ? requestResetForm : resetForm" (ngSubmit)="onSubmit()">
   <div class="form-control">
     <label for="telephone">{{ pageIndex == 2 ? "Token" : "Telefono"}}</label>
-    <input id="telephone" type="tel" [formControl]="telephoneField" placeholder="Telefono">
+    <input id="telephone" type="tel" [formControl]="phoneNumberField" placeholder="Telefono">
     @if (checkTelephoneFieldError()) {
       <p class="error">{{ pageIndex === 0 || pageIndex === 1 ? 'Inserisci un numero di telefono valido' : 'Token errato' }}</p>
     }

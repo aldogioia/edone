@@ -5,13 +5,15 @@ import {Login} from './admin/screens/login/login';
 import {AdminHome} from './admin/admin-home/admin-home';
 import {CustomersPage} from './admin/screens/customers-page/customers-page';
 import {ToolsPage} from './admin/screens/tools-page/tools-page';
+import {authGuard} from './security/auth-guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'admin', pathMatch: 'full' }, // TODO: Change to home after development
   { path: 'home', component: Home, title: 'Home Page'},
-  { path: 'admin/login', component: Login, title: 'Admin Login' },
+  { path: 'login', component: Login, title: 'Login' },
   {
     path: 'admin',
+    canActivate: [authGuard],
     component: AdminHome,
     title: 'Admin Home',
     children: [
