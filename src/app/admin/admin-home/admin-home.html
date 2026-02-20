@@ -1,10 +1,10 @@
 <nav>
-  <img class="logo-large" src="logo.png" alt="logo">
-  <img class="logo-small" src="img.png" alt="logo">
   <div class="links">
+    <img class="logo-large" src="logo.png" alt="logo">
+    <img class="logo-small" src="img.png" alt="logo">
     <ul>
       <p class="text-small">Appuntamenti</p>
-      <li routerLinkActive="active" data-name="Calendario" routerLink="calendar">
+      <li routerLinkActive="active" title="Calendario" routerLink="calendar">
         <hugeicons-icon [icon]="Calendar03Icon"></hugeicons-icon>
         <p class="text-small">Calendario</p>
       </li>
@@ -12,19 +12,19 @@
     <div class="separator"></div>
     <ul>
       <p class="text-small">Gestione</p>
-      <li routerLinkActive="active" data-name="Clienti" routerLink="customers">
+      <li routerLinkActive="active" title="Clienti" routerLink="customers">
         <hugeicons-icon [icon]="UserIcon"></hugeicons-icon>
         <p class="text-small">Clienti</p>
       </li>
-      <li routerLinkActive="active" data-name="Operatori" routerLink="operators">
+      <li routerLinkActive="active" title="Operatori" routerLink="operators">
         <hugeicons-icon [icon]="UserMultipleIcon"></hugeicons-icon>
         <p class="text-small">Operatori</p>
       </li>
-      <li routerLinkActive="active" data-name="Macchinari" routerLink="tools">
+      <li routerLinkActive="active" title="Macchinari" routerLink="tools">
         <hugeicons-icon [icon]="BrushIcon"></hugeicons-icon>
         <p class="text-small">Macchinari</p>
       </li>
-      <li routerLinkActive="active" data-name="Stanze" routerLink="rooms">
+      <li routerLinkActive="active" title="Stanze" routerLink="rooms">
         <hugeicons-icon [icon]="Door01Icon"></hugeicons-icon>
         <p class="text-small">Stanze</p>
       </li>
@@ -32,11 +32,11 @@
     <div class="separator"></div>
     <ul>
       <p class="text-small">Turni</p>
-      <li routerLinkActive="active" data-name="Standard" routerLink="schedules">
+      <li routerLinkActive="active" title="Turni standard" routerLink="schedules">
         <hugeicons-icon [icon]="DateTimeIcon"></hugeicons-icon>
         <p class="text-small">Standard</p>
       </li>
-      <li routerLinkActive="active" data-name="Eccezioni" routerLink="schedules-exceptions">
+      <li routerLinkActive="active" title="Eccezioni turni" routerLink="schedules-exceptions">
         <hugeicons-icon [icon]="CalendarBlock01Icon"></hugeicons-icon>
         <p class="text-small">Eccezioni</p>
       </li>
