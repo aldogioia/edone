@@ -24,7 +24,7 @@ export class CustomersService {
     );
   }
 
-  getCustomersPage(page: number = 0, size: number = 100): Observable<Page<CustomerDto>> {
+  getCustomersPage(page: number = 0, size: number = 1): Observable<Page<CustomerDto>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());

@@ -30,7 +30,7 @@ export class CustomersPage implements OnInit {
   customers: CustomerDto[] = [];
 
   currentPage = 0;
-  pageSize = 10;
+  pageSize = 1;
   isLastPage = false;
 
   isFormOpen = false;

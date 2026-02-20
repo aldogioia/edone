@@ -159,15 +159,13 @@ button:disabled, button:disabled:hover {
 /* Button Secondary (Outline/Ghost) */
 button.secondary,
 .button.secondary {
-  background-color: transparent;
-  border: 1px solid var(--stroke-strong);
-  color: var(--text-strong);
+  background-color: var(--brand-fill);
+  color: var(--text-weak);
 }
 
 button.secondary:hover,
 .button.secondary:hover {
-  background-color: var(--stroke-weak);
-  border-color: var(--text-strong);
+  color: var(--admin-brand-strong);
 }
 
 /* Button Danger (Delete actions) */

@@ -100,8 +100,7 @@
     </div>
 
     <div class="form-group">
-      <label for="services">Servizi Offerti</label>
-
+      <label>Servizi e Durata</label>
       @if (isLoadingServices) {
         <small>Caricamento servizi...</small>
       } @else if (services.length === 0) {
@@ -109,14 +108,24 @@
       } @else {
         <div id="services" class="services">
           @for (service of services; track service.id) {
-            <div class="checkbox">
+            <div class="service-item" [class.selected]="isServiceSelected(service.id)">
+              <label class="checkbox-label">
+                <input
+                  type="checkbox"
+                  [checked]="isServiceSelected(service.id)"
+                  (change)="onServiceToggle(service.id, $event)">
+                {{ service.name }}
+              </label>
+
               <input
-                type="checkbox"
-                id="{{service.id}}"
-                [checked]="isServiceSelected(service.id)"
-                (change)="onServiceToggle(service.id, $event)">
-              <label for="{{service.id}}">{{service.name}}</label>
+                type="number"
+                min="5"
+                step="5"
+                placeholder="es. 30"
+                [value]="getServiceDuration(service.id)"
+                (input)="onDurationChange(service.id, $event)">
             </div>
+
           }
         </div>
       }

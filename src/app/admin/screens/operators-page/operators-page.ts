@@ -7,6 +7,7 @@ import { OperatorDto, CreateOperatorDto, UpdateOperatorDto } from '../../../mode
 import {Add01Icon, Cancel01Icon, Refresh01Icon} from '@hugeicons/core-free-icons';
 import {ServiceService} from '../../../service/service-service';
 import {ServiceDto} from '../../../model/service-dto';
+import {CreateOperatorServiceDto, UpdateOperatorServiceDto} from '../../../model/operator-service-dto';
 
 @Component({
   selector: 'app-operators-page',
@@ -101,16 +102,39 @@ export class OperatorsPage implements OnInit, OnDestroy {
     return selected.some(s => s.serviceId === serviceId);
   }
 
+  getServiceDuration(serviceId: string): number {
+    const selected: any[] = this.operatorForm.value.operatorServices || [];
+    const found = selected.find(s => s.serviceId === serviceId);
+    return found ? found.duration : 30; // 30 è il default visivo iniziale
+  }
+
   onServiceToggle(serviceId: string, event: Event) {
     const isChecked = (event.target as HTMLInputElement).checked;
     const currentServices: any[] = this.operatorForm.value.operatorServices || [];
 
     let newServices;
     if (isChecked) {
-      newServices = [...currentServices, { serviceId: serviceId }];
+      newServices = [...currentServices, { serviceId: serviceId, duration: 30 }];
     } else {
       newServices = currentServices.filter(s => s.serviceId !== serviceId);
     }
+
+    this.operatorForm.patchValue({ operatorServices: newServices });
+  }
+
+  onDurationChange(serviceId: string, event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    const newDuration = parseInt(inputElement.value, 10) || 0; // Evita NaN se l'utente svuota il campo
+
+    const currentServices: any[] = this.operatorForm.value.operatorServices || [];
+
+    // Creiamo un nuovo array aggiornando solo l'oggetto interessato
+    const newServices = currentServices.map(s => {
+      if (s.serviceId === serviceId) {
+        return { ...s, duration: newDuration };
+      }
+      return s;
+    });
 
     this.operatorForm.patchValue({ operatorServices: newServices });
   }
@@ -174,7 +198,10 @@ export class OperatorsPage implements OnInit, OnDestroy {
     this.isEditMode = true;
     this.selectedImageFile = undefined;
 
-    const servicesForForm = operator.operatorServices?.map(s => ({ serviceId: s.serviceId })) || [];
+    const servicesForForm = operator.operatorServices?.map(s => ({
+      serviceId: s.serviceId,
+      duration: s.duration || 30
+    })) || [];
 
     this.operatorForm.patchValue({
       id: operator.id,
@@ -203,12 +230,18 @@ export class OperatorsPage implements OnInit, OnDestroy {
     const formValue = this.operatorForm.value;
 
     if (this.isEditMode) {
+      const mappedUpdateServices: UpdateOperatorServiceDto[] = (formValue.operatorServices || []).map((s: any) => ({
+        operatorId: formValue.id,
+        serviceId: s.serviceId,
+        duration: s.duration || 30
+      }));
+
       const updateDto: UpdateOperatorDto = {
         id: formValue.id,
         name: formValue.name,
         surname: formValue.surname,
         phoneNumber: formValue.phoneNumber,
-        operatorServices: formValue.operatorServices
+        operatorServices: mappedUpdateServices
       };
 
       this.operatorsService.updateOperator(updateDto, this.selectedImageFile).subscribe({
@@ -223,11 +256,16 @@ export class OperatorsPage implements OnInit, OnDestroy {
         }
       });
     } else {
+      const mappedCreateServices: CreateOperatorServiceDto[] = (formValue.operatorServices || []).map((s: any) => ({
+        serviceId: s.serviceId,
+        duration: s.duration || 30
+      }));
+
       const createDto: CreateOperatorDto = {
         name: formValue.name,
         surname: formValue.surname,
         phoneNumber: formValue.phoneNumber,
-        operatorServices: formValue.operatorServices
+        operatorServices: mappedCreateServices
       };
 
       this.operatorsService.createOperator(createDto, this.selectedImageFile).subscribe({

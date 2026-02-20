@@ -27,13 +27,10 @@
     @if (isLoading) {
       <div class="loading">Caricamento in corso...</div>
     }
-
-    @if (!isLoading && !isLastPage && !isSearching && customers.length > 0) {
-      <div class="load-more-container">
-        <button class="secondary" (click)="loadMore()">Carica altro</button>
-      </div>
-    }
   </div>
+  @if (!isLoading && !isLastPage && !isSearching && customers.length > 0) {
+    <button class="secondary" (click)="loadMore()">Carica altro</button>
+  }
 </section>
 
 <form [formGroup]="customerForm" (ngSubmit)="onSubmit()" [class.open]="isFormOpen" class="side-form">
