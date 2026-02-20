@@ -1,0 +1,126 @@
+<section class="list-section">
+  <div class="header">
+    <h2>Turni Operatori</h2>
+    <div class="search-section">
+      <div class="side-list">
+        @for (operator of operators; track operator.id) {
+          <div class="side-list-item" [class.selected]="isOperatorSelected(operator)" (click)="selectOperator(operator)">
+            <img [src]="operator.imgUrl" [alt]="operator.name + ' ' + operator.surname"/>
+            <p>{{ operator.name + ' ' + operator.surname }}</p>
+          </div>
+        } @empty {
+          @if (!isLoadingOperators) { <p class="empty-state">Nessun operatore trovato</p> }
+        }
+        @if (isLoadingOperators) { <div class="loading">Caricamento in corso...</div> }
+      </div>
+      <div class="controls">
+        <button  title="Aggiorna lista"> <!-- TODO: (click)="forceRefreshList()" -->
+          <hugeicons-icon [icon]="Refresh01Icon"></hugeicons-icon>
+        </button>
+        <button [class.open]="isFormOpen" (click)="isFormOpen ? closeForm() : openCreateForm()">
+          <hugeicons-icon [icon]="isFormOpen ? Cancel01Icon : Add01Icon"></hugeicons-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="list">
+    @for (day of weekDays; track day.key){
+      <app-list-item [title]="day.label" (click)="handleDayClick(day.key)">
+        <div class="shifts">
+          @for (shift of getShiftsByDay(day.key); track shift.id) {
+            <p class="text-small shift">{{ shift.start.substring(0, 5) }} {{ shift.end }} {{ shift.type }}</p>
+          } @empty {
+            <p class="text-small">Riposo</p>
+          }
+        </div>
+      </app-list-item>
+    }
+  </div>
+</section>
+
+<form [formGroup]="scheduleForm" [class.open]="isFormOpen" class="side-form" (ngSubmit)="onSubmit()">
+  <div class="header">
+    <h2>{{ isEditMode ? 'Modifica Turno' : 'Nuovo Turno' }}</h2>
+  </div>
+
+  <div class="form-groups">
+    <input type="hidden" formControlName="id">
+
+    <div class="form-group">
+      <label for="days">Giorno della settimana</label>
+      <select id="days" formControlName="day">
+        <option value="" disabled>Seleziona un giorno</option>
+
+        @if (isEditMode) {
+          <option [value]="scheduleForm.get('day')?.value">
+            {{ getLabelFromKey(scheduleForm.get('day')?.value) }}
+          </option>
+        } @else {
+          @for (day of getDaysWithoutShifts(); track day.key) {
+            <option [value]="day.key">{{ day.label }}</option>
+          }
+        }
+      </select>
+    </div>
+
+    <div class="hours-header">
+      <label>Fasce Orarie</label>
+      <div class="add-buttons">
+        @if (!getAvailableSlotTypes().hasAM) {
+          <button type="button" (click)="addSlot('AM')">+ Mattino</button>
+        }
+        @if (!getAvailableSlotTypes().hasPM) {
+          <button type="button" (click)="addSlot('PM')">+ Pomeriggio</button>
+        }
+      </div>
+    </div>
+
+    <div formArrayName="slots" class="slots-container">
+      @if (slots.hasError('overlap')) {
+        <p class="error-banner">L'orario del pomeriggio non può iniziare prima della fine della mattina.</p>
+      }
+
+      @for (slot of slots.controls; track slot.get('type')?.value) {
+        <div [formGroupName]="$index" class="slot-card" [class.error]="slot.invalid">
+
+          <div class="slot-header">
+            <span class="slot-label">{{ slot.get('type')?.value === 'AM' ? 'Mattina (AM)' : 'Pomeriggio (PM)' }}</span>
+            <button type="button" class="btn-remove" (click)="removeSlot($index)">✕</button>
+          </div>
+
+          <div class="hours-row">
+            <div class="form-group flex-1">
+              <label>Inizio</label>
+              <input type="time" formControlName="start" step="1800">
+              @if (slot.get('start')?.hasError('invalidStep')) {
+                <span class="error-text">Usa :00 o :30</span>
+              }
+            </div>
+            <div class="form-group flex-1">
+              <label>Fine</label>
+              <input type="time" formControlName="end" step="1800">
+              @if (slot.get('end')?.hasError('invalidStep')) {
+                <span class="error-text">Usa :00 o :30</span>
+              }
+            </div>
+          </div>
+
+          @if (slot.hasError('invalidRange')) {
+            <p class="error-text">L'orario di fine deve essere dopo l'inizio.</p>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="form-controls">
+    <button class="primary" type="submit" [disabled]="scheduleForm.invalid || isSaving">
+      @if (isSaving) { Attendere... } @else { {{ isEditMode ? 'Salva Modifiche' : 'Aggiungi' }} }
+    </button>
+
+    @if (isEditMode) {
+      <button type="button" class="danger" (click)="deleteSchedule($event)" [disabled]="isSaving">Elimina</button>
+    }
+  </div>
+</form>

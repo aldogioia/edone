@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+
+:host {
+  width: 100%;
+  display: flex;
+}
+
+.shifts {
+  display: flex;
+  margin-top: 4pt;
+  gap: 4pt;
+  width: 100%;
+}
+
+.shift {
+  width: 100%;
+  border: 1px solid var(--stroke-strong);
+  padding: 4pt;
+  border-radius: 4pt;
+  font-family: 'Space Mono', monospace;
+  color: var(--text-strong) !important;
+  text-align: center;
+  text-wrap: nowrap;
+}
+
+
+
+
+
+
+.slots-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.slot-card {
+  border: 1px solid #eee;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+/* Allinea Label e X agli estremi */
+.slot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.slot-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* Allinea gli input orario sulla stessa riga */
+.hours-row {
+  display: flex;
+  gap: 1rem; /* Spazio tra inizio e fine */
+  align-items: center;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.btn-remove {
+  background: none;
+  border: none;
+  color: #ff4d4f;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0 5px;
+  line-height: 1;
+  transition: transform 0.2s;
+}
+
+.btn-remove:hover {
+  transform: scale(1.2);
+}
+
+/* Forza gli input a occupare tutto lo spazio del loro contenitore */
+.hours-row input {
+  width: 100%;
+}
