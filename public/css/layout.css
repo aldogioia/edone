@@ -69,7 +69,7 @@
 }
 
 .side-form {
-  display: flex;
+  display: none;
   flex-direction: column;
   gap: 24pt;
   width: 0;
@@ -78,6 +78,7 @@
 }
 
 .side-form.open {
+  display: flex;
   padding: 8pt 8pt;
   width: 400px;
   min-width: 400px;

@@ -27,6 +27,33 @@ label {
   padding-left: 4pt;
 }
 
+.services {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 8pt;
+}
+
+.services > .checkbox {
+  display: flex;
+  align-items: center;
+  gap: 4pt;
+  border: 1px solid var(--stroke-weak);
+  padding: 4pt 8pt 4pt 4pt;
+  border-radius: 8pt;
+  transition: all .2s ease-in-out;
+  cursor: pointer;
+}
+
+.services > .checkbox:has(input:checked) {
+  background-color: var(--brand-fill);
+  border-color: var(--brand-stroke-weak);
+}
+
+.error-message {
+  color: var(--error-strong);
+}
+
 input[type="text"],
 input[type="search"],
 input[type="tel"],
@@ -72,6 +99,18 @@ input:focus, select:focus, textarea:focus {
   box-shadow: 0 0 0 3px var(--brand-fill);
 }
 
+input.invalid,
+select.invalid,
+textarea.invalid {
+  border: 1px solid var(--error-stroke-strong);
+}
+
+input.invalid:focus,
+select.invalid:focus,
+textarea.invalid:focus{
+  box-shadow: 0 0 0 3px var(--error-fill);
+}
+
 input:disabled {
   background-color: var(--stroke-weak);
   cursor: not-allowed;
@@ -110,6 +149,11 @@ button.primary,
 button.primary:hover,
 .button.primary:hover {
   background-color: var(--brand-weak);
+}
+
+button:disabled, button:disabled:hover {
+  background-color: var(--stroke-strong);
+  cursor: not-allowed;
 }
 
 /* Button Secondary (Outline/Ghost) */

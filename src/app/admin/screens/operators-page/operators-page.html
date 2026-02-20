@@ -45,32 +45,91 @@
 
     <div class="form-group">
       <label for="name">Nome</label>
-      <input formControlName="name" id="name" type="text" placeholder="Nome">
+      <input
+        formControlName="name"
+        id="name"
+        type="text"
+        placeholder="Nome"
+        [class.invalid]="getFormControl('name')?.invalid && (getFormControl('name')?.dirty || getFormControl('name')?.touched)">
+
+      @if (getFormControl('name')?.invalid && (getFormControl('name')?.dirty || getFormControl('name')?.touched)) {
+        <div class="error-message">
+          @if (getFormControl('name')?.errors?.['required']) { <small>Il nome è obbligatorio.</small> }
+          @if (getFormControl('name')?.errors?.['minlength']) { <small>Il nome deve avere almeno 3 caratteri.</small> }
+        </div>
+      }
     </div>
 
     <div class="form-group">
       <label for="surname">Cognome</label>
-      <input formControlName="surname" id="surname" type="text" placeholder="Cognome">
+      <input
+        formControlName="surname"
+        id="surname"
+        type="text"
+        placeholder="Cognome"
+        [class.invalid]="getFormControl('surname')?.invalid && (getFormControl('surname')?.dirty || getFormControl('surname')?.touched)">
+
+      @if (getFormControl('surname')?.invalid && (getFormControl('surname')?.dirty || getFormControl('surname')?.touched)) {
+        <div class="error-message">
+          @if (getFormControl('surname')?.errors?.['required']) { <small>Il cognome è obbligatorio.</small> }
+          @if (getFormControl('surname')?.errors?.['minlength']) { <small>Il cognome deve avere almeno 3 caratteri.</small> }
+        </div>
+      }
     </div>
 
     <div class="form-group">
       <label for="phone">Numero di Telefono</label>
-      <input formControlName="phoneNumber" id="phone" type="tel" placeholder="Numero di telefono">
+      <input
+        formControlName="phoneNumber"
+        id="phone"
+        type="tel"
+        placeholder="Es: 3331234567"
+        [class.invalid]="getFormControl('phoneNumber')?.invalid && (getFormControl('phoneNumber')?.dirty || getFormControl('phoneNumber')?.touched)">
+
+      @if (getFormControl('phoneNumber')?.invalid && (getFormControl('phoneNumber')?.dirty || getFormControl('phoneNumber')?.touched)) {
+        <div class="error-message">
+          @if (getFormControl('phoneNumber')?.errors?.['required']) { <small>Il telefono è obbligatorio.</small> }
+          @if (getFormControl('phoneNumber')?.errors?.['pattern']) { <small>Inserisci un numero di 10 cifre valido (no lettere).</small> }
+        </div>
+      }
     </div>
 
     <div class="form-group">
       <label for="imageFile">Immagine Profilo</label>
       <input type="file" id="imageFile" (change)="onFileSelected($event)" accept="image/*">
     </div>
+
+    <div class="form-group">
+      <label for="services">Servizi Offerti</label>
+
+      @if (isLoadingServices) {
+        <small>Caricamento servizi...</small>
+      } @else if (services.length === 0) {
+        <small>Nessun servizio disponibile.</small>
+      } @else {
+        <div id="services" class="services">
+          @for (service of services; track service.id) {
+            <div class="checkbox">
+              <input
+                type="checkbox"
+                id="{{service.id}}"
+                [checked]="isServiceSelected(service.id)"
+                (change)="onServiceToggle(service.id, $event)">
+              <label for="{{service.id}}">{{service.name}}</label>
+            </div>
+          }
+        </div>
+      }
+    </div>
   </div>
 
-  <div class="form-group actions">
-    <button class="primary" type="submit" [disabled]="operatorForm.invalid || isLoading">
-      {{ isEditMode ? 'Salva Modifiche' : 'Aggiungi' }}
+  <div class="form-controls">
+    <button class="primary" type="submit" [disabled]="operatorForm.invalid || isSaving">
+      @if (isLoading) { Attendere... } @else { {{ isEditMode ? 'Salva Modifiche' : 'Aggiungi' }} }
     </button>
 
     @if (isEditMode) {
-      <button type="button" class="danger" (click)="deleteOperator($event)">Elimina</button>
+      <button type="button" class="danger" (click)="deleteOperator($event)" [disabled]="isSaving">Elimina</button>
     }
   </div>
 </form>

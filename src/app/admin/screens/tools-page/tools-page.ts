@@ -28,6 +28,7 @@ export class ToolsPage implements OnInit, OnDestroy{
   isFormOpen = false;
   isEditMode = false;
   isLoading = false;
+  isSaving = false;
 
   private destroy$ = new Subject<void>();
 
@@ -91,6 +92,17 @@ export class ToolsPage implements OnInit, OnDestroy{
     })
   }
 
+  forceRefreshList() {
+    this.isLoading = true;
+    this.toolService.refreshCache().subscribe({
+      error: (err) => {
+        console.error('Errore refresh', err);
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
   openCreateForm() {
     this.isFormOpen = true;
     this.isEditMode = false;
@@ -123,18 +135,14 @@ export class ToolsPage implements OnInit, OnDestroy{
     });
   }
 
-  checkToolNameError() {
-    return this.toolForm.get('name')?.invalid && this.toolForm.get('name')?.touched
-  }
-
-  checkToolAvailabilityError() {
-    return this.toolForm.get('availability')?.invalid && this.toolForm.get('availability')?.touched
+  getFormControl(controlName: string) {
+    return this.toolForm.get(controlName);
   }
 
   onSubmit() {
-    if(!this.toolForm.valid || this.isLoading) return
+    if(!this.toolForm.valid || this.isSaving) return
 
-    this.isLoading = true;
+    this.isSaving = true; // Inizio salvataggio
     const formValue = this.toolForm.value;
 
     if(this.isEditMode){
@@ -145,12 +153,12 @@ export class ToolsPage implements OnInit, OnDestroy{
       }
       this.toolService.updateTool(updateDto).subscribe({
         next: () => {
-          this.isLoading = false;
+          this.isSaving = false; // Fine
           this.closeForm()
           this.cdr.detectChanges();
         },
         error: (err) => {
-          this.isLoading = false;
+          this.isSaving = false;
           alert('Errore durante l\'aggiornamento del macchinario. Verifica che il nome non sia già in uso e riprova.');
           console.error('Error updating tool:', err);
           this.cdr.detectChanges();
@@ -163,12 +171,12 @@ export class ToolsPage implements OnInit, OnDestroy{
       }
       this.toolService.createTool(createDto).subscribe({
         next: () => {
-          this.isLoading = false;
+          this.isSaving = false; // Fine
           this.closeForm()
           this.cdr.detectChanges();
         },
         error: (err) => {
-          this.isLoading = false;
+          this.isSaving = false;
           alert('Errore durante la creazione del macchinario. Verifica che il nome non sia già in uso e riprova.');
           console.error('Error creating tool:', err);
           this.cdr.detectChanges();
@@ -179,23 +187,22 @@ export class ToolsPage implements OnInit, OnDestroy{
 
   deleteTool(event: Event) {
     event.stopPropagation();
-
     if(!confirm('Sei sicuro di voler eliminare questo macchinario?')) return;
 
     const toolId = this.toolForm.get('id')?.value;
     if(!toolId) return;
 
-    this.isLoading = true;
+    this.isSaving = true; // Mostra il caricamento
 
     this.toolService.deleteTool(toolId).subscribe({
       next: () => {
         this.closeForm()
-        this.isLoading = false
+        this.isSaving = false
         this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error deleting tool:', err);
-        this.isLoading = false
+        this.isSaving = false
         this.cdr.detectChanges();
       }
     })

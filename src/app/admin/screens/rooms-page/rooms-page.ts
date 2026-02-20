@@ -30,9 +30,11 @@ export class RoomsPage implements OnInit, OnDestroy{
 
   isFormOpen = false;
   isEditMode = false;
+
   isLoading = false;
   isLoadingRooms = false;
   isLoadingServices = false;
+  isSaving = false;
 
   private destroy$ = new Subject<void>();
 
@@ -63,6 +65,17 @@ export class RoomsPage implements OnInit, OnDestroy{
       name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50), noOnlySpacesValidator()]],
       selectedServiceIds: [[]]
     })
+  }
+
+  forceRefreshList() {
+    this.isLoading = true;
+    this.roomService.refreshCache().subscribe({
+      error: (err) => {
+        console.error('Errore refresh', err);
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   openCreateForm() {
@@ -121,6 +134,10 @@ export class RoomsPage implements OnInit, OnDestroy{
     })
   }
 
+  getFormControl(controlName: string) {
+    return this.roomForm.get(controlName);
+  }
+
   private setupSearchAndDataStream() {
     combineLatest([
       this.roomService.rooms$,
@@ -145,9 +162,10 @@ export class RoomsPage implements OnInit, OnDestroy{
     })
   }
 
-  onSubmit(){
-    if(!this.roomForm.valid || this.isLoading) return;
+  onSubmit() {
+    if(!this.roomForm.valid || this.isSaving) return;
 
+    this.isSaving = true;
     const formValue = this.roomForm.value;
 
     const dto = {
@@ -159,13 +177,13 @@ export class RoomsPage implements OnInit, OnDestroy{
     if(this.isEditMode) {
       this.roomService.updateRoom(dto).subscribe({
         next: () => {
-          this.isLoading = false;
+          this.isSaving = false;
           this.closeForm()
           this.cdr.detectChanges();
         },
         error: (err) => {
-          this.isLoading = false;
-          alert("Errorere durante l'aggiornamento della stanza. Riprova.")
+          this.isSaving = false;
+          alert("Errore durante l'aggiornamento della stanza. Riprova.")
           console.error('Failed to update room', err)
           this.cdr.detectChanges();
         }
@@ -173,13 +191,13 @@ export class RoomsPage implements OnInit, OnDestroy{
     } else {
       this.roomService.createRoom(dto).subscribe({
         next: () => {
-          this.isLoading = false;
+          this.isSaving = false;
           this.closeForm()
           this.cdr.detectChanges();
         },
         error: (err) => {
-          this.isLoading = false;
-          alert("Errorere durante la creazione della stanza. Riprova.")
+          this.isSaving = false;
+          alert("Errore durante la creazione della stanza. Riprova.")
           console.error('Failed to create room', err)
           this.cdr.detectChanges();
         }
@@ -189,23 +207,22 @@ export class RoomsPage implements OnInit, OnDestroy{
 
   deleteRoom(event: Event) {
     event.stopPropagation();
-
     if(!confirm('Sei sicuro di voler eliminare questa stanza?')) return;
 
     const roomId = this.roomForm.get('id')?.value;
     if(!roomId) return;
 
-    this.isLoading = true;
+    this.isSaving = true;
 
     this.roomService.deleteRoom(roomId).subscribe({
       next: () => {
         this.closeForm()
-        this.isLoading = false
+        this.isSaving = false
         this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error deleting room:', err);
-        this.isLoading = false
+        this.isSaving = false
         this.cdr.detectChanges();
       }
     })

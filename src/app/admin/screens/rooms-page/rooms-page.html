@@ -1,11 +1,10 @@
 <section class="list-section">
-
   <div class="header">
     <h2>Stanze</h2>
     <div class="search-section">
       <input [formControl]="searchControl" type="search" placeholder="Cerca per nome...">
       <div class="controls">
-        <button  title="Aggiorna lista"> <!-- TODO: (click)="forceRefreshList()" -->
+        <button (click)="forceRefreshList()" title="Aggiorna lista">
           <hugeicons-icon [icon]="Refresh01Icon"></hugeicons-icon>
         </button>
         <button [class.open]="isFormOpen" (click)="isFormOpen ? closeForm() : openCreateForm()">
@@ -36,44 +35,60 @@
     }
   </div>
 </section>
-@if (isFormOpen) {
-  <form [formGroup]="roomForm" [class.open]="isFormOpen" class="side-form" (ngSubmit)="onSubmit()">
-    <div class="header">
-      <h2>{{ isEditMode ? 'Modifica Stanza' : 'Nuova Stanza' }}</h2>
-    </div>
+<form [formGroup]="roomForm" [class.open]="isFormOpen" class="side-form" (ngSubmit)="onSubmit()">
+  <div class="header">
+    <h2>{{ isEditMode ? 'Modifica Stanza' : 'Nuova Stanza' }}</h2>
+  </div>
 
-    <div class="form-groups">
-      <input type="hidden" formControlName="id">
+  <div class="form-groups">
+    <input type="hidden" formControlName="id">
 
-      <div class="form-group">
-        <label for="name">Nome</label>
-        <input id="name" type="text" placeholder="Nome Stanza" formControlName="name">
-      </div>
-      <div class="form-group">
-        <label for="services">Servizi</label>
-        <div id="services" class="services">
-          @for (service of services; track service.id) {
-            <div class="checkbox">
-              <input
-                type="checkbox"
-                id="{{service.id}}"
-                [checked]="isServiceSelected(service.id)"
-                (change)="onServiceToggle(service.id, $event)">
-              <label for="{{service.id}}">{{service.name}}</label>
-            </div>
-          } @empty {
-            @if (!isLoadingServices) { <p class="text-small">Nessun servizio disponibile</p> }
-          }
-          @if (isLoadingServices) { <div class="loading">Caricamento in corso...</div> }
+    <div class="form-group">
+      <label for="name">Nome</label>
+      <input
+        id="name"
+        type="text"
+        placeholder="Nome Stanza"
+        formControlName="name"
+        [class.invalid]="getFormControl('name')?.invalid && (getFormControl('name')?.dirty || getFormControl('name')?.touched)">
+
+      @if (getFormControl('name')?.invalid && (getFormControl('name')?.dirty || getFormControl('name')?.touched)) {
+        <div class="error-message">
+          @if (getFormControl('name')?.errors?.['required']) { <small>Il nome è obbligatorio.</small> }
+          @if (getFormControl('name')?.errors?.['minlength']) { <small>Il nome non può essere vuoto.</small> }
+          @if (getFormControl('name')?.errors?.['maxlength']) { <small>Il nome è troppo lungo (max 50 caratteri).</small> }
+          @if (getFormControl('name')?.errors?.['onlySpaces']) { <small>Il nome non può contenere solo spazi.</small> }
         </div>
-      </div>
+      }
     </div>
 
     <div class="form-group">
-      <button class="primary" type="submit">{{ isEditMode ? 'Salva Modifiche' : 'Aggiungi' }}</button>
-      @if (isEditMode) {
-        <button class="danger" (click)="deleteRoom($event)">Elimina</button>
-      }
+      <label for="services">Servizi</label>
+      <div id="services" class="services">
+        @for (service of services; track service.id) {
+          <div class="checkbox">
+            <input
+              type="checkbox"
+              id="{{service.id}}"
+              [checked]="isServiceSelected(service.id)"
+              (change)="onServiceToggle(service.id, $event)">
+            <label for="{{service.id}}">{{service.name}}</label>
+          </div>
+        } @empty {
+          @if (!isLoadingServices) { <p class="text-small">Nessun servizio disponibile</p> }
+        }
+        @if (isLoadingServices) { <div class="loading">Caricamento in corso...</div> }
+      </div>
     </div>
-  </form>
-}
+  </div>
+
+  <div class="form-controls">
+    <button class="primary" type="submit" [disabled]="roomForm.invalid || isSaving">
+      @if (isSaving) { Attendere... } @else { {{ isEditMode ? 'Salva Modifiche' : 'Aggiungi' }} }
+    </button>
+
+    @if (isEditMode) {
+      <button type="button" class="danger" (click)="deleteRoom($event)" [disabled]="isSaving">Elimina</button>
+    }
+  </div>
+</form>

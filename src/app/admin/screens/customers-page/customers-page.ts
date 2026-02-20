@@ -10,6 +10,7 @@ import {
   CreateCustomerWithoutPasswordDto
 } from '../../../model/customer-dto';
 import {Add01Icon, Cancel01Icon, UserIcon} from '@hugeicons/core-free-icons';
+import {disabled} from '@angular/forms/signals';
 
 @Component({
   selector: 'app-customers-page',
@@ -36,8 +37,7 @@ export class CustomersPage implements OnInit {
   isEditMode = false;
   isLoading = false;
   isSearching = false;
-
-
+  isSaving = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -162,9 +162,14 @@ export class CustomersPage implements OnInit {
     this.isFormOpen = true;
   }
 
-  onSubmit() {
-    if (this.customerForm.invalid) return;
+  getFormControl(controlName: string) {
+    return this.customerForm.get(controlName);
+  }
 
+  onSubmit() {
+    if (this.customerForm.invalid || this.isSaving) return;
+
+    this.isSaving = true;
     const formValue = this.customerForm.value;
 
     if (this.isEditMode) {
@@ -178,9 +183,13 @@ export class CustomersPage implements OnInit {
       this.customersService.updateCustomer(updateDto).subscribe({
         next: () => {
           this.refreshListAfterChange();
+          this.isSaving = false;
           this.closeForm();
         },
-        error: (err) => console.error('Errore update', err)
+        error: (err) => {
+          this.isSaving = false;
+          console.error('Errore update', err)
+        }
       });
 
     } else {
@@ -193,9 +202,13 @@ export class CustomersPage implements OnInit {
       this.customersService.createCustomer(createDto).subscribe({
         next: (newCustomer) => {
           this.customers = [newCustomer, ...this.customers];
+          this.isSaving = false;
           this.closeForm();
         },
-        error: (err) => console.error('Errore creazione', err)
+        error: (err) => {
+          this.isSaving = false;
+          console.error('Errore creazione', err)
+        }
       });
     }
   }
@@ -208,19 +221,19 @@ export class CustomersPage implements OnInit {
     const id = this.customerForm.get('id')?.value;
     if (!id) return;
 
-    this.isLoading = true;
+    this.isSaving = true;
     this.cdr.detectChanges();
 
     this.customersService.deleteCustomer(id).subscribe({
       next: () => {
         this.customers = this.customers.filter(c => c.id !== id);
 
-        this.isLoading = false;
+        this.isSaving = false;
         this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Errore eliminazione', err);
-        this.isLoading = false;
+        this.isSaving = false;
         this.cdr.detectChanges();
       }
     });
@@ -243,4 +256,5 @@ export class CustomersPage implements OnInit {
   protected readonly UserIcon = UserIcon;
   protected readonly Cancel01Icon = Cancel01Icon;
   protected readonly Add01Icon = Add01Icon;
+  protected readonly disabled = disabled;
 }

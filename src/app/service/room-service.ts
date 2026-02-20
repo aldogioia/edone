@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Environment} from '../utils/Enviroment';
-import {BehaviorSubject, tap} from 'rxjs';
+import {BehaviorSubject, Observable, tap} from 'rxjs';
 import {CreateRoomDto, RoomDto, UpdateRoomDto} from '../model/room-dto';
 import {HttpClient} from '@angular/common/http';
 
@@ -27,6 +27,10 @@ export class RoomService {
         this.roomsSubject.next(rooms);
       })
     )
+  }
+
+  refreshCache(): Observable<RoomDto[]> {
+    return this.loadAllRooms(true);
   }
 
   createRoom(dto: CreateRoomDto) {

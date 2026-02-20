@@ -5,6 +5,8 @@ import { map, startWith } from 'rxjs/operators';
 import { OperatorsService } from '../../../service/operators-service';
 import { OperatorDto, CreateOperatorDto, UpdateOperatorDto } from '../../../model/operator-dto';
 import {Add01Icon, Cancel01Icon, Refresh01Icon} from '@hugeicons/core-free-icons';
+import {ServiceService} from '../../../service/service-service';
+import {ServiceDto} from '../../../model/service-dto';
 
 @Component({
   selector: 'app-operators-page',
@@ -24,11 +26,14 @@ export class OperatorsPage implements OnInit, OnDestroy {
   selectedImageFile: File | undefined = undefined;
 
   allOperators: OperatorDto[] = [];
+  services: ServiceDto[] = [];
   filteredOperators: OperatorDto[] = [];
 
   isFormOpen = false;
   isEditMode = false;
   isLoading = false;
+  isLoadingServices = false;
+  isSaving = false;
 
   private destroy$ = new Subject<void>();
   protected readonly Refresh01Icon = Refresh01Icon;
@@ -36,6 +41,7 @@ export class OperatorsPage implements OnInit, OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private operatorsService: OperatorsService,
+    private serviceService: ServiceService,
     private cdr: ChangeDetectorRef
   ) {
     this.initForm();
@@ -43,6 +49,7 @@ export class OperatorsPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadData();
+    this.loadAllServices()
     this.setupSearchAndDataStream();
   }
 
@@ -70,6 +77,42 @@ export class OperatorsPage implements OnInit, OnDestroy {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  private loadAllServices() {
+    this.isLoadingServices = true;
+
+    this.serviceService.loadAllServices().subscribe({
+      next: (servicesResponse: ServiceDto[]) => {
+        this.services = servicesResponse;
+        this.isLoadingServices = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.isLoadingServices = false;
+        console.error('Failed to load services', err);
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  isServiceSelected(serviceId: string): boolean {
+    const selected: any[] = this.operatorForm.value.operatorServices || [];
+    return selected.some(s => s.serviceId === serviceId);
+  }
+
+  onServiceToggle(serviceId: string, event: Event) {
+    const isChecked = (event.target as HTMLInputElement).checked;
+    const currentServices: any[] = this.operatorForm.value.operatorServices || [];
+
+    let newServices;
+    if (isChecked) {
+      newServices = [...currentServices, { serviceId: serviceId }];
+    } else {
+      newServices = currentServices.filter(s => s.serviceId !== serviceId);
+    }
+
+    this.operatorForm.patchValue({ operatorServices: newServices });
   }
 
   forceRefreshList() {
@@ -130,11 +173,15 @@ export class OperatorsPage implements OnInit, OnDestroy {
   openEditForm(operator: OperatorDto) {
     this.isEditMode = true;
     this.selectedImageFile = undefined;
+
+    const servicesForForm = operator.operatorServices?.map(s => ({ serviceId: s.serviceId })) || [];
+
     this.operatorForm.patchValue({
       id: operator.id,
       name: operator.name,
       surname: operator.surname,
-      phoneNumber: operator.phoneNumber
+      phoneNumber: operator.phoneNumber,
+      operatorServices: servicesForForm
     });
     this.isFormOpen = true;
   }
@@ -145,10 +192,14 @@ export class OperatorsPage implements OnInit, OnDestroy {
     this.selectedImageFile = undefined;
   }
 
-  onSubmit() {
-    if (this.operatorForm.invalid) return;
+  getFormControl(controlName: string) {
+    return this.operatorForm.get(controlName);
+  }
 
-    this.isLoading = true;
+  onSubmit() {
+    if (this.operatorForm.invalid || this.isSaving) return;
+
+    this.isSaving = true;
     const formValue = this.operatorForm.value;
 
     if (this.isEditMode) {
@@ -157,17 +208,17 @@ export class OperatorsPage implements OnInit, OnDestroy {
         name: formValue.name,
         surname: formValue.surname,
         phoneNumber: formValue.phoneNumber,
-        operatorServices: []
+        operatorServices: formValue.operatorServices
       };
 
       this.operatorsService.updateOperator(updateDto, this.selectedImageFile).subscribe({
         next: () => {
           this.closeForm();
-          this.isLoading = false;
+          this.isSaving = false;
         },
         error: (err) => {
           console.error(err);
-          this.isLoading = false;
+          this.isSaving = false;
           this.cdr.detectChanges();
         }
       });
@@ -176,18 +227,17 @@ export class OperatorsPage implements OnInit, OnDestroy {
         name: formValue.name,
         surname: formValue.surname,
         phoneNumber: formValue.phoneNumber,
-        operatorServices: []
+        operatorServices: formValue.operatorServices
       };
 
       this.operatorsService.createOperator(createDto, this.selectedImageFile).subscribe({
         next: () => {
           this.closeForm();
-
-          this.isLoading = false;
+          this.isSaving = false;
         },
         error: (err) => {
           console.error(err);
-          this.isLoading = false;
+          this.isSaving = false;
           this.cdr.detectChanges();
         }
       });
@@ -200,15 +250,15 @@ export class OperatorsPage implements OnInit, OnDestroy {
     const id = this.operatorForm.get('id')?.value;
     if (!id || !confirm('Sei sicuro di voler eliminare questo operatore?')) return;
 
-    this.isLoading = true;
+    this.isSaving = true;
     this.operatorsService.deleteOperator(id).subscribe({
       next: () => {
         this.closeForm();
-        this.isLoading = false;
+        this.isSaving = false;
       },
       error: (err) => {
         console.error(err);
-        this.isLoading = false;
+        this.isSaving = false;
         this.cdr.detectChanges();
       }
     });

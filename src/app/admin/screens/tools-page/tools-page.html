@@ -5,7 +5,7 @@
     <div class="search-section">
       <input [formControl]="searchControl" type="search" placeholder="Cerca per nome...">
       <div class="controls">
-        <button  title="Aggiorna lista"> <!-- TODO: (click)="forceRefreshList()" -->
+        <button (click)="forceRefreshList()" title="Aggiorna lista">
           <hugeicons-icon [icon]="Refresh01Icon"></hugeicons-icon>
         </button>
         <button [class.open]="isFormOpen" (click)="isFormOpen ? closeForm() : openCreateForm()">
@@ -44,11 +44,23 @@
 
     <div class="form-group">
       <label for="name">Nome</label>
-      <input id="name" formControlName="name" type="text" placeholder="Nome Macchinario">
-      @if (checkToolNameError()) {
-        <p class="error">Il nome è obbligatorio</p>
+      <input
+        id="name"
+        formControlName="name"
+        type="text"
+        placeholder="Nome Macchinario"
+        [class.invalid]="getFormControl('name')?.invalid && (getFormControl('name')?.dirty || getFormControl('name')?.touched)">
+
+      @if (getFormControl('name')?.invalid && (getFormControl('name')?.dirty || getFormControl('name')?.touched)) {
+        <div class="error-message">
+          @if (getFormControl('name')?.errors?.['required']) { <small>Il nome è obbligatorio.</small> }
+          @if (getFormControl('name')?.errors?.['minlength']) { <small>Il nome non può essere vuoto.</small> }
+          @if (getFormControl('name')?.errors?.['maxlength']) { <small>Il nome è troppo lungo (max 50 caratteri).</small> }
+          @if (getFormControl('name')?.errors?.['onlySpaces']) { <small>Il nome non può contenere solo spazi.</small> }
+        </div>
       }
     </div>
+
     <div class="form-group">
       <label for="availability">Disponibilità</label>
       <input
@@ -57,19 +69,25 @@
         type="number"
         placeholder="Disponibilità"
         step="1"
-        min="{{ isEditMode ? 0 : 1}}">
-      @if (checkToolAvailabilityError()) {
-        <p class="error">La disponibilità deve essere un numero intero positivo</p>
+        min="{{ isEditMode ? 0 : 1}}"
+        [class.invalid]="getFormControl('availability')?.invalid && (getFormControl('availability')?.dirty || getFormControl('availability')?.touched)">
+
+      @if (getFormControl('availability')?.invalid && (getFormControl('availability')?.dirty || getFormControl('availability')?.touched)) {
+        <div class="error-message">
+          @if (getFormControl('availability')?.errors?.['required']) { <small>La disponibilità è obbligatoria.</small> }
+          @if (getFormControl('availability')?.errors?.['min']) { <small>La disponibilità deve essere un numero positivo (minimo {{ isEditMode ? 0 : 1 }}).</small> }
+        </div>
       }
     </div>
   </div>
 
-  <div class="form-group">
-    <button class="primary" type="submit" [disabled]="toolForm.invalid || isLoading">
-      {{ isEditMode ? 'Salva Modifiche' : 'Aggiungi' }}
+  <div class="form-controls">
+    <button class="primary" type="submit" [disabled]="toolForm.invalid || isSaving">
+      @if (isSaving) { Attendere... } @else { {{ isEditMode ? 'Salva Modifiche' : 'Aggiungi' }} }
     </button>
+
     @if (isEditMode) {
-      <button class="danger" (click)="deleteTool($event)">Elimina</button>
+      <button type="button" class="danger" (click)="deleteTool($event)" [disabled]="isSaving">Elimina</button>
     }
   </div>
 </form>
