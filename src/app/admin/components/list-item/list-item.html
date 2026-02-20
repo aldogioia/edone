@@ -1,4 +1,8 @@
-<hugeicons-icon [icon]="icon()"></hugeicons-icon>
+@if (imageUrl()) {
+  <img [src]="imageUrl()" [alt]="title()"/>
+} @else if (icon()) {
+  <hugeicons-icon [icon]="icon()!"></hugeicons-icon>
+}
 <div class="item-info">
   <p>{{ title() }}</p>
   <ng-content></ng-content>

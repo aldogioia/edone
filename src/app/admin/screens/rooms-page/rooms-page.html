@@ -4,13 +4,26 @@
     <h2>Stanze</h2>
     <div class="search-section">
       <input [formControl]="searchControl" type="search" placeholder="Cerca per nome...">
-      <button class="primary" (click)="openCreateForm()">Nuova Stanza</button>
+      <div class="controls">
+        <button  title="Aggiorna lista"> <!-- TODO: (click)="forceRefreshList()" -->
+          <hugeicons-icon [icon]="Refresh01Icon"></hugeicons-icon>
+        </button>
+        <button [class.open]="isFormOpen" (click)="isFormOpen ? closeForm() : openCreateForm()">
+          <hugeicons-icon [icon]="isFormOpen ? Cancel01Icon : Add01Icon"></hugeicons-icon>
+        </button>
+      </div>
     </div>
   </div>
   <div class="list">
     @for (room of searchedRooms; track room.id) {
-      <app-list-item [title]="room.name" [type]="'room'" (click)="openEditForm(room)">
-        <p class="text-small">Servizi disponibili ({{room.services.length}})</p>
+      <app-list-item
+        [title]="room.name"
+        [icon]="Door01Icon"
+        (click)="openEditForm(room)">
+        <div class="services-info">
+          <p class="text-small">Servizi disponibili:</p>
+          <p class="text-small green">{{ room.services.length }}</p>
+        </div>
       </app-list-item>
     } @empty {
       @if (!isLoadingRooms){
@@ -27,7 +40,6 @@
   <form [formGroup]="roomForm" [class.open]="isFormOpen" class="side-form" (ngSubmit)="onSubmit()">
     <div class="header">
       <h2>{{ isEditMode ? 'Modifica Stanza' : 'Nuova Stanza' }}</h2>
-      <button type="button" (click)="closeForm()" class="close-btn">✕</button>
     </div>
 
     <div class="form-groups">

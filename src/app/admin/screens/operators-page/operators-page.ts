@@ -4,7 +4,7 @@ import { Subject, combineLatest, takeUntil } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { OperatorsService } from '../../../service/operators-service';
 import { OperatorDto, CreateOperatorDto, UpdateOperatorDto } from '../../../model/operator-dto';
-import {Refresh01Icon} from '@hugeicons/core-free-icons';
+import {Add01Icon, Cancel01Icon, Refresh01Icon} from '@hugeicons/core-free-icons';
 
 @Component({
   selector: 'app-operators-page',
@@ -31,6 +31,7 @@ export class OperatorsPage implements OnInit, OnDestroy {
   isLoading = false;
 
   private destroy$ = new Subject<void>();
+  protected readonly Refresh01Icon = Refresh01Icon;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -213,5 +214,6 @@ export class OperatorsPage implements OnInit, OnDestroy {
     });
   }
 
-  protected readonly Refresh01Icon = Refresh01Icon;
+  protected readonly Cancel01Icon = Cancel01Icon;
+  protected readonly Add01Icon = Add01Icon;
 }

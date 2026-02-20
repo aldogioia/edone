@@ -3,6 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {noOnlySpacesValidator} from '../../../validators/no-only-space-validator';
 import {ToolService} from '../../../service/tool-service';
 import {CreateToolDto, ToolDto} from '../../../model/tool-dto';
+import {Add01Icon, BrushIcon, Cancel01Icon, Refresh01Icon} from '@hugeicons/core-free-icons';
 import {Subject, combineLatest, takeUntil} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 
@@ -204,4 +205,9 @@ export class ToolsPage implements OnInit, OnDestroy{
     this.isFormOpen = false;
     this.toolForm.reset();
   }
+
+  protected readonly BrushIcon = BrushIcon;
+  protected readonly Refresh01Icon = Refresh01Icon;
+  protected readonly Cancel01Icon = Cancel01Icon;
+  protected readonly Add01Icon = Add01Icon;
 }

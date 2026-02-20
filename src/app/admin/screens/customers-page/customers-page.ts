@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import {debounceTime, distinctUntilChanged, map, switchMap} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 import { ChangeDetectorRef } from '@angular/core';
-import { tap} from 'rxjs';
+import { tap } from 'rxjs';
 import {CustomersService} from '../../../service/customers-service';
 import {
   CustomerDto,
   UpdateCustomerDto,
   CreateCustomerWithoutPasswordDto
 } from '../../../model/customer-dto';
+import {Add01Icon, Cancel01Icon, UserIcon} from '@hugeicons/core-free-icons';
 
 @Component({
   selector: 'app-customers-page',
@@ -35,6 +36,8 @@ export class CustomersPage implements OnInit {
   isEditMode = false;
   isLoading = false;
   isSearching = false;
+
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -236,4 +239,8 @@ export class CustomersPage implements OnInit {
       this.loadCustomers(true);
     }
   }
+
+  protected readonly UserIcon = UserIcon;
+  protected readonly Cancel01Icon = Cancel01Icon;
+  protected readonly Add01Icon = Add01Icon;
 }

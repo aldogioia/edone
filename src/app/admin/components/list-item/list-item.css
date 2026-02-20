@@ -29,12 +29,17 @@
   color: var(--admin-brand-strong);
 }
 
+img{
+  width: 24pt;
+  height: 24pt;
+  object-fit: cover;
+  border-radius: 50%;
+  object-position: center;
+}
+
 hugeicons-icon {
   width: 24pt;
   height: 24pt;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background: var(--brand-fill);
   border-radius: 50%;
   stroke: var(--admin-brand-strong);

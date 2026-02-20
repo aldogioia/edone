@@ -39,6 +39,35 @@
   padding: 16pt 0;
 }
 
+.controls {
+  display: flex;
+  gap: 8pt;
+}
+
+.search-section button {
+  background: var(--fill-dark);
+  backdrop-filter: blur(10px);
+  stroke: var(--admin-brand-strong);
+  border: 1px solid var(--stroke-weak);
+  padding: 4pt;
+}
+
+.search-section button:hover {
+  background: var(--brand-fill);
+  border: 1px solid var(--brand-stroke-weak);
+}
+
+.search-section button.open {
+  transform: translateX(calc((50%)));
+  stroke: var(--error-strong);
+  z-index: 99;
+}
+
+.search-section button.open:hover {
+  background: var(--error-fill);
+  border: 1px solid var(--error-stroke-weak);
+}
+
 .side-form {
   display: flex;
   flex-direction: column;

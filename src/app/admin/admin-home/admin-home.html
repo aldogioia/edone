@@ -1,12 +1,51 @@
 <nav>
-  <h3>Edoné</h3>
-  <ul>
-    <li routerLinkActive="active" routerLink="customers">Clienti</li>
-    <li routerLinkActive="active" routerLink="operators">Operatori</li>
-    <li routerLinkActive="active" routerLink="tools">Macchinari</li>
-    <li routerLinkActive="active" routerLink="rooms">Stanze</li>
-  </ul>
-
+  <img class="logo-large" src="logo.png" alt="logo">
+  <img class="logo-small" src="img.png" alt="logo">
+  <div class="links">
+    <ul>
+      <p class="text-small">Appuntamenti</p>
+      <li routerLinkActive="active" data-name="Calendario" routerLink="calendar">
+        <hugeicons-icon [icon]="Calendar03Icon"></hugeicons-icon>
+        <p class="text-small">Calendario</p>
+      </li>
+    </ul>
+    <div class="separator"></div>
+    <ul>
+      <p class="text-small">Gestione</p>
+      <li routerLinkActive="active" data-name="Clienti" routerLink="customers">
+        <hugeicons-icon [icon]="UserIcon"></hugeicons-icon>
+        <p class="text-small">Clienti</p>
+      </li>
+      <li routerLinkActive="active" data-name="Operatori" routerLink="operators">
+        <hugeicons-icon [icon]="UserMultipleIcon"></hugeicons-icon>
+        <p class="text-small">Operatori</p>
+      </li>
+      <li routerLinkActive="active" data-name="Macchinari" routerLink="tools">
+        <hugeicons-icon [icon]="BrushIcon"></hugeicons-icon>
+        <p class="text-small">Macchinari</p>
+      </li>
+      <li routerLinkActive="active" data-name="Stanze" routerLink="rooms">
+        <hugeicons-icon [icon]="Door01Icon"></hugeicons-icon>
+        <p class="text-small">Stanze</p>
+      </li>
+    </ul>
+    <div class="separator"></div>
+    <ul>
+      <p class="text-small">Turni</p>
+      <li routerLinkActive="active" data-name="Standard" routerLink="schedules">
+        <hugeicons-icon [icon]="DateTimeIcon"></hugeicons-icon>
+        <p class="text-small">Standard</p>
+      </li>
+      <li routerLinkActive="active" data-name="Eccezioni" routerLink="schedules-exceptions">
+        <hugeicons-icon [icon]="CalendarBlock01Icon"></hugeicons-icon>
+        <p class="text-small">Eccezioni</p>
+      </li>
+    </ul>
+  </div>
+  <li class="danger"> <!-- TODO: Logout -->
+      <hugeicons-icon [icon]="Logout02Icon"></hugeicons-icon>
+      <p>Esci</p>
+  </li>
 </nav>
 <main class="page">
   <router-outlet></router-outlet>

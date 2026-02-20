@@ -2,23 +2,25 @@
   <div class="header">
     <h2>Operatori</h2>
     <div class="search-section">
-      <input
-        [formControl]="searchControl"
-        type="search"
-        placeholder="Cerca per nome o cognome...">
-
-      <button class="secondary icon-btn" (click)="forceRefreshList()" title="Aggiorna lista">
-        <hugeicons-icon [icon]="Refresh01Icon"></hugeicons-icon>
-      </button>
-
-      <button class="primary" (click)="openCreateForm()">Nuovo Operatore</button>
+      <input [formControl]="searchControl" type="search" placeholder="Cerca per nome o cognome...">
+      <div class="controls">
+        <button (click)="forceRefreshList()" title="Aggiorna lista">
+          <hugeicons-icon [icon]="Refresh01Icon"></hugeicons-icon>
+        </button>
+        <button [class.open]="isFormOpen" (click)="isFormOpen ? closeForm() : openCreateForm()">
+          <hugeicons-icon [icon]="isFormOpen ? Cancel01Icon : Add01Icon"></hugeicons-icon>
+        </button>
+      </div>
     </div>
   </div>
 
   <div class="list">
     @for (item of filteredOperators; track item.id) {
-      <app-list-item [title]="item.name + ' ' + item.surname" [type]="'operator'" (click)="openEditForm(item)" style="cursor: pointer;">
-        <p class="text-small">{{ item.phoneNumber }}</p>
+      <app-list-item
+        [title]="item.name + ' ' + item.surname"
+        [imageUrl]="item.imgUrl"
+        (click)="openEditForm(item)">
+        <p class="text-small">{{ item.phoneNumber | formatPhone }}</p>
       </app-list-item>
     }
     @empty {
@@ -36,7 +38,6 @@
 <form [formGroup]="operatorForm" (ngSubmit)="onSubmit()" [class.open]="isFormOpen" class="side-form">
   <div class="header">
     <h2>{{ isEditMode ? 'Modifica Operatore' : 'Nuovo Operatore' }}</h2>
-    <button type="button" (click)="closeForm()" class="close-btn">✕</button>
   </div>
 
   <div class="form-groups">

@@ -3,6 +3,15 @@
   display: flex;
 }
 
+.services-info {
+  display: flex;
+  gap: 2pt;
+}
+
+.text-small.green {
+  color: var(--admin-brand-strong);
+}
+
 .services {
   display: flex;
   flex-wrap: wrap;
@@ -21,6 +30,6 @@
 }
 
 .services > .checkbox:has(input:checked) {
-  background-color: var(--admin-brand-light);
+  background-color: var(--brand-fill);
   border-color: var(--admin-brand-weak);
 }

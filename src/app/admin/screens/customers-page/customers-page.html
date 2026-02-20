@@ -2,19 +2,20 @@
   <div class="header">
     <h2>Clienti</h2>
     <div class="search-section">
-      <input
-        [formControl]="searchControl"
-        type="search"
-        placeholder="Cerca per nome...">
-
-      <button class="primary" (click)="openCreateForm()">Nuovo Cliente</button>
+      <input [formControl]="searchControl" type="search" placeholder="Cerca per nome...">
+      <button [class.open]="isFormOpen" (click)="isFormOpen ? closeForm() : openCreateForm()">
+        <hugeicons-icon [icon]="isFormOpen ? Cancel01Icon : Add01Icon"></hugeicons-icon>
+      </button>
     </div>
   </div>
 
   <div class="list">
     @for (item of customers; track item.id) {
-      <app-list-item [title]="item.name + ' ' + item.surname" [type]="'customer'" (click)="openEditForm(item)">
-        <p class="text-small">{{ item.phoneNumber }}</p>
+      <app-list-item
+        [title]="item.name + ' ' + item.surname"
+        [icon]="UserIcon"
+        (click)="openEditForm(item)">
+        <p class="text-small">{{ item.phoneNumber | formatPhone }}</p>
       </app-list-item>
     }
     @empty {
@@ -38,7 +39,6 @@
 <form [formGroup]="customerForm" (ngSubmit)="onSubmit()" [class.open]="isFormOpen" class="side-form">
   <div class="header">
     <h2>{{ isEditMode ? 'Modifica Cliente' : 'Nuovo Cliente' }}</h2>
-    <button type="button" (click)="closeForm()" class="close-btn">✕</button>
   </div>
 
   <div class="form-groups">
@@ -60,7 +60,7 @@
     </div>
   </div>
 
-  <div class="form-group">
+  <div class="form-controls">
     <button class="primary" type="submit" [disabled]="customerForm.invalid || isLoading">
       {{ isEditMode ? 'Salva Modifiche' : 'Aggiungi' }}
     </button>

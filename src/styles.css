@@ -26,12 +26,13 @@
   --brand-fill: #00D4921A;
 
   --error-strong: #EF4444;
-  --error-weak: #FEF2F2;
-  --error-stroke: #FECACA;
+  --error-weak: #EF4444E6;
+  --error-stroke-strong: #EF444473;
+  --error-stroke-weak: #EF444433;
+  --error-fill: #EF44441A;
 
   --admin-brand-strong: #059669;
   --admin-brand-weak: #10b981;
-  --admin-brand-light: #D1FAE5;
 
   --btn-strong: #F1F5F9;
   --btn-weak: #F8FAFC;
@@ -51,4 +52,10 @@ html, body {
   background-color: var(--background);
   color: var(--text-strong);
   scroll-behavior: smooth;
+}
+
+hugeicons-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

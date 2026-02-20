@@ -1,3 +1,4 @@
+import {Add01Icon, Cancel01Icon, Door01Icon, Refresh01Icon} from '@hugeicons/core-free-icons';
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {ServiceDto} from '../../../model/service-dto';
 import {RoomDto} from '../../../model/room-dto';
@@ -223,4 +224,9 @@ export class RoomsPage implements OnInit, OnDestroy{
       this.roomForm.patchValue({ selectedServiceIds: selectedServiceIds.filter((id: string) => id !== serviceId) });
     }
   }
+
+  protected readonly Door01Icon = Door01Icon;
+  protected readonly Cancel01Icon = Cancel01Icon;
+  protected readonly Add01Icon = Add01Icon;
+  protected readonly Refresh01Icon = Refresh01Icon;
 }

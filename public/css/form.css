@@ -1,4 +1,4 @@
-.form-groups, .form-group {
+.form-groups, .form-group, .form-controls {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -12,6 +12,10 @@
 
 .form-group {
   gap: 2pt;
+}
+
+.form-controls {
+  gap: 8pt;
 }
 
 label {
@@ -125,11 +129,14 @@ button.secondary:hover,
 /* Button Danger (Delete actions) */
 button.danger,
 .button.danger {
-  background-color: var(--error-weak);
-  color: var(--error-strong);
+  background-color: var(--fill-dark);
+  color: var(--error-weak);
+  border: 1px solid var(--stroke-weak);
 }
 
 button.danger:hover,
 .button.danger:hover {
-  background-color: var(--error-stroke);
+  background-color: var(--error-fill);
+  color: var(--error-strong);
+  border: 1px solid var(--error-stroke-weak);
 }

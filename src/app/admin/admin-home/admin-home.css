@@ -6,60 +6,129 @@
 }
 
 nav {
-  width: fit-content;
   height: 100%;
-  padding: 10pt 8pt;
+  padding: 8pt;
   display: flex;
   flex-direction: column;
   gap: 24pt;
+  width: 250px;
   min-width: 250px;
   background: var(--admin-background);
   border-right: 1px solid var(--stroke-weak);
 }
 
-nav > h3 {
-  color: var(--admin-brand-weak);
-  font-weight: bold;
+.logo-large {
+  padding: 0 16pt;
+  width: 100%;
 }
 
-nav > ul {
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  gap: 8pt;
-
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-nav > ul::-webkit-scrollbar {
+.logo-small {
   display: none;
 }
 
-nav > ul > li {
+.links {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16pt;
+}
+
+
+ul {
+  display: flex;
+  flex-direction: column;
+  gap: 8pt;
+}
+
+ul > p {
+  font-weight: 500;
+  color: var(--text-weak);
+  padding: 0 8pt;
+}
+
+.separator {
+  height: 1px;
+  background-color: var(--stroke-weak);
+  width: 100%;
+}
+
+li {
+  position: relative;
   list-style: none;
   padding: 8pt;
   border-radius: 8pt;
   transition: all .3s ease-in-out;
-}
-
-nav > ul > li.active {
-  background-color: var(--admin-brand-light);
-}
-
-nav > ul > li:hover {
-  background-color: var(--btn-weak);
+  display: flex;
+  align-items: center;
+  gap: 8pt;
+  color: var(--text-weak);
+  stroke: var(--text-weak);
   cursor: pointer;
 }
 
-nav > ul > li > a {
-  text-decoration: none;
+
+
+li.active, li:hover {
   color: var(--text-strong);
-  width: 100%;
+  stroke: var(--text-strong);
+}
+
+li.active {
+  stroke: var(--brand-strong);
+  background-color: var(--fill-dark);
+}
+
+li.danger {
+  border-top: 1px solid var(--stroke-weak);
+  border-radius: 0;
+}
+
+li.danger:hover{
+  color: var(--error-strong);
+  stroke: var(--error-strong);
 }
 
 .page {
   display: flex;
   gap: 0;
   width: 100%;
+}
+
+
+@media (max-width: 700px) {
+  nav {
+    width: fit-content;
+    min-width: fit-content;
+    align-items: center;
+  }
+
+  .logo-large {
+    display: none;
+  }
+
+  .logo-small {
+    display: block;
+    width: 50px;
+  }
+
+  li:hover::after {
+    content: attr(data-name);
+    position: absolute;
+    left: calc(100% + 8px);
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--fill-dark);
+    backdrop-filter: blur(10px);
+    color: var(--text-strong);
+    padding: 4pt 8pt;
+    border-radius: 4pt;
+    white-space: nowrap;
+    pointer-events: none;
+    font-size: 8px;
+    z-index: 99;
+  }
+
+  p {
+    display: none;
+  }
 }

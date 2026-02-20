@@ -86,10 +86,6 @@ h1 > img {
   stroke: var(--text-on-black-strong);
 }
 
-.social hugeicons-icon {
-  display: flex;
-}
-
 .box > a {
   display: flex;
   align-items: self-start;
