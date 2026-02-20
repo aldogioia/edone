@@ -21,6 +21,7 @@ import {tokenInterceptor} from './security/token-interceptor';
 import { RoomsPage } from './admin/screens/rooms-page/rooms-page';
 import { OperatorsPage } from './admin/screens/operators-page/operators-page';
 import { FormatPhonePipe } from './pipe/format-phone-pipe';
+import { StandardSchedulePage } from './admin/screens/standard-schedule-page/standard-schedule-page';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { FormatPhonePipe } from './pipe/format-phone-pipe';
     RoomsPage,
     OperatorsPage,
     FormatPhonePipe,
+    StandardSchedulePage,
   ],
   imports: [
     BrowserModule,
