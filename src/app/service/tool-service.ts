@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {CreateToolDto, ToolDto, UpdateToolDto} from '../model/tool-dto';
 import {BehaviorSubject, Observable, tap} from 'rxjs';
-import {map} from 'rxjs/operators';
 import {Environment} from '../utils/Enviroment';
-import {OperatorDto} from '../model/operator-dto';
 
 @Injectable({
   providedIn: 'root',

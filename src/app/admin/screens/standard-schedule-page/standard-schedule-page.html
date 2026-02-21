@@ -29,7 +29,7 @@
       <app-list-item [title]="day.label" (click)="handleDayClick(day.key)">
         <div class="shifts">
           @for (shift of getShiftsByDay(day.key); track shift.id) {
-            <p class="text-small shift">{{ shift.start.substring(0, 5) }} {{ shift.end }} {{ shift.type }}</p>
+            <p class="text-small shift">{{ shift.start.substring(0, 5) }} - {{ shift.end.substring(0, 5) }} {{ shift.type }}</p>
           } @empty {
             <p class="text-small">Riposo</p>
           }
@@ -64,22 +64,18 @@
       </select>
     </div>
 
-    <div class="hours-header">
-      <label>Fasce Orarie</label>
-      <div class="add-buttons">
-        @if (!getAvailableSlotTypes().hasAM) {
-          <button type="button" (click)="addSlot('AM')">+ Mattino</button>
-        }
-        @if (!getAvailableSlotTypes().hasPM) {
-          <button type="button" (click)="addSlot('PM')">+ Pomeriggio</button>
-        }
-      </div>
-    </div>
-
     <div formArrayName="slots" class="slots-container">
-      @if (slots.hasError('overlap')) {
-        <p class="error-banner">L'orario del pomeriggio non può iniziare prima della fine della mattina.</p>
-      }
+      <div class="hours-header">
+        <label>Fasce Orarie</label>
+        <div class="add-buttons">
+          @if (!getAvailableSlotTypes().hasAM) {
+            <button class="secondary" type="button" (click)="addSlot('AM')">+ Mattino</button>
+          }
+          @if (!getAvailableSlotTypes().hasPM) {
+            <button class="secondary" type="button" (click)="addSlot('PM')">+ Pomeriggio</button>
+          }
+        </div>
+      </div>
 
       @for (slot of slots.controls; track slot.get('type')?.value) {
         <div [formGroupName]="$index" class="slot-card" [class.error]="slot.invalid">
@@ -92,25 +88,36 @@
           <div class="hours-row">
             <div class="form-group flex-1">
               <label>Inizio</label>
-              <input type="time" formControlName="start" step="1800">
-              @if (slot.get('start')?.hasError('invalidStep')) {
-                <span class="error-text">Usa :00 o :30</span>
-              }
+              <input
+                type="time"
+                formControlName="start"
+                step="1800"
+                [class.invalid]="(slot.get('end')?.invalid && (slot.get('end')?.dirty || slot.get('end')?.touched)) || slot.hasError('invalidRange')">
             </div>
             <div class="form-group flex-1">
               <label>Fine</label>
-              <input type="time" formControlName="end" step="1800">
-              @if (slot.get('end')?.hasError('invalidStep')) {
-                <span class="error-text">Usa :00 o :30</span>
-              }
+              <input
+                type="time"
+                formControlName="end"
+                step="1800"
+                [class.invalid]="(slot.get('end')?.invalid && (slot.get('end')?.dirty || slot.get('end')?.touched)) || slot.hasError('invalidRange')">
             </div>
           </div>
-
-          @if (slot.hasError('invalidRange')) {
-            <p class="error-text">L'orario di fine deve essere dopo l'inizio.</p>
-          }
+          <div class="error-message">
+            @if (slot.get('end')?.hasError('invalidStep') || slot.get('start')?.hasError('invalidStep')) {
+              <small>Usa :00 o :30</small>
+            } @else if (slot.hasError('invalidRange')) {
+            <small>L'orario di fine deve essere dopo l'inizio.</small>
+            }
+          </div>
         </div>
       }
+
+      <div class="error-message">
+        @if (slots.hasError('overlap')) {
+          <small>L'orario del pomeriggio non può iniziare prima della fine della mattina.</small>
+        }
+      </div>
     </div>
   </div>
 

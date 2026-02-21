@@ -5,7 +5,7 @@ import {OperatorsService} from '../../../service/operators-service';
 import {map} from 'rxjs/operators';
 import {OperatorDto} from '../../../model/operator-dto';
 import {Add01Icon, Cancel01Icon, Refresh01Icon} from '@hugeicons/core-free-icons';
-import { StandardScheduleDto} from '../../../model/standard-schedule-dto';
+import {CreateStandardScheduleDto, StandardScheduleDto, UpdateStandardScheduleDto} from '../../../model/schedule-dto';
 import {ScheduleService} from '../../../service/schedule-service';
 import {Shift} from '../../../model/shift';
 import {ScheduleValidators} from '../../../validators/schedule-validators';
@@ -69,6 +69,7 @@ export class StandardSchedulePage implements OnInit, OnDestroy{
   selectOperator(operator: OperatorDto) {
     this.selectedOperator = operator;
     this.loadOperatorSchedule(operator.id);
+    console.log('Selected operator', operator);
   }
 
   isOperatorSelected(operator: OperatorDto): boolean {
@@ -266,11 +267,89 @@ export class StandardSchedulePage implements OnInit, OnDestroy{
   }
 
   onSubmit() {
-    // todo da fare
+    if(!this.scheduleForm.valid || this.isSaving) return
+
+    this.isSaving = true;
+    const formValue = this.scheduleForm.value;
+    const slots = formValue.slots as any[];
+
+    const amSlot = slots.find(s => s.type === 'AM');
+    const pmSlot = slots.find(s => s.type === 'PM');
+
+    const scheduleData = {
+      morningStart: amSlot ? amSlot.start : null,
+      morningEnd: amSlot ? amSlot.end : null,
+      afternoonStart: pmSlot ? pmSlot.start : null,
+      afternoonEnd: pmSlot ? pmSlot.end : null,
+      operatorId: this.selectedOperator!.id
+    };
+
+    if(this.isEditMode){
+      const updateDto: UpdateStandardScheduleDto = {
+        id: formValue.id,
+        ...scheduleData
+      }
+      this.scheduleService.updateStandardSchedule(updateDto).subscribe({
+        next: (updatedSchedule) => {
+          this.operatorSchedules = this.operatorSchedules.map(
+            s => s.id === updatedSchedule.id ? updatedSchedule : s
+          )
+          this.isSaving = false;
+          this.closeForm()
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          this.isSaving = false;
+          alert('Errore durante l\'aggiornamento del Turno. ' + err);
+          console.error('Error updating tool:', err);
+          this.cdr.detectChanges();
+        }
+      })
+    } else {
+      const createDto: CreateStandardScheduleDto = {
+        day: formValue.day,
+        ...scheduleData
+      }
+      console.log('Creating schedule with data', createDto);
+      this.scheduleService.createStandardSchedule(createDto).subscribe({
+        next: (newSchedules) => {
+          this.operatorSchedules.push(newSchedules);
+          this.isSaving = false;
+          this.closeForm()
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          this.isSaving = false;
+          alert('Errore durante la creazione del macchinario. Verifica che il nome non sia già in uso e riprova.');
+          console.error('Error creating tool:', err);
+          this.cdr.detectChanges();
+        }
+      })
+    }
   }
 
   deleteSchedule(event: Event) {
-    // todo
+    event.stopPropagation();
+    if(!confirm('Sei sicuro di voler eliminare questo Turno?')) return;
+
+    const standardScheduleId = this.scheduleForm.get('id')?.value;
+    if(!standardScheduleId) return;
+
+    this.isSaving = true;
+
+    this.scheduleService.deleteStandardSchedule(standardScheduleId).subscribe({
+      next: () => {
+        this.operatorSchedules = this.operatorSchedules.filter(s => s.id !== standardScheduleId);
+        this.closeForm()
+        this.isSaving = false
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error deleting standard schedule:', err);
+        this.isSaving = false
+        this.cdr.detectChanges();
+      }
+    })
   }
 
   protected readonly Cancel01Icon = Cancel01Icon;

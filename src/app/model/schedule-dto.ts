@@ -16,3 +16,19 @@ export interface StandardScheduleDto {
   afternoonStart: string | null;
   afternoonEnd: string | null;
 }
+
+export interface ScheduleAbstract {
+  morningStart?: string | null;
+  morningEnd?: string | null;
+  afternoonStart?: string | null;
+  afternoonEnd?: string | null;
+  operatorId: string;
+}
+
+export interface CreateStandardScheduleDto extends ScheduleAbstract {
+  day: DayOfWeek;
+}
+
+export interface UpdateStandardScheduleDto extends ScheduleAbstract {
+  id: string;
+}
