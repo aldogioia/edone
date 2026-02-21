@@ -32,9 +32,11 @@
 img{
   width: 24pt;
   height: 24pt;
+  aspect-ratio: 1/1;
   object-fit: cover;
   border-radius: 50%;
   object-position: center;
+  border: 1px solid var(--stroke-weak);
 }
 
 hugeicons-icon {

@@ -1,0 +1,130 @@
+<section class="list-section">
+  <div class="header">
+    <h2>Servizi</h2>
+    <div class="search-section">
+      <input [formControl]="searchControl" type="search" placeholder="Cerca per nome...">
+      <div class="controls">
+        <button (click)="forceRefreshList()" title="Aggiorna lista">
+          <hugeicons-icon [icon]="Refresh01Icon"></hugeicons-icon>
+        </button>
+        <button [class.open]="isFormOpen" (click)="isFormOpen ? closeForm() : openCreateForm()">
+          <hugeicons-icon [icon]="isFormOpen ? Cancel01Icon : Add01Icon"></hugeicons-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="list">
+    @for (service of searchedServices; track service.id) {
+      <app-list-item
+        [title]="service.name"
+        [imageUrl]="service.imgUrl"
+        (click)="openEditForm(service)">
+        <div class="tools-info">
+          <p class="text-small">Macchinari necessari:</p>
+          <p class="text-small green">{{ service.tools?.length || 0 }}</p>
+        </div>
+      </app-list-item>
+    } @empty {
+      @if (!isLoadingService){
+        <p class="empty-state">Nessun servizio trovato</p>
+      }
+    }
+
+    @if (isLoadingService) {
+      <div class="loading">Caricamento in corso...</div>
+    }
+  </div>
+</section>
+
+<form [formGroup]="serviceForm" [class.open]="isFormOpen" class="side-form" (ngSubmit)="onSubmit()">
+  <div class="header">
+    <h2>{{ isEditMode ? 'Modifica Servizio' : 'Nuovo Servizio' }}</h2>
+  </div>
+
+  <div class="form-groups">
+    <input type="hidden" formControlName="id">
+
+    <div class="form-group">
+      <label for="imageFile">Immagine Servizio</label>
+      <input
+        type="file"
+        id="imageFile"
+        (change)="onFileSelected($event)"
+        accept="image/*">
+
+      @if (!isEditMode && !selectedImageFile && (serviceForm.dirty || serviceForm.touched)) {
+        <div class="error-message">
+          <small>L'immagine è obbligatoria per la creazione.</small>
+        </div>
+      } @else if (isEditMode) {
+        <small class="text-small">Lascia vuoto per mantenere l'immagine attuale.</small>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="name">Nome</label>
+      <input
+        id="name"
+        formControlName="name"
+        type="text"
+        placeholder="Nome Servizio"
+        [class.invalid]="getFormControl('name')?.invalid && (getFormControl('name')?.dirty || getFormControl('name')?.touched)">
+
+      @if (getFormControl('name')?.invalid && (getFormControl('name')?.dirty || getFormControl('name')?.touched)) {
+        <div class="error-message">
+          @if (getFormControl('name')?.errors?.['required']) { <small>Il nome è obbligatorio.</small> }
+          @if (getFormControl('name')?.errors?.['minlength']) { <small>Il nome non può essere vuoto.</small> }
+          @if (getFormControl('name')?.errors?.['maxlength']) { <small>Il nome è troppo lungo (max 50 caratteri).</small> }
+        </div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="price">Prezzo (€)</label>
+      <input
+        id="price"
+        formControlName="price"
+        type="number"
+        step="0.50"
+        min="1"
+        placeholder="Es: 25.00"
+        [class.invalid]="getFormControl('price')?.invalid && (getFormControl('price')?.dirty || getFormControl('price')?.touched)">
+
+      @if (getFormControl('price')?.invalid && (getFormControl('price')?.dirty || getFormControl('price')?.touched)) {
+        <div class="error-message">
+          @if (getFormControl('price')?.errors?.['required']) { <small>Il prezzo è obbligatorio.</small> }
+          @if (getFormControl('price')?.errors?.['min']) { <small>Il prezzo deve essere almeno 1€.</small> }
+        </div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label>Macchinari Necessari (Opzionale)</label>
+      <div class="services">
+        @for (tool of tools; track tool.id) {
+          <div class="checkbox">
+            <input
+              type="checkbox"
+              id="tool-{{tool.id}}"
+              [checked]="isToolSelected(tool.id)"
+              (change)="onToolToggle(tool.id, $event)">
+            <label for="tool-{{tool.id}}">{{tool.name}}</label>
+          </div>
+        } @empty {
+          @if (!isLoadingTools) { <p class="text-small">Nessun macchinario disponibile</p> }
+        }
+        @if (isLoadingTools) { <div class="loading">Caricamento macchinari...</div> }
+      </div>
+    </div>
+  </div>
+
+  <div class="form-controls">
+    <button class="primary" type="submit" [disabled]="serviceForm.invalid || isSaving || (!isEditMode && !selectedImageFile)">
+      @if (isSaving) { Attendere... } @else { {{ isEditMode ? 'Salva Modifiche' : 'Aggiungi' }} }
+    </button>
+
+    @if (isEditMode) {
+      <button type="button" class="danger" (click)="deleteService($event)" [disabled]="isSaving">Elimina</button>
+    }
+  </div>
+</form>

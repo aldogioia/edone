@@ -1,0 +1,13 @@
+:host {
+  width: 100%;
+  display: flex;
+}
+
+.tools-info {
+  display: flex;
+  gap: 2pt;
+}
+
+.text-small.green {
+  color: var(--admin-brand-strong);
+}

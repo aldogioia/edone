@@ -22,6 +22,7 @@ import { RoomsPage } from './admin/screens/rooms-page/rooms-page';
 import { OperatorsPage } from './admin/screens/operators-page/operators-page';
 import { FormatPhonePipe } from './pipe/format-phone-pipe';
 import { StandardSchedulePage } from './admin/screens/standard-schedule-page/standard-schedule-page';
+import { ServicesPage } from './admin/screens/services-page/services-page';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { StandardSchedulePage } from './admin/screens/standard-schedule-page/sta
     OperatorsPage,
     FormatPhonePipe,
     StandardSchedulePage,
+    ServicesPage,
   ],
   imports: [
     BrowserModule,

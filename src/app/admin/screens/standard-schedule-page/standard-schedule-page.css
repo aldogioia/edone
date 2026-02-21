@@ -5,6 +5,10 @@
   display: flex;
 }
 
+.search-section {
+  gap: 0 !important;
+}
+
 .shifts {
   display: flex;
   margin-top: 4pt;

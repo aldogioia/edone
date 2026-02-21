@@ -38,6 +38,7 @@ label {
   display: flex;
   align-items: center;
   gap: 4pt;
+  background-color: var(--fill-dark);
   border: 1px solid var(--stroke-weak);
   padding: 4pt 8pt 4pt 4pt;
   border-radius: 8pt;

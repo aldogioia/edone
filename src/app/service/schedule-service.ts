@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Environment} from '../utils/Enviroment';
+import {Environment} from '../utils/environment';
 import {HttpClient} from '@angular/common/http';
 import {CreateStandardScheduleDto, StandardScheduleDto, UpdateStandardScheduleDto} from '../model/schedule-dto';
 import {HttpParams} from '@angular/common/http';

@@ -103,9 +103,8 @@
 .side-list {
   display: flex;
   width: 100%;
-  gap: 12pt;
+  gap: 8pt;
   overflow-x: auto;
-
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -118,8 +117,8 @@
   display: flex;
   align-items: center;
   gap: 8pt;
-  padding: 8pt;
-  border-radius: 8pt;
+  padding: 2pt 8pt 2pt 2pt;
+  border-radius: 16pt;
   transition: .3s ease-in-out;
 }
 
@@ -136,6 +135,7 @@
   border-radius: 50%;
   object-position: center;
   filter: grayscale(100%);
+  transition: .3s ease-in-out;
 }
 
 .side-list-item:hover {

@@ -7,7 +7,7 @@ import {
   CreateOperatorDto,
   UpdateOperatorDto
 } from '../model/operator-dto';
-import {Environment} from '../utils/Enviroment';
+import {Environment} from '../utils/environment';
 
 @Injectable({
   providedIn: 'root'

@@ -98,6 +98,7 @@ li.danger:hover{
   display: flex;
   gap: 0;
   width: 100%;
+  max-width: calc(100vw - 250px);
 }
 
 
@@ -117,7 +118,15 @@ li.danger:hover{
     width: 50px;
   }
 
+  li {
+    justify-content: center;
+  }
+
   p {
     display: none;
+  }
+
+  .page {
+    max-width: calc(100vw - 72px);
   }
 }

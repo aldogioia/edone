@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable, tap, throwError} from 'rxjs';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {TokenHandler} from '../security/token-handler';
-import {Environment} from '../utils/Enviroment';
+import {Environment} from '../utils/environment';
 
 @Injectable({
   providedIn: 'root',

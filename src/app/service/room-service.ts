@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Environment} from '../utils/Enviroment';
+import {Environment} from '../utils/environment';
 import {BehaviorSubject, Observable, tap} from 'rxjs';
 import {CreateRoomDto, RoomDto, UpdateRoomDto} from '../model/room-dto';
 import {HttpClient} from '@angular/common/http';

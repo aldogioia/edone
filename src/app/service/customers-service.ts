@@ -8,7 +8,7 @@ import {
   UpdateCustomerDto,
   Page
 } from '../model/customer-dto';
-import {Environment} from '../utils/Enviroment';
+import {Environment} from '../utils/environment';
 
 @Injectable({
   providedIn: 'root',

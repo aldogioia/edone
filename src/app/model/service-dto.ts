@@ -1,23 +1,22 @@
 import {SummaryToolDto} from './tool-dto';
 
-export class ServiceDto {
+export interface ServiceDto {
   id: string;
-  imgUrl: string;
+  imgUrl?: string;
   name: string;
   price: number;
   tools: SummaryToolDto[];
+}
 
-  constructor(
-    id: string,
-    imgUrl: string,
-    name: string,
-    price: number,
-    tools: SummaryToolDto[]
-  ) {
-    this.id = id;
-    this.imgUrl = imgUrl;
-    this.name = name;
-    this.price = price;
-    this.tools = tools;
-  }
+export interface CreateServiceDto {
+  name: string;
+  price: number;
+  tools: string[];
+}
+
+export interface UpdateServiceDto {
+  id: string;
+  name: string;
+  price: number;
+  tools: string[];
 }
