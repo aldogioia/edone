@@ -1,0 +1,144 @@
+<section class="list-section">
+  <div class="header">
+    <h2>Eccezioni Turni e Ferie</h2>
+    <div class="search-section">
+      <div class="side-list">
+        @for (operator of operators; track operator.id) {
+          <div class="side-list-item" [class.selected]="isOperatorSelected(operator)" (click)="selectOperator(operator)">
+            <img [src]="operator.imgUrl" [alt]="operator.name + ' ' + operator.surname"/>
+            <p>{{ operator.name + ' ' + operator.surname }}</p>
+          </div>
+        } @empty {
+          @if (!isLoadingOperators) { <p class="empty-state">Nessun operatore trovato</p> }
+        }
+        @if (isLoadingOperators) { <div class="loading">Caricamento in corso...</div> }
+      </div>
+      <div class="controls">
+        <button (click)="forceRefreshList()" title="Aggiorna lista">
+          <hugeicons-icon [icon]="Refresh01Icon"></hugeicons-icon>
+        </button>
+        <button [class.open]="isFormOpen" (click)="isFormOpen ? closeForm() : openCreateForm()">
+          <hugeicons-icon [icon]="isFormOpen ? Cancel01Icon : Add01Icon"></hugeicons-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="list">
+    @if (selectedOperator && !isLoadingExceptions) {
+      @for (ex of exceptions; track ex.id) {
+        <app-list-item [title]="formatDateRange(ex.startDate, ex.endDate)" [icon]="CalendarBlock01Icon" [action]="'Elimina'" (click)="deleteException(ex.id, $event)">
+          <div class="shifts">
+            <div class="shift" data-shift="M">
+              <p class="text-small mono">
+                {{ ex.morningStart ? ex.morningStart.substring(0,5) + ' - ' + ex.morningEnd?.substring(0,5) : 'Riposo' }}
+              </p>
+            </div>
+            <div class="shift" data-shift="P">
+              <p class="text-small mono">
+                {{ ex.afternoonStart ? ex.afternoonStart.substring(0,5) + ' - ' + ex.afternoonEnd?.substring(0,5) : 'Riposo' }}
+              </p>
+            </div>
+          </div>
+        </app-list-item>
+      } @empty {
+        <p class="empty-state">Nessuna eccezione o permesso per questo operatore.</p>
+      }
+    } @else if (!selectedOperator) {
+      <p class="empty-state">Seleziona un operatore dalla barra in alto.</p>
+    } @else if (isLoadingExceptions) {
+      <div class="loading">Caricamento eccezioni...</div>
+    }
+  </div>
+</section>
+
+<form [formGroup]="exceptionForm" [class.open]="isFormOpen" class="side-form" (ngSubmit)="onSubmit()">
+  <div class="header">
+    <h2>Aggiungi Eccezione</h2>
+  </div>
+
+  <div class="form-groups">
+    <div class="form-group">
+      <div class="form-group row">
+        <div class="form-group flex-1">
+          <label for="startDate">Data Inizio</label>
+          <input id="startDate" type="date" formControlName="startDate"
+                 [class.invalid]="getFormControl('startDate')?.invalid && getFormControl('startDate')?.touched">
+        </div>
+
+        <div class="form-group flex-1">
+          <label for="endDate">Data Fine (Opzionale)</label>
+          <input id="endDate" type="date" formControlName="endDate"
+                 [class.invalid]="exceptionForm.hasError('invalidPeriod') && getFormControl('endDate')?.touched">
+        </div>
+      </div>
+      @if (exceptionForm.hasError('invalidPeriod') && getFormControl('startDate')?.touched) {
+        <div class="error-message"><small>{{ exceptionForm.getError('invalidPeriod') }}</small></div>
+      }
+    </div>
+
+    <div class="slot-card" [class.error]="isMorningInvalid" [class.success]="isMorningValid">
+      <div class="slot-header">
+        <h5>Mattina</h5>
+        <div class="form-group row">
+          <label>Riposo</label>
+          <input type="checkbox" formControlName="isMorningOff">
+        </div>
+      </div>
+
+      <div class="form-group row" [class.disabled-row]="getFormControl('isMorningOff')?.value">
+        <div class="form-group">
+          <label>Inizio</label>
+          <input type="time" formControlName="morningStart" step="1800">
+        </div>
+        <div class="form-group">
+          <label>Fine</label>
+          <input type="time" formControlName="morningEnd" step="1800">
+        </div>
+      </div>
+
+      @if (isMorningInvalid) {
+        <div class="error-message"><small>{{ exceptionForm.getError('invalidMorning') }}</small></div>
+      }
+    </div>
+
+    <div class="slot-card" [class.error]="isAfternoonInvalid" [class.success]="isAfternoonValid">
+      <div class="slot-header">
+        <h5>Pomeriggio</h5>
+        <div class="form-group row">
+          <label>Riposo</label>
+          <input type="checkbox" formControlName="isAfternoonOff">
+        </div>
+      </div>
+
+      <div class="form-group row" [class.disabled-row]="getFormControl('isAfternoonOff')?.value">
+        <div class="form-group">
+          <label>Inizio</label>
+          <input type="time" formControlName="afternoonStart" step="1800">
+        </div>
+        <div class="form-group">
+          <label>Fine</label>
+          <input type="time" formControlName="afternoonEnd" step="1800">
+        </div>
+      </div>
+      @if (isAfternoonInvalid) {
+        <div class="error-message">
+          <small>{{ exceptionForm.getError('invalidAfternoon') }}</small>
+        </div>
+      }
+    </div>
+
+    @if (hasOverlapError) {
+      <div class="error-message" style="margin-top: 10px;">
+        <small>{{ exceptionForm.getError('overlap') }}</small>
+      </div>
+    }
+
+  </div>
+
+  <div class="form-controls">
+    <button class="primary" type="submit" [disabled]="exceptionForm.invalid || isSaving">
+      @if (isSaving) { Attendere... } @else { Aggiungi Eccezione }
+    </button>
+  </div>
+</form>

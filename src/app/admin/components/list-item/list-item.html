@@ -1,3 +1,6 @@
+<small [class.danger]="action() == 'Elimina'">
+  {{ action() ? action() : 'Modifica' }}
+</small>
 @if (imageUrl()) {
   <img [src]="imageUrl()" [alt]="title()"/>
 } @else if (icon()) {

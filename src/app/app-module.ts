@@ -23,6 +23,7 @@ import { OperatorsPage } from './admin/screens/operators-page/operators-page';
 import { FormatPhonePipe } from './pipe/format-phone-pipe';
 import { StandardSchedulePage } from './admin/screens/standard-schedule-page/standard-schedule-page';
 import { ServicesPage } from './admin/screens/services-page/services-page';
+import { ScheduleExceptionPage } from './admin/screens/schedule-exception-page/schedule-exception-page';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { ServicesPage } from './admin/screens/services-page/services-page';
     FormatPhonePipe,
     StandardSchedulePage,
     ServicesPage,
+    ScheduleExceptionPage,
   ],
   imports: [
     BrowserModule,

@@ -14,4 +14,5 @@ export class ListItem {
   title = input.required<string>();
   icon = input<IconSvgObject>();
   imageUrl = input<string>();
+  action= input<string>();
 }

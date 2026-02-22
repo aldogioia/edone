@@ -29,7 +29,7 @@
       <app-list-item [title]="day.label" (click)="handleDayClick(day.key)">
         <div class="shifts">
           @for (shift of getShiftsByDay(day.key); track shift.id) {
-            <p class="text-small shift">{{ shift.start.substring(0, 5) }} - {{ shift.end.substring(0, 5) }} {{ shift.type }}</p>
+            <p class="text-small shift mono">{{ shift.start.substring(0, 5) }} - {{ shift.end.substring(0, 5) }} {{ shift.type }}</p>
           } @empty {
             <p class="text-small">Riposo</p>
           }

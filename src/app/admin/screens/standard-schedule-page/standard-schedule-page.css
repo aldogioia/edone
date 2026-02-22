@@ -21,7 +21,6 @@
   border: 1px solid var(--stroke-strong);
   padding: 4pt;
   border-radius: 4pt;
-  font-family: 'Space Mono', monospace;
   color: var(--text-strong) !important;
   text-align: center;
   text-wrap: nowrap;

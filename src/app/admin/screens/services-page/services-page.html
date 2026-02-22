@@ -21,7 +21,7 @@
         (click)="openEditForm(service)">
         <div class="tools-info">
           <p class="text-small">Macchinari necessari:</p>
-          <p class="text-small green">{{ service.tools?.length || 0 }}</p>
+          <p class="text-small green">{{ service.tools.length || 0 }}</p>
         </div>
       </app-list-item>
     } @empty {

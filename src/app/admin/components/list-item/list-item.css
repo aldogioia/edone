@@ -20,13 +20,23 @@
   box-shadow: 0 4px 32px -12px rgba(0, 0, 0, 0.1);
 }
 
-:host:hover:after {
-  content: 'Modifica';
+:host > small {
   position: absolute;
   top: 8pt;
   right: 8pt;
   font-size: 0.75rem;
   color: var(--admin-brand-strong);
+  opacity: 0;
+  pointer-events: none;
+  transition: .3s ease-in-out;
+}
+
+:host > small.danger {
+  color: var(--error-strong);
+}
+
+:host:hover > small {
+  opacity: 1;
 }
 
 img{
