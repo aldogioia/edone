@@ -31,6 +31,29 @@ export class AuthService {
       );
   }
 
+  signOut() {
+    const accessToken = this.tokenHandler.getAccessToken();
+    if (!accessToken) return throwError(() => 'No access token');
+
+    const refreshToken = this.tokenHandler.getRefreshToken();
+    if (!refreshToken) return throwError(() => 'No refresh token');
+
+    const headers = { 'X-Refresh-Token': refreshToken, 'Authorization': accessToken };
+    return this.http.post<any>(`${this.baseUrl}/sign-out`, {}, { headers: headers })
+      .pipe(
+        tap({
+          next: () => {
+            this.tokenHandler.clearTokens();
+            console.log('[AuthService] Token rimossi dopo signOut');
+            window.location.href = '/';
+          },
+          error: (err) => {
+            console.error('[AuthService] Errore durante signOut', err);
+          }
+        })
+      );
+  }
+
   refreshToken(): Observable<{ accessToken: string; refreshToken?: string }> {
     const refresh = this.tokenHandler.getRefreshToken();
     if (!refresh) {

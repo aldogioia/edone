@@ -27,12 +27,36 @@
   <div class="list">
     @if (selectedOperator && !isLoadingSchedules){
       @for (day of weekDays; track day.key){
-        <app-list-item [title]="day.label" (click)="handleDayClick(day.key)">
+        <app-list-item [title]="day.label" [icon]="DateTimeIcon" (click)="handleDayClick(day.key)">
           <div class="shifts">
             @for (shift of getShiftsByDay(day.key); track shift.id) {
-              <p class="text-small shift mono">{{ shift.start.substring(0, 5) }} - {{ shift.end.substring(0, 5) }} {{ shift.type }}</p>
+              @if (shift.type === 'M') {
+                <div class="shift" data-shift="M">
+                  <p class="text-small mono">{{ shift.start.substring(0, 5) + ' - ' + shift.end.substring(0, 5) }}</p>
+                </div>
+                @if (getShiftsByDay(day.key).length < 2) {
+                  <div class="shift" data-shift="P">
+                    <p class="text-small mono">Riposo</p>
+                  </div>
+                }
+              } @else {
+                @if (getShiftsByDay(day.key).length < 2) {
+                  <div class="shift" data-shift="M">
+                    <p class="text-small mono">Riposo</p>
+                  </div>
+                }
+                <div class="shift" data-shift="P">
+                  <p class="text-small mono">{{ shift.start.substring(0, 5) + ' - ' + shift.end.substring(0, 5) }}</p>
+                </div>
+
+              }
             } @empty {
-              <p class="text-small">Riposo</p>
+              <div class="shift" data-shift="M">
+                <p class="text-small mono">Riposo</p>
+              </div>
+              <div class="shift" data-shift="P">
+                <p class="text-small mono">Riposo</p>
+              </div>
             }
           </div>
         </app-list-item>

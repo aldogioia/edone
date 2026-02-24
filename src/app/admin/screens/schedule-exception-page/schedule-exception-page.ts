@@ -16,7 +16,8 @@ import {Add01Icon, Cancel01Icon, Refresh01Icon, CalendarBlock01Icon} from '@huge
     './schedule-exception-page.css',
     '../../../../../public/css/form.css',
     '../../../../../public/css/layout.css',
-    '../../../../../public/css/typography.css'
+    '../../../../../public/css/typography.css',
+    '../../../../../public/css/schedule.css'
   ]
 })
 export class ScheduleExceptionPage implements OnInit, OnDestroy {

@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Subject, takeUntil} from 'rxjs';
 import {OperatorsService} from '../../../service/operators-service';
 import {OperatorDto} from '../../../model/operator-dto';
-import {Add01Icon, Cancel01Icon, Refresh01Icon} from '@hugeicons/core-free-icons';
+import {Add01Icon, Cancel01Icon, DateTimeIcon, Refresh01Icon} from '@hugeicons/core-free-icons';
 import {CreateStandardScheduleDto, StandardScheduleDto, UpdateStandardScheduleDto} from '../../../model/schedule-dto';
 import {ScheduleService} from '../../../service/schedule-service';
 import {Shift} from '../../../model/shift';
@@ -17,7 +17,8 @@ import {scheduleInfoValidator} from '../../../validators/schedule-exception-vali
     './standard-schedule-page.css',
     '../../../../../public/css/form.css',
     '../../../../../public/css/layout.css',
-    '../../../../../public/css/typography.css'
+    '../../../../../public/css/typography.css',
+    '../../../../../public/css/schedule.css'
   ],
 })
 export class StandardSchedulePage implements OnInit, OnDestroy{
@@ -88,7 +89,7 @@ export class StandardSchedulePage implements OnInit, OnDestroy{
         id: schedule.id,
         start: schedule.morningStart,
         end: schedule.morningEnd,
-        type: "AM"
+        type: "M"
       });
     }
 
@@ -97,7 +98,7 @@ export class StandardSchedulePage implements OnInit, OnDestroy{
         id: schedule.id + 1,
         start: schedule.afternoonStart,
         end: schedule.afternoonEnd,
-        type: "PM"
+        type: "P"
       });
     }
 
@@ -398,4 +399,5 @@ export class StandardSchedulePage implements OnInit, OnDestroy{
   protected readonly Cancel01Icon = Cancel01Icon;
   protected readonly Add01Icon = Add01Icon;
   protected readonly Refresh01Icon = Refresh01Icon;
+  protected readonly DateTimeIcon = DateTimeIcon;
 }

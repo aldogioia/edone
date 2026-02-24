@@ -5,7 +5,7 @@
     <ul>
       <p class="text-small">Appuntamenti</p>
       <li routerLinkActive="active" title="Calendario" routerLink="bookings">
-        <hugeicons-icon [icon]="Calendar03Icon"></hugeicons-icon>
+        <hugeicons-icon [icon]="Calendar01Icon"></hugeicons-icon>
         <p class="text-small">Calendario</p>
       </li>
     </ul>
@@ -46,7 +46,7 @@
       </li>
     </ul>
   </div>
-  <li class="danger"> <!-- TODO: Logout -->
+  <li class="danger" (click)="signOut()">
       <hugeicons-icon [icon]="Logout02Icon"></hugeicons-icon>
       <p>Esci</p>
   </li>

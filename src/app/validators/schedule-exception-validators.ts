@@ -31,9 +31,9 @@ export const scheduleInfoValidator: ValidatorFn = (control: AbstractControl): Va
     }
   }
 
-  if(!(morningStart && morningEnd) && !(afternoonStart && afternoonEnd)) {
+  /*if(!(morningStart && morningEnd) && !(afternoonStart && afternoonEnd)) {
     errors.noSchedule = 'Deve essere definito almeno un orario per mattina o pomeriggio.';
-  }
+  }*/
 
   if (Object.keys(errors).length > 0) {
     return errors;

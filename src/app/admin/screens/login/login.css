@@ -6,64 +6,64 @@
   gap: 24pt;
   height: 100%;
   width: 100%;
-
   background-color: var(--background);
 }
 
-.back-icon {
-  position: absolute;
-  top: 24pt;
-  left: 24pt;
+.box {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-}
-
-.back-icon > svg {
-  width: 40px;
-  height: 40px;
-}
-
-.back-icon > svg > path {
-  fill: transparent;
-  stroke: var(--stroke-weak);
-  transition: all .3s ease-in-out;
-}
-
-.back-icon:hover > svg > path{
-  fill: transparent;
-  stroke: var(--stroke-strong);
-}
-
-.login-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 80px;
-  height: 80px;
-  background-color: var(--admin-brand-strong);
-  border-radius: 20%;
-}
-
-.login-icon > svg  {
-  width: 40px;
-  height: 40px;
-}
-
-.login-icon > svg > path {
-  fill: transparent;
-  stroke: var(--background);
+  flex-direction: column;
+  gap: 24pt;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 24pt;
+  border: 1px solid var(--stroke-weak);
+  background: var(--fill-dark);
+  padding: 16pt;
+  overflow: hidden;
 }
 
 .header {
-  text-align: center;
-  vertical-align: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.header > h3 {
-  color: var(--admin-brand-strong)
+.header img {
+  width: 50%;
+}
+
+.back-btn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  background: var(--fill-dark);
+  border: 1px solid var(--stroke-weak);
+  border-radius: 8pt;
+  padding: 4pt;
+  stroke: var(--admin-brand-strong);
+  transition: .3s ease-in-out;
+  cursor: pointer;
+}
+
+.back-btn.show {
+  opacity: 1;
+  pointer-events: initial;
+}
+
+.back-btn:hover {
+  background: var(--brand-fill);
+  border: 1px solid var(--brand-stroke-weak);
+}
+
+.forms {
+  display: flex;
+  width: calc(200% + 16pt);
+  overflow: hidden;
+  gap: 24pt;
+  transition: .3s ease-in-out;
 }
 
 form {
@@ -71,23 +71,46 @@ form {
   flex-direction: column;
   align-items: center;
   gap: 16pt;
-  justify-content: center;
-
-  border: 1px solid var(--stroke-weak);
-  border-radius: 12pt;
-  padding: 24pt;
-  background-color: var(--background);
-
-  width: 60%;
-  max-width: 580px;
+  width: 100%;
 }
 
-.forget-password {
-  color: var(--admin-brand-strong);
-  text-align: center;
+.forms.translate {
+  transform: translateX(calc(-50% - 8pt));
 }
 
-.forget-password:hover{
+button {
+  width: 100%;
+}
+
+.forget-link {
+  margin-top: 8pt;
+  display: flex;
+  gap: 4pt;
   cursor: pointer;
 }
 
+.forget-link > b {
+  font-weight: 500;
+  color: var(--text-strong) !important;
+  transition: opacity 0.2s;
+}
+
+.forget-link:hover > b {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.instruction-box {
+  background: var(--brand-fill);
+  border: 1px dashed var(--brand-stroke-strong);
+  padding: 12pt;
+  border-radius: 8pt;
+  width: 100%;
+  text-align: center;
+}
+
+.instruction-box p {
+  margin: 0;
+  color: var(--text-weak);
+  line-height: 1.4;
+}

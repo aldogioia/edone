@@ -1,8 +1,16 @@
-import {Component, inject} from '@angular/core';
-import {FormBuilder, Validators} from '@angular/forms';
-import {AuthService} from '../../../service/auth-service';
-import {PasswordService} from '../../../service/password-service';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AuthService } from '../../../service/auth-service';
+import { PasswordService } from '../../../service/password-service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ArrowLeft01Icon } from '@hugeicons/core-free-icons';
+
+// Validatore custom per controllare che le password coincidano
+export const passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  const newPassword = control.get('newPassword')?.value;
+  const confirmPassword = control.get('confirmPassword')?.value;
+  return newPassword === confirmPassword ? null : { mismatch: true };
+};
 
 @Component({
   selector: 'app-login',
@@ -10,82 +18,82 @@ import {ActivatedRoute, Router} from '@angular/router';
   templateUrl: './login.html',
   styleUrls: [
     './login.css',
-    '../../../../../public/css/form.css'
+    '../../../../../public/css/form.css',
+    '../../../../../public/css/typography.css',
   ],
 })
 export class Login {
-  private formBuilder = inject(FormBuilder);
+  loginForm!: FormGroup;
+  resetForm!: FormGroup;
 
-  // 0 -> Login
-  // 1 -> Password Forget
-  // 2 -> Insert Token for Password Reset
-  pageIndex = 0
+  pageIndex = 0; // 0: Login, 1: Richiesta Token, 2: Reset Password
   loading = false;
 
+  protected readonly ArrowLeft01Icon = ArrowLeft01Icon;
+
   constructor(
+    private formBuilder: FormBuilder,
     private authService: AuthService,
     private passwordService: PasswordService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
-
-  loginForm = this.formBuilder.group({
-    phoneNumber: ['', [
-      Validators.required,
-      Validators.minLength(10),
-      Validators.maxLength(10),
-      Validators.pattern('^[0-9]*$')
-    ]],
-    password: ['', [
-      Validators.required,
-      Validators.pattern(/^(?=.*\d).{8,}$/)
-    ]]
-  })
-
-  requestResetForm = this.formBuilder.group({
-    phoneNumber: ['', [
-      Validators.required,
-      Validators.minLength(10),
-      Validators.maxLength(10),
-      Validators.pattern('^[0-9]*$')
-    ]]
-  })
-
-  resetForm = this.formBuilder.group({
-    token: ['', [
-      Validators.required,
-      Validators.pattern('^[0-9]*$') // todo pattern nel backend
-    ]],
-    newPassword: ['', [
-      Validators.required,
-      Validators.pattern(/^(?=.*\d).{8,}$/)
-    ]]
-  })
-
-  phoneNumberField = this.pageIndex === 0 ?
-    this.loginForm.controls.phoneNumber :
-    this.pageIndex == 1 ?
-      this.requestResetForm.controls.phoneNumber :
-      this.resetForm.controls.token
-
-  passwordField = this.pageIndex === 0 ?
-    this.loginForm.controls.password :
-    this.resetForm.controls.newPassword
-
-  checkTelephoneFieldError() {
-    if(this.pageIndex === 0)
-      return (this.loginForm.get('phoneNumber')?.invalid && this.loginForm.get('phoneNumber')?.touched)
-    else if(this.pageIndex === 1)
-      return (this.requestResetForm.get('phoneNumber')?.invalid && this.requestResetForm.get('phoneNumber')?.touched)
-    else
-      return (this.resetForm.get('token')?.invalid && this.resetForm.get('token')?.touched)
+  ) {
+    this.initForms();
   }
 
-  checkPasswordFieldError() {
-    if(this.pageIndex === 0)
-      return (this.loginForm.get('password')?.invalid && this.loginForm.get('password')?.touched)
-    else
-      return (this.resetForm.get('newPassword')?.invalid && this.resetForm.get('newPassword')?.touched)
+  private initForms() {
+    this.loginForm = this.formBuilder.group({
+      phoneNumber: ['', [
+        Validators.required,
+        Validators.pattern('^\\+?[0-9]{10}$')
+      ]],
+      password: ['', [
+        Validators.required,
+        Validators.pattern(/^(?=.*\d).{8,}$/)
+      ]]
+    });
+
+    this.resetForm = this.formBuilder.group({
+      token: ['', [
+        Validators.required,
+        Validators.pattern('^[0-9]+$')
+      ]],
+      newPassword: ['', [
+        Validators.required,
+        Validators.pattern(/^(?=.*\d).{8,}$/)
+      ]],
+      confirmPassword: ['', [
+        Validators.required
+      ]]
+    }, { validators: passwordMatchValidator });
+  }
+
+
+  onPasswordForgetClick() {
+    this.pageIndex = 1;
+    this.loginForm.get('password')?.clearValidators();
+    this.loginForm.get('password')?.updateValueAndValidity();
+    this.loginForm.markAsUntouched();
+  }
+
+  goBack() {
+    if (this.pageIndex === 1) {
+      this.pageIndex = 0;
+      this.loginForm.get('password')?.setValidators([Validators.required, Validators.pattern(/^(?=.*\d).{8,}$/)]);
+      this.loginForm.get('password')?.updateValueAndValidity();
+    } else if (this.pageIndex === 2) {
+      this.pageIndex = 0;
+      this.resetForm.reset();
+      this.loginForm.get('password')?.setValidators([Validators.required, Validators.pattern(/^(?=.*\d).{8,}$/)]);
+      this.loginForm.get('password')?.updateValueAndValidity();
+    }
+  }
+
+
+  onSubmit() {
+    if (this.pageIndex === 0) this.login();
+    else if (this.pageIndex === 1) this.requestReset();
+    else this.reset();
   }
 
   private login() {
@@ -113,53 +121,46 @@ export class Login {
   }
 
   private requestReset() {
-    if(this.requestResetForm.valid){
-      this.passwordService.requestReset(this.requestResetForm.value.phoneNumber!).subscribe({
+    if (this.loginForm.valid && !this.loading) {
+      this.loading = true;
+      this.passwordService.requestReset(this.loginForm.value.phoneNumber!).subscribe({
         next: () => {
+          this.loading = false;
           this.pageIndex = 2;
-          this.requestResetForm.reset()
+          this.loginForm.reset();
         },
         error: (error) => {
-          console.log(error);
-          alert('Request failed: ' + error.message);
+          this.loading = false;
+          console.error(error);
+          alert('Impossibile inviare la richiesta. Riprova.');
         }
-      })
+      });
     } else {
-      this.requestResetForm.markAllAsTouched();
+      this.loginForm.markAllAsTouched();
     }
   }
 
   private reset() {
-    if(this.resetForm.valid){
+    if (this.resetForm.valid && !this.loading) {
+      this.loading = true;
       this.passwordService.reset(this.resetForm.value.token!, this.resetForm.value.newPassword!).subscribe({
         next: () => {
-          alert('Password reset successful. Please log in with your new password.');
-          this.pageIndex = 0;
-          this.resetForm.reset();
+          this.loading = false;
+          alert('Password aggiornata con successo. Effettua il login.');
+          this.goBack(); // Torna al form di login
         },
         error: (error) => {
-          console.log(error);
-          alert('Password reset failed: ' + error.message);
+          this.loading = false;
+          console.error(error);
+          alert('Token non valido o scaduto.');
         }
-      })
+      });
     } else {
       this.resetForm.markAllAsTouched();
     }
   }
 
-  onSubmit() {
-    if(this.pageIndex === 0) this.login()
-    else if(this.pageIndex === 1) this.requestReset()
-    else this.reset()
-  }
-
-  onPasswordForgetClick() {
-    this.pageIndex = 1;
-    this.loginForm.markAsUntouched();
-  }
-
-  onBack() {
-    this.pageIndex--;
-    this.loginForm.reset()
+  getFormControl(form: FormGroup, name: string) {
+    return form.get(name);
   }
 }
