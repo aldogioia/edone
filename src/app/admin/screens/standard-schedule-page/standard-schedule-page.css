@@ -5,96 +5,70 @@
   display: flex;
 }
 
-.search-section {
-  gap: 0 !important;
+.shifts, .shift {
+  display: flex;
+  align-items: center;
 }
 
 .shifts {
-  display: flex;
-  margin-top: 4pt;
+  margin-top: 8pt;
+  flex-wrap: wrap;
   gap: 4pt;
   width: 100%;
 }
 
 .shift {
-  width: 100%;
-  border: 1px solid var(--stroke-strong);
+  position: relative;
+  justify-content: center;
+  flex: 1 0 0;
+  min-width: 150px;
+  border: 1px solid var(--stroke-weak);
+  border-radius: 1pt;
+  background: var(--fill-dark);
   padding: 4pt;
-  border-radius: 4pt;
+}
+
+.shift > p {
   color: var(--text-strong) !important;
-  text-align: center;
-  text-wrap: nowrap;
 }
 
-.hours-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1rem;
-}
-
-.add-buttons {
-  display: flex;
-  gap: 0.5rem;
-}
-
-
-
-.slots-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  margin-top: 1rem;
+.shift::after {
+  content: attr(data-shift);
+  position: absolute;
+  top: 50%;
+  left: 4pt;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: var(--admin-brand-weak);
 }
 
 .slot-card {
-  width: 100%;
+  display: flex;
+  flex-direction: column;
   padding: 8pt;
-  font-size: 0.9375rem;
-  background: #FFFFFF;
-  border: 1px solid var(--stroke-strong);
-  border-radius: 8pt;
+  border: 1px solid var(--stroke-weak);
+  background: var(--fill-dark);
+  border-radius: 16pt;
+  gap: 8pt;
 }
 
-/* Allinea Label e X agli estremi */
+.slot-card.success {
+  border: 1px dashed var(--brand-stroke-strong);
+  background: var(--brand-fill);
+}
+
+.slot-card.error {
+  border: 1px dashed var(--error-stroke-strong);
+  background: var(--error-fill);
+}
+
 .slot-header {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.8rem;
-}
-
-.slot-label {
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: #333;
-}
-
-.hours-row {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-.flex-1 {
-  flex: 1;
-}
-
-.btn-remove {
-  background: none;
-  border: none;
-  color: var(--error-weak);
-  cursor: pointer;
-  font-size: 1.2rem;
-  padding: 0 5px;
-  line-height: 1;
-  transition: transform 0.2s;
-}
-
-.btn-remove:hover {
-  transform: scale(1.2);
-}
-
-.hours-row input {
   width: 100%;
+}
+
+.slot-header > .form-group {
+  width: fit-content;
 }

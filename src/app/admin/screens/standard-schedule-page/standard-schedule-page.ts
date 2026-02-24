@@ -1,14 +1,13 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {combineLatest, Subject, takeUntil} from 'rxjs';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Subject, takeUntil} from 'rxjs';
 import {OperatorsService} from '../../../service/operators-service';
-import {map} from 'rxjs/operators';
 import {OperatorDto} from '../../../model/operator-dto';
 import {Add01Icon, Cancel01Icon, Refresh01Icon} from '@hugeicons/core-free-icons';
 import {CreateStandardScheduleDto, StandardScheduleDto, UpdateStandardScheduleDto} from '../../../model/schedule-dto';
 import {ScheduleService} from '../../../service/schedule-service';
 import {Shift} from '../../../model/shift';
-import {ScheduleValidators} from '../../../validators/schedule-validators';
+import {scheduleInfoValidator} from '../../../validators/schedule-exception-validators';
 
 @Component({
   selector: 'app-standard-schedule-page',
@@ -57,8 +56,8 @@ export class StandardSchedulePage implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-    this.loadAllOperators()
-    this.setupDataStream()
+    this.loadOperators()
+    this.setupFormListeners()
   }
 
   ngOnDestroy(): void {
@@ -68,8 +67,8 @@ export class StandardSchedulePage implements OnInit, OnDestroy{
 
   selectOperator(operator: OperatorDto) {
     this.selectedOperator = operator;
+    this.isFormOpen = false;
     this.loadOperatorSchedule(operator.id);
-    console.log('Selected operator', operator);
   }
 
   isOperatorSelected(operator: OperatorDto): boolean {
@@ -105,28 +104,10 @@ export class StandardSchedulePage implements OnInit, OnDestroy{
     return shifts;
   }
 
-
   getDaysWithoutShifts() {
     return this.weekDays.filter(day =>
       !this.operatorSchedules.some(schedule => schedule.day === day.key)
     );
-  }
-
-  loadAllOperators() {
-    if(this.isLoadingOperators) return;
-    this.isLoadingOperators = true;
-
-    this.operatorService.loadAllOperators().subscribe({
-      next: () => {
-        this.isLoadingOperators = false;
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        this.isLoadingOperators = false;
-        console.error('Failed to load operators', err);
-        this.cdr.detectChanges();
-      }
-    })
   }
 
   loadOperatorSchedule(operatorId: string) {
@@ -137,7 +118,6 @@ export class StandardSchedulePage implements OnInit, OnDestroy{
       next: (schedules) => {
         this.operatorSchedules = schedules;
         this.isLoadingSchedules = false;
-        console.log('Loaded operator schedule', schedules);
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -148,61 +128,125 @@ export class StandardSchedulePage implements OnInit, OnDestroy{
     })
   }
 
-  private setupDataStream() {
-    combineLatest([
-      this.operatorService.operators$
-    ]).pipe(
-      takeUntil(this.destroy$),
-      map(([operators]) => {
-        this.operators = operators
-        if(operators.length > 0){
-          this.selectedOperator = operators[0]
-          this.loadOperatorSchedule(this.selectedOperator!.id)
+  forceRefreshList() {
+    if (this.selectedOperator) {
+      this.isLoadingSchedules = true;
+      this.scheduleService.getOperatorStandardSchedule(this.selectedOperator.id, true).subscribe({
+        next: (ex) => {
+          this.operatorSchedules = ex;
+          this.isLoadingSchedules = false;
+          this.cdr.detectChanges();
         }
-      })
-    ).subscribe({
-      next: () => { this.cdr.detectChanges() }
-    })
+      });
+    }
+  }
+
+  loadOperators() {
+    this.isLoadingOperators = true;
+    this.operatorService.loadAllOperators().subscribe({
+      next: (ops) => {
+        this.operators = ops;
+        this.isLoadingOperators = false;
+        if (ops.length > 0) this.selectOperator(ops[0]);
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Errore caricamento operatori', err);
+        this.isLoadingOperators = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  private setupFormListeners() {
+    this.scheduleForm.get('isMorningOff')?.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(isOff => {
+        const startCtrl = this.scheduleForm.get('morningStart');
+        const endCtrl = this.scheduleForm.get('morningEnd');
+        if (isOff) {
+          startCtrl?.disable(); endCtrl?.disable();
+          startCtrl?.setValue(''); endCtrl?.setValue('');
+        } else {
+          startCtrl?.enable(); endCtrl?.enable();
+        }
+      });
+
+    this.scheduleForm.get('isAfternoonOff')?.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(isOff => {
+        const startCtrl = this.scheduleForm.get('afternoonStart');
+        const endCtrl = this.scheduleForm.get('afternoonEnd');
+        if (isOff) {
+          startCtrl?.disable(); endCtrl?.disable();
+          startCtrl?.setValue(''); endCtrl?.setValue('');
+        } else {
+          startCtrl?.enable(); endCtrl?.enable();
+        }
+      });
   }
 
   initForm() {
     this.scheduleForm = this.formBuilder.group({
       id: [null],
       day: ['', Validators.required],
-      slots: this.formBuilder.array([], [ScheduleValidators.amPmOverlap()])
-    });
+      isMorningOff: [true],
+      morningStart: [{value: '', disabled: true}],
+      morningEnd: [{value: '', disabled: true}],
+      isAfternoonOff: [true],
+      afternoonStart: [{value: '', disabled: true}],
+      afternoonEnd: [{value: '', disabled: true}]
+    }, { validators: [scheduleInfoValidator] });
   }
 
-
-  get slots() {
-    return this.scheduleForm.get('slots') as FormArray;
+  getFormControl(name: string) {
+    return this.scheduleForm.get(name);
   }
 
-  getAvailableSlotTypes() {
-    const currentTypes = this.slots.value.map((s: any) => s.type);
-    return {
-      hasAM: currentTypes.includes('AM'),
-      hasPM: currentTypes.includes('PM')
-    };
+  get isMorningInvalid(): boolean {
+    const isTouched = this.getFormControl('morningStart')?.touched || this.getFormControl('morningEnd')?.touched;
+    return this.scheduleForm.hasError('invalidMorning') && !!isTouched;
   }
 
-  addSlot(type: 'AM' | 'PM') {
-    const slotGroup = this.formBuilder.group({
-      type: [type],
-      start: [null, [Validators.required, ScheduleValidators.step30Min()]],
-      end: [null, [Validators.required, ScheduleValidators.step30Min()]]
-    }, {
-      validators: [ScheduleValidators.timeRange()]
-    });
+  get isMorningValid(): boolean {
+    const isOff = this.getFormControl('isMorningOff')?.value;
+    if (isOff) return true;
 
-    this.slots.push(slotGroup);
-    this.slots.controls.sort((a, b) => a.get('type')?.value === 'AM' ? -1 : 1);
-    this.cdr.detectChanges();
+    const start = this.getFormControl('morningStart');
+    const end = this.getFormControl('morningEnd');
+    const isTouchedAndDirty = (start?.touched && end?.touched) || (start?.dirty && end?.dirty);
+    const hasValues = start?.value && end?.value;
+
+    return !!isTouchedAndDirty && !!hasValues && !this.scheduleForm.hasError('invalidMorning');
   }
 
-  removeSlot(index: number) {
-    this.slots.removeAt(index);
-    this.cdr.detectChanges();
+  get isAfternoonInvalid(): boolean {
+    const isTouched = this.getFormControl('afternoonStart')?.touched || this.getFormControl('afternoonEnd')?.touched;
+    return this.scheduleForm.hasError('invalidAfternoon') && !!isTouched;
+  }
+
+  get isAfternoonValid(): boolean {
+    const isOff = this.getFormControl('isAfternoonOff')?.value;
+    if (isOff) return true;
+
+    const start = this.getFormControl('afternoonStart');
+    const end = this.getFormControl('afternoonEnd');
+    const isTouchedAndDirty = (start?.touched && end?.touched) || (start?.dirty && end?.dirty);
+    const hasValues = start?.value && end?.value;
+
+    return !!isTouchedAndDirty && !!hasValues && !this.scheduleForm.hasError('invalidAfternoon');
+  }
+
+  get hasOverlapError(): boolean {
+    const mEnd = this.getFormControl('morningEnd')?.touched;
+    const pStart = this.getFormControl('afternoonStart')?.touched;
+    return this.scheduleForm.hasError('overlap') && (!!mEnd || !!pStart);
+  }
+
+  get hasNoScheduleError(): boolean {
+    const mTouched = this.getFormControl('morningStart')?.touched || this.getFormControl('morningEnd')?.touched;
+    const pTouched = this.getFormControl('afternoonStart')?.touched || this.getFormControl('afternoonEnd')?.touched;
+    return this.scheduleForm.hasError('noSchedule') && (!!mTouched || !!pTouched);
   }
 
   handleDayClick(dayKey: string) {
@@ -220,9 +264,12 @@ export class StandardSchedulePage implements OnInit, OnDestroy{
   }
 
   openEditForm(dto: StandardScheduleDto) {
+    if (!this.selectedOperator) {
+      alert("Seleziona un operatore dalla lista a sinistra prima di aggiungere un'eccezione.");
+      return;
+    }
     this.isFormOpen = true;
     this.isEditMode = true;
-    this.slots.clear();
 
     this.scheduleForm.get('day')?.setValue(dto.day);
     this.scheduleForm.get('day')?.disable();
@@ -230,35 +277,34 @@ export class StandardSchedulePage implements OnInit, OnDestroy{
     this.scheduleForm.get('id')?.setValue(dto.id);
 
     if (dto.morningStart && dto.morningEnd) {
-      this.addSlotWithData('AM', dto.morningStart, dto.morningEnd);
+      this.scheduleForm.get('isMorningOff')?.setValue(false);
+      this.scheduleForm.get('morningStart')?.setValue(dto.morningStart);
+      this.scheduleForm.get('morningEnd')?.setValue(dto.morningEnd);
     }
     if (dto.afternoonStart && dto.afternoonEnd) {
-      this.addSlotWithData('PM', dto.afternoonStart, dto.afternoonEnd);
+      this.scheduleForm.get('isAfternoonOff')?.setValue(false);
+      this.scheduleForm.get('afternoonStart')?.setValue(dto.afternoonStart);
+      this.scheduleForm.get('afternoonEnd')?.setValue(dto.afternoonEnd);
     }
 
     this.cdr.detectChanges();
   }
 
   openCreateForm(dayKey?: string) {
+    if (!this.selectedOperator) {
+      alert("Seleziona un operatore dalla lista a sinistra prima di aggiungere un'eccezione.");
+      return;
+    }
+    this.isEditMode = false
     this.isFormOpen = true;
-    this.isEditMode = false;
-    this.slots.clear();
-    this.scheduleForm.get('day')?.enable();
-
     this.scheduleForm.reset({
+      isMorningOff: true,
+      isAfternoonOff: true,
       day: dayKey || ''
     });
-  }
 
-  private addSlotWithData(type: 'AM' | 'PM', start: string, end: string) {
-    const slotGroup = this.formBuilder.group({
-      type: [type],
-      start: [start.substring(0, 5), [Validators.required, ScheduleValidators.step30Min()]],
-      end: [end.substring(0, 5), [Validators.required, ScheduleValidators.step30Min()]]
-    }, {
-      validators: [ScheduleValidators.timeRange()]
-    });
-    this.slots.push(slotGroup);
+    if(dayKey) this.scheduleForm.get('day')?.disable();
+    else this.scheduleForm.get('day')?.enable();
   }
 
   closeForm() {
@@ -271,16 +317,12 @@ export class StandardSchedulePage implements OnInit, OnDestroy{
 
     this.isSaving = true;
     const formValue = this.scheduleForm.value;
-    const slots = formValue.slots as any[];
-
-    const amSlot = slots.find(s => s.type === 'AM');
-    const pmSlot = slots.find(s => s.type === 'PM');
 
     const scheduleData = {
-      morningStart: amSlot ? amSlot.start : null,
-      morningEnd: amSlot ? amSlot.end : null,
-      afternoonStart: pmSlot ? pmSlot.start : null,
-      afternoonEnd: pmSlot ? pmSlot.end : null,
+      morningStart: formValue.isMorningOff ? undefined : formValue.morningStart,
+      morningEnd: formValue.isMorningOff ? undefined : formValue.morningEnd,
+      afternoonStart: formValue.isAfternoonOff ? undefined : formValue.afternoonStart,
+      afternoonEnd: formValue.isAfternoonOff ? undefined : formValue.afternoonEnd,
       operatorId: this.selectedOperator!.id
     };
 
@@ -296,6 +338,7 @@ export class StandardSchedulePage implements OnInit, OnDestroy{
           )
           this.isSaving = false;
           this.closeForm()
+          this.loadOperatorSchedule(this.selectedOperator!.id);
           this.cdr.detectChanges();
         },
         error: (err) => {
@@ -312,10 +355,10 @@ export class StandardSchedulePage implements OnInit, OnDestroy{
       }
       console.log('Creating schedule with data', createDto);
       this.scheduleService.createStandardSchedule(createDto).subscribe({
-        next: (newSchedules) => {
-          this.operatorSchedules.push(newSchedules);
+        next: () => {
           this.isSaving = false;
           this.closeForm()
+          this.loadOperatorSchedule(this.selectedOperator!.id);
           this.cdr.detectChanges();
         },
         error: (err) => {

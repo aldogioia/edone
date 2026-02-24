@@ -14,7 +14,7 @@
         @if (isLoadingOperators) { <div class="loading">Caricamento in corso...</div> }
       </div>
       <div class="controls">
-        <button  title="Aggiorna lista"> <!-- TODO: (click)="forceRefreshList()" -->
+        <button (click)="forceRefreshList()" title="Aggiorna lista">
           <hugeicons-icon [icon]="Refresh01Icon"></hugeicons-icon>
         </button>
         <button [class.open]="isFormOpen" (click)="isFormOpen ? closeForm() : openCreateForm()">
@@ -25,23 +25,31 @@
   </div>
 
   <div class="list">
-    @for (day of weekDays; track day.key){
-      <app-list-item [title]="day.label" (click)="handleDayClick(day.key)">
-        <div class="shifts">
-          @for (shift of getShiftsByDay(day.key); track shift.id) {
-            <p class="text-small shift mono">{{ shift.start.substring(0, 5) }} - {{ shift.end.substring(0, 5) }} {{ shift.type }}</p>
-          } @empty {
-            <p class="text-small">Riposo</p>
-          }
-        </div>
-      </app-list-item>
+    @if (selectedOperator && !isLoadingSchedules){
+      @for (day of weekDays; track day.key){
+        <app-list-item [title]="day.label" (click)="handleDayClick(day.key)">
+          <div class="shifts">
+            @for (shift of getShiftsByDay(day.key); track shift.id) {
+              <p class="text-small shift mono">{{ shift.start.substring(0, 5) }} - {{ shift.end.substring(0, 5) }} {{ shift.type }}</p>
+            } @empty {
+              <p class="text-small">Riposo</p>
+            }
+          </div>
+        </app-list-item>
+      } @empty {
+        <p class="empty-state">Nessun turno settimanale definito per questo operatore.</p>
+      }
+    } @else if (!selectedOperator) {
+      <p class="empty-state">Seleziona un operatore dalla barra in alto.</p>
+    } @else if (isLoadingSchedules) {
+      <div class="loading">Caricamento eccezioni...</div>
     }
   </div>
 </section>
 
 <form [formGroup]="scheduleForm" [class.open]="isFormOpen" class="side-form" (ngSubmit)="onSubmit()">
   <div class="header">
-    <h2>{{ isEditMode ? 'Modifica Turno' : 'Nuovo Turno' }}</h2>
+    <h2>{{ isEditMode ? 'Modifica Turno' : 'Aggiungi Turno' }}</h2>
   </div>
 
   <div class="form-groups">
@@ -64,61 +72,66 @@
       </select>
     </div>
 
-    <div formArrayName="slots" class="slots-container">
-      <div class="hours-header">
-        <label>Fasce Orarie</label>
-        <div class="add-buttons">
-          @if (!getAvailableSlotTypes().hasAM) {
-            <button class="secondary" type="button" (click)="addSlot('AM')">+ Mattino</button>
-          }
-          @if (!getAvailableSlotTypes().hasPM) {
-            <button class="secondary" type="button" (click)="addSlot('PM')">+ Pomeriggio</button>
-          }
+    <div class="slot-card" [class.error]="isMorningInvalid" [class.success]="isMorningValid">
+      <div class="slot-header">
+        <h5>Mattina</h5>
+        <div class="form-group row">
+          <label>Riposo</label>
+          <input type="checkbox" formControlName="isMorningOff">
         </div>
       </div>
 
-      @for (slot of slots.controls; track slot.get('type')?.value) {
-        <div [formGroupName]="$index" class="slot-card" [class.error]="slot.invalid">
+      <div class="form-group row" [class.disabled-row]="getFormControl('isMorningOff')?.value">
+        <div class="form-group">
+          <label>Inizio</label>
+          <input type="time" formControlName="morningStart" step="1800">
+        </div>
+        <div class="form-group">
+          <label>Fine</label>
+          <input type="time" formControlName="morningEnd" step="1800">
+        </div>
+      </div>
 
-          <div class="slot-header">
-            <span class="slot-label">{{ slot.get('type')?.value === 'AM' ? 'Mattina (AM)' : 'Pomeriggio (PM)' }}</span>
-            <button type="button" class="btn-remove" (click)="removeSlot($index)">✕</button>
-          </div>
+      @if (isMorningInvalid) {
+        <div class="error-message"><small>{{ scheduleForm.getError('invalidMorning') }}</small></div>
+      }
+    </div>
 
-          <div class="hours-row">
-            <div class="form-group flex-1">
-              <label>Inizio</label>
-              <input
-                type="time"
-                formControlName="start"
-                step="1800"
-                [class.invalid]="(slot.get('end')?.invalid && (slot.get('end')?.dirty || slot.get('end')?.touched)) || slot.hasError('invalidRange')">
-            </div>
-            <div class="form-group flex-1">
-              <label>Fine</label>
-              <input
-                type="time"
-                formControlName="end"
-                step="1800"
-                [class.invalid]="(slot.get('end')?.invalid && (slot.get('end')?.dirty || slot.get('end')?.touched)) || slot.hasError('invalidRange')">
-            </div>
-          </div>
-          <div class="error-message">
-            @if (slot.get('end')?.hasError('invalidStep') || slot.get('start')?.hasError('invalidStep')) {
-              <small>Usa :00 o :30</small>
-            } @else if (slot.hasError('invalidRange')) {
-            <small>L'orario di fine deve essere dopo l'inizio.</small>
-            }
-          </div>
+    <div class="slot-card" [class.error]="isAfternoonInvalid" [class.success]="isAfternoonValid">
+      <div class="slot-header">
+        <h5>Pomeriggio</h5>
+        <div class="form-group row">
+          <label>Riposo</label>
+          <input type="checkbox" formControlName="isAfternoonOff">
+        </div>
+      </div>
+
+      <div class="form-group row" [class.disabled-row]="getFormControl('isAfternoonOff')?.value">
+        <div class="form-group">
+          <label>Inizio</label>
+          <input type="time" formControlName="afternoonStart" step="1800">
+        </div>
+        <div class="form-group">
+          <label>Fine</label>
+          <input type="time" formControlName="afternoonEnd" step="1800">
+        </div>
+      </div>
+      @if (isAfternoonInvalid) {
+        <div class="error-message">
+          <small>{{ scheduleForm.getError('invalidAfternoon') }}</small>
         </div>
       }
-
-      <div class="error-message">
-        @if (slots.hasError('overlap')) {
-          <small>L'orario del pomeriggio non può iniziare prima della fine della mattina.</small>
-        }
-      </div>
     </div>
+
+    @if (hasNoScheduleError) {
+      <div class="error-message" style="margin-top: 10px;">
+        <small>{{ scheduleForm.getError('noSchedule') }}</small>
+      </div>
+    }@else if (hasOverlapError) {
+      <div class="error-message" style="margin-top: 10px;">
+        <small>{{ scheduleForm.getError('overlap') }}</small>
+      </div>
+    }
   </div>
 
   <div class="form-controls">
