@@ -24,6 +24,8 @@ import { FormatPhonePipe } from './pipe/format-phone-pipe';
 import { StandardSchedulePage } from './admin/screens/standard-schedule-page/standard-schedule-page';
 import { ServicesPage } from './admin/screens/services-page/services-page';
 import { ScheduleExceptionPage } from './admin/screens/schedule-exception-page/schedule-exception-page';
+import { BookingPage } from './admin/screens/booking-page/booking-page';
+import {FullCalendarModule} from '@fullcalendar/angular';
 
 @NgModule({
   declarations: [
@@ -46,12 +48,14 @@ import { ScheduleExceptionPage } from './admin/screens/schedule-exception-page/s
     StandardSchedulePage,
     ServicesPage,
     ScheduleExceptionPage,
+    BookingPage,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HugeiconsIconComponent,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FullCalendarModule
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),

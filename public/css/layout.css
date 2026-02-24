@@ -45,7 +45,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8pt;
-  padding: 16pt 8pt 16pt 0;
+  padding: 16pt 8pt 0 0;
 }
 
 .controls {

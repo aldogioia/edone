@@ -1,0 +1,113 @@
+<section class="list-section" style="display: flex; flex-direction: column;">
+  <div class="header">
+    <h2>Appuntamenti</h2>
+    <div class="search-section">
+      <div class="side-list">
+
+        <div class="side-list-item" style="padding: 2pt 8pt" [class.selected]="isOperatorSelected(null)" (click)="selectOperator(null)">
+          <p>Tutti gli operatori</p>
+        </div>
+
+        @for (operator of operators; track operator.id) {
+          <div class="side-list-item" [class.selected]="isOperatorSelected(operator)" (click)="selectOperator(operator)">
+            <img [src]="operator.imgUrl" [alt]="operator.name + ' ' + operator.surname"/>
+            <p>{{ operator.name + ' ' + operator.surname }}</p>
+          </div>
+        } @empty {
+          @if (!isLoadingData) { <p class="empty-state">Nessun operatore trovato</p> }
+        }
+        @if (isLoadingData) { <div class="loading">Caricamento in corso...</div> }
+      </div>
+
+      <div class="controls">
+        <button (click)="forceRefreshList()" title="Aggiorna Calendario">
+          <hugeicons-icon [icon]="Refresh01Icon"></hugeicons-icon>
+        </button>
+        <button [class.open]="isFormOpen" (click)="isFormOpen ? closeForm() : openCreateForm()">
+          <hugeicons-icon [icon]="isFormOpen ? Cancel01Icon : Add01Icon"></hugeicons-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="calendar">
+    <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+  </div>
+</section>
+
+<form [formGroup]="bookingForm" [class.open]="isFormOpen" class="side-form" (ngSubmit)="onSubmit()">
+  <div class="header">
+    <h2>{{ isViewMode ? 'Dettagli Appuntamento' : 'Nuovo Appuntamento' }}</h2>
+  </div>
+
+  <div class="form-groups">
+
+    <div class="form-group">
+      <label for="customer">Cliente</label>
+      <select id="customer" formControlName="customer" [class.invalid]="getFormControl('customer')?.invalid && getFormControl('customer')?.touched">
+        <option value="" disabled>Seleziona un cliente</option>
+        @for (customer of customers; track customer.id) {
+          <option [value]="customer.id">{{ customer.name }} {{ customer.surname }} ({{ customer.phoneNumber }})</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="service">Servizio</label>
+      <select id="service" formControlName="service" [class.invalid]="getFormControl('service')?.invalid && getFormControl('service')?.touched">
+        <option value="" disabled>Seleziona il servizio</option>
+        @for (service of services; track service.id) {
+          <option [value]="service.id">{{ service.name }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="operator">Operatore</label>
+      <select id="operator" formControlName="operator" [class.invalid]="getFormControl('operator')?.invalid && getFormControl('operator')?.touched">
+        <option value="" disabled>
+          {{ getFormControl('service')?.value ? 'Seleziona operatore' : 'Seleziona prima un servizio' }}
+        </option>
+        @for (op of (isViewMode ? operators : filteredOperatorsForForm); track op.id) {
+          <option [value]="op.id">{{ op.name }} {{ op.surname }}</option>
+        }
+      </select>
+      @if (!isViewMode && getFormControl('service')?.value && filteredOperatorsForForm.length === 0) {
+        <small class="error-message">Nessun operatore fornisce questo servizio.</small>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="date">Data</label>
+      <input id="date" type="date" formControlName="date" [class.invalid]="getFormControl('date')?.invalid && getFormControl('date')?.touched">
+    </div>
+
+    <div class="form-group">
+      <label for="time">Orari Disponibili</label>
+      <select id="time" formControlName="time" [class.invalid]="getFormControl('time')?.invalid && getFormControl('time')?.touched">
+        <option value="" disabled>
+          {{ isLoadingTimes ? 'Ricerca orari...' : (isViewMode ? 'Orario prenotato' : 'Scegli la data e l\'operatore') }}
+        </option>
+        @for (time of availableTimes; track time) {
+          <option [value]="time">{{ time.substring(0, 5) }}</option>
+        }
+      </select>
+      @if (!isViewMode && availableTimes.length === 0 && getFormControl('date')?.value && getFormControl('operator')?.value && !isLoadingTimes) {
+        <small class="error-message">Nessun orario disponibile per questa data.</small>
+      }
+    </div>
+
+  </div>
+
+  <div class="form-controls">
+    @if (!isViewMode) {
+      <button class="primary" type="submit" [disabled]="bookingForm.invalid || isSaving">
+        @if (isSaving) { Attendere... } @else { Conferma Prenotazione }
+      </button>
+    } @else {
+      <button class="danger" style="width: 100%;" type="button" (click)="deleteBooking($event)" [disabled]="isSaving">
+        @if (isSaving) { Attendere... } @else { Elimina Appuntamento }
+      </button>
+    }
+  </div>
+</form>

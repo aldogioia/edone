@@ -8,6 +8,7 @@ import {
   UpdateOperatorDto
 } from '../model/operator-dto';
 import {Environment} from '../utils/environment';
+import {take} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,7 @@ export class OperatorsService {
 
   loadAllOperators(forceRefresh: boolean = false): Observable<OperatorDto[]> {
     if (this.hasLoaded && !forceRefresh) {
-      return this.operators$;
+      return this.operators$.pipe(take(1));
     }
 
     return this.http.get<OperatorDto[]>(`${this.baseUrl}/all`).pipe(

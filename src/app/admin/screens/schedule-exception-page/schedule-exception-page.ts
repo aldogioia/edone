@@ -6,7 +6,7 @@ import { OperatorsService } from '../../../service/operators-service';
 import { OperatorDto } from '../../../model/operator-dto';
 import { ScheduleExceptionDto, CreateScheduleExceptionDto } from '../../../model/schedule-exception-dto';
 import { periodValidator, scheduleInfoValidator } from '../../../validators/schedule-exception-validators';
-import {Add01Icon, Cancel01Icon, Refresh01Icon, Calendar01Icon, CalendarBlock01Icon} from '@hugeicons/core-free-icons';
+import {Add01Icon, Cancel01Icon, Refresh01Icon, CalendarBlock01Icon} from '@hugeicons/core-free-icons';
 
 @Component({
   selector: 'app-schedule-exception-page',
@@ -35,7 +35,6 @@ export class ScheduleExceptionPage implements OnInit, OnDestroy {
   protected readonly Refresh01Icon = Refresh01Icon;
   protected readonly Cancel01Icon = Cancel01Icon;
   protected readonly Add01Icon = Add01Icon;
-  protected readonly Calendar01Icon = Calendar01Icon;
 
   constructor(
     private formBuilder: FormBuilder,

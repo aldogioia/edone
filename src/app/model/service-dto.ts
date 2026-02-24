@@ -20,3 +20,8 @@ export interface UpdateServiceDto {
   price: number;
   tools: string[];
 }
+
+export interface SummaryServiceDto {
+  id: string;
+  name: string;
+}

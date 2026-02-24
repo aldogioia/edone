@@ -7,6 +7,7 @@ import {
   CreateServiceDto,
   UpdateServiceDto
 } from '../model/service-dto';
+import {take} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +24,7 @@ export class ServiceService {
 
   loadAllServices(forceRefresh: boolean = false): Observable<ServiceDto[]> {
     if (this.hasLoaded && !forceRefresh) {
-      return this.services$;
+      return this.services$.pipe(take(1));
     }
 
     return this.http.get<ServiceDto[]>(`${this.baseUrl}/all`).pipe(

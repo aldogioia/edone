@@ -11,6 +11,7 @@ import {OperatorsPage} from './admin/screens/operators-page/operators-page';
 import {StandardSchedulePage} from './admin/screens/standard-schedule-page/standard-schedule-page';
 import {ServicesPage} from './admin/screens/services-page/services-page';
 import {ScheduleExceptionPage} from './admin/screens/schedule-exception-page/schedule-exception-page';
+import {BookingPage} from './admin/screens/booking-page/booking-page';
 
 const routes: Routes = [
   { path: '', redirectTo: 'admin', pathMatch: 'full' }, // TODO: Change to home after development
@@ -29,7 +30,8 @@ const routes: Routes = [
       { path: 'tools', component: ToolsPage, title: 'Tools Page' },
       { path: 'rooms', component: RoomsPage, title: 'Rooms Page' },
       { path: 'schedules', component: StandardSchedulePage, title: 'Standard Schedule Page' },
-      { path: 'exceptions', component: ScheduleExceptionPage, title: 'Schedule Exception Page' }
+      { path: 'exceptions', component: ScheduleExceptionPage, title: 'Schedule Exception Page' },
+      { path: 'bookings', component: BookingPage, title: 'Booking Page' }
     ]
   },
 ];

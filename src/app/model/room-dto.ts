@@ -1,4 +1,5 @@
-import {SummaryServiceDto} from './summary/summary-service-dto';
+import {SummaryServiceDto} from './service-dto';
+
 
 export interface RoomDto {
   id: string;

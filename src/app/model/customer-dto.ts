@@ -16,7 +16,6 @@ export interface CreateCustomerWithoutPasswordDto {
   name: string;
   surname: string;
   phoneNumber: string;
-  // Aggiungi altri campi se presenti nel DTO Java
 }
 
 export interface UpdateCustomerDto {
@@ -26,11 +25,17 @@ export interface UpdateCustomerDto {
   phoneNumber?: string;
 }
 
-// Interfaccia per la paginazione Spring Boot
 export interface Page<T> {
   content: T[];
   totalPages: number;
   totalElements: number;
   size: number;
-  number: number; // numero pagina corrente
+  number: number;
+}
+
+export interface SummaryCustomerDto {
+  id: string;
+  name: string;
+  surname: string;
+  phoneNumber: string;
 }
