@@ -4,8 +4,8 @@ import { FullCalendarComponent } from '@fullcalendar/angular';
 import { CalendarOptions, EventClickArg, EventSourceFuncArg } from '@fullcalendar/core';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { forkJoin, Observable, of, Subject, combineLatest } from 'rxjs';
-import { catchError, startWith, takeUntil } from 'rxjs/operators';
+import {forkJoin, Observable, of, Subject, combineLatest, tap} from 'rxjs';
+import {catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap, takeUntil} from 'rxjs/operators';
 
 import { BookingService } from '../../../service/booking-service';
 import { OperatorsService } from '../../../service/operators-service';
@@ -32,6 +32,10 @@ import { Add01Icon, Cancel01Icon, Refresh01Icon } from '@hugeicons/core-free-ico
 })
 export class BookingPage implements OnInit, OnDestroy {
   @ViewChild('calendar') calendarComponent!: FullCalendarComponent;
+
+  customers$!: Observable<CustomerDto[]>;
+  customerInput$ = new Subject<string>();
+  isCustomersLoading = false;
 
   operators: OperatorDto[] = [];
   services: ServiceDto[] = [];
@@ -65,7 +69,7 @@ export class BookingPage implements OnInit, OnDestroy {
     },
     locale: 'it',
     slotMinTime: '08:00:00',
-    slotMaxTime: '21:00:00',
+    slotMaxTime: '21:10:00',
     allDaySlot: false,
 
     height: 'auto',
@@ -94,6 +98,7 @@ export class BookingPage implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef
   ) {
     this.initForm();
+    this.setupCustomerSearch();
   }
 
   ngOnInit() {
@@ -118,24 +123,51 @@ export class BookingPage implements OnInit, OnDestroy {
 
   getFormControl(name: string) { return this.bookingForm.get(name); }
 
-  // --- CARICAMENTO DATI ---
-
   loadAllData() {
     this.isLoadingData = true;
     forkJoin({
       operators: this.operatorService.loadAllOperators(),
-      services: this.serviceService.loadAllServices(),
-      customers: this.customerService.getAllCustomers()
+      services: this.serviceService.loadAllServices()
     }).subscribe({
       next: (res) => {
         this.operators = res.operators;
         this.services = res.services;
-        this.customers = res.customers;
         this.isLoadingData = false;
         this.cdr.detectChanges();
       },
       error: () => { this.isLoadingData = false; }
     });
+  }
+
+  private setupCustomerSearch() {
+    this.customers$ = combineLatest([
+      this.customerService.getCustomersPage(0, 50).pipe(map(page => page.content)),
+      this.customerInput$.pipe(
+        startWith(''),
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap(term => {
+          this.isCustomersLoading = true;
+          if (term) {
+            return this.customerService.searchCustomers(term).pipe(
+              catchError(() => of([])),
+              tap(() => this.isCustomersLoading = false)
+            );
+          } else {
+            return this.customerService.getCustomersPage(0, 50).pipe(
+              map(page => page.content),
+              catchError(() => of([])),
+              tap(() => this.isCustomersLoading = false)
+            );
+          }
+        })
+      )
+    ]).pipe(
+      map(([baseCustomers, searchedCustomers]) => {
+        this.isCustomersLoading = false;
+        return searchedCustomers.length > 0 ? searchedCustomers : baseCustomers;
+      })
+    );
   }
 
   selectOperator(operator: OperatorDto | null) {
@@ -259,7 +291,7 @@ export class BookingPage implements OnInit, OnDestroy {
       operator: booking.operator?.id,
       date: booking.date,
       time: booking.time.substring(0, 5),
-      customer: booking.customer?.id
+      customer: booking.customer?.id // ng-select userà questo ID
     });
 
     this.bookingForm.disable();
@@ -273,7 +305,7 @@ export class BookingPage implements OnInit, OnDestroy {
 
     this.bookingForm.enable();
     this.bookingForm.reset({
-      customer: '',
+      customer: null,
       service: '',
       operator: '',
       date: '',

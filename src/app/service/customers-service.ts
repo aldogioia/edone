@@ -45,20 +45,6 @@ export class CustomersService {
     );
   }
 
-  getAllCustomers(): Observable<CustomerDto[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/all`).pipe(
-      map(list => list.map(item => new CustomerDto(item)))
-    );
-  }
-
-  getCustomer(id: string): Observable<CustomerDto> {
-    const params = new HttpParams().set('id', id);
-
-    return this.http.get<any>(`${this.baseUrl}/one`, { params }).pipe(
-      map(data => new CustomerDto(data))
-    );
-  }
-
   updateCustomer(dto: UpdateCustomerDto): Observable<void> {
     return this.http.patch<void>(this.baseUrl, dto);
   }

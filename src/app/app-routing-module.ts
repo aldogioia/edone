@@ -23,7 +23,7 @@ const routes: Routes = [
     component: AdminHome,
     title: 'Admin Home',
     children: [
-      { path: '', redirectTo: 'customers', pathMatch: 'full' },
+      { path: '', redirectTo: 'bookings', pathMatch: 'full' },
       { path: 'customers', component: CustomersPage, title: 'Customers Page' },
       { path: 'operators', component: OperatorsPage, title: 'Operators Page' },
       { path: 'services', component: ServicesPage, title: 'Services Page' },

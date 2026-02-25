@@ -26,6 +26,7 @@ import { ServicesPage } from './admin/screens/services-page/services-page';
 import { ScheduleExceptionPage } from './admin/screens/schedule-exception-page/schedule-exception-page';
 import { BookingPage } from './admin/screens/booking-page/booking-page';
 import {FullCalendarModule} from '@fullcalendar/angular';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import {FullCalendarModule} from '@fullcalendar/angular';
     AppRoutingModule,
     HugeiconsIconComponent,
     ReactiveFormsModule,
-    FullCalendarModule
+    FullCalendarModule,
+    NgSelectModule
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),

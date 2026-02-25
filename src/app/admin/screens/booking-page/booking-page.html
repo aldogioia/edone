@@ -44,12 +44,36 @@
 
     <div class="form-group">
       <label for="customer">Cliente</label>
-      <select id="customer" formControlName="customer" [class.invalid]="getFormControl('customer')?.invalid && getFormControl('customer')?.touched">
-        <option value="" disabled>Seleziona un cliente</option>
-        @for (customer of customers; track customer.id) {
-          <option [value]="customer.id">{{ customer.name }} {{ customer.surname }} ({{ customer.phoneNumber }})</option>
-        }
-      </select>
+
+      <ng-select
+        id="customer"
+        [items]="(customers$ | async) || []"
+        bindLabel="name"
+        bindValue="id"
+        formControlName="customer"
+        placeholder="Seleziona cliente..."
+        [typeahead]="customerInput$"
+        [loading]="isCustomersLoading"
+        notFoundText="Nessun cliente trovato"
+        [clearable]="false"  [class.invalid]="getFormControl('customer')?.invalid && getFormControl('customer')?.touched"
+        [readonly]="isViewMode">
+
+        <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+          <div>
+            <span>{{ item.name }} {{ item.surname }}</span>
+            <span style="color: var(--text-weak); font-size: 0.8em; margin-left: 8px;">{{ item.phoneNumber }}</span>
+          </div>
+        </ng-template>
+
+        <ng-template ng-label-tmp let-item="item">
+          {{ item.name }} {{ item.surname }} ({{ item.phoneNumber }})
+        </ng-template>
+
+      </ng-select>
+
+      @if (getFormControl('customer')?.invalid && getFormControl('customer')?.touched) {
+        <small class="error-message">Seleziona un cliente valido.</small>
+      }
     </div>
 
     <div class="form-group">

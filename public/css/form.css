@@ -195,3 +195,88 @@ button.danger:hover,
   color: var(--error-strong);
   border: 1px solid var(--error-stroke-weak);
 }
+
+::ng-deep .ng-select.ng-select-single .ng-select-container {
+  height: 36px;
+  min-height: 36px;
+  padding: 0 8pt;
+  border: 1px solid var(--stroke-strong);
+  border-radius: 8pt;
+  background-color: var(--admin-background);
+  color: var(--text-strong);
+  box-shadow: none;
+  transition: .2s ease-in-out;
+  cursor: pointer;
+}
+
+::ng-deep .ng-select .ng-select-container .ng-value-container {
+  padding: 0 !important;
+  align-items: center;
+  position: relative;
+}
+
+::ng-deep .ng-select .ng-select-container .ng-value-container .ng-placeholder {
+  color: var(--stroke-strong);
+  font-size: 0.9375rem;
+  position: absolute;
+  left: 0;
+}
+
+::ng-deep .ng-select-container.ng-has-value .ng-placeholder {
+  display: none !important;
+}
+
+::ng-deep .ng-select .ng-select-container .ng-value-container .ng-value {
+  font-size: 0.9375rem;
+  color: var(--text-strong);
+  position: absolute;
+  left: 0;
+  pointer-events: none;
+}
+
+::ng-deep .ng-select.ng-select-opened .ng-value {
+  display: none;
+}
+
+::ng-deep .ng-select .ng-select-container .ng-value-container .ng-input {
+  padding: 0 !important;
+  left: 0 !important;
+  width: 100%;
+}
+
+::ng-deep .ng-select .ng-select-container .ng-value-container .ng-input > input {
+  padding: 0 !important;
+  font-size: 0.9375rem;
+  color: var(--text-strong);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+::ng-deep .ng-dropdown-panel {
+  background-color: var(--admin-background);
+  border: 1px solid var(--stroke-weak);
+  border-radius: 8pt;
+  margin-top: 4px;
+  padding: 4pt;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+  background-color: transparent;
+  color: var(--text-strong);
+  padding: 8px 12px;
+  border-radius: 4pt;
+  font-size: 0.9375rem;
+}
+
+::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option:hover,
+::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked,
+::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected {
+  background-color: var(--brand-fill) !important;
+}
+
+::ng-deep .ng-select.ng-select-disabled > .ng-select-container {
+  background-color: var(--stroke-weak);
+  cursor: not-allowed;
+}
