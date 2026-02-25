@@ -1,0 +1,66 @@
+.privacy-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px 80px 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text-strong);
+  line-height: 1.6;
+}
+
+.privacy-header {
+  margin-bottom: 40px;
+
+  h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+
+  .last-update {
+    font-size: 14px;
+    color: var(--text-weak);
+  }
+}
+
+section {
+  margin-bottom: 30px;
+
+  h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: var(--text-strong);
+    border-left: 4px solid var(--admin-brand-strong);
+    padding-left: 10px;
+  }
+
+  p {
+    margin-bottom: 10px;
+  }
+
+  ul {
+    padding-left: 20px;
+
+    li {
+      margin-bottom: 6px;
+    }
+  }
+}
+
+.privacy-footer {
+  text-align: center;
+  margin-top: 40px;
+
+  button {
+    padding: 10px 20px;
+    border: none;
+    background-color: var(--admin-brand-strong);
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: 0.3s ease;
+
+    &:hover {
+      background-color: var(--admin-brand-weak);
+    }
+  }
+}
