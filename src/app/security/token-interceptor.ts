@@ -89,7 +89,7 @@ export function tokenInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn)
       }
 
       const errorMessage = error?.error?.message;
-      console.warn('[INTERCEPTOR] Messaggio utente:', errorMessage);
+      alert(errorMessage);
 
       return throwError(() => errorMessage);
     })

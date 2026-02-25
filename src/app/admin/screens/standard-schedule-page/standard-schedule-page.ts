@@ -344,7 +344,6 @@ export class StandardSchedulePage implements OnInit, OnDestroy{
         },
         error: (err) => {
           this.isSaving = false;
-          alert('Errore durante l\'aggiornamento del Turno. ' + err);
           console.error('Error updating tool:', err);
           this.cdr.detectChanges();
         }
@@ -364,7 +363,6 @@ export class StandardSchedulePage implements OnInit, OnDestroy{
         },
         error: (err) => {
           this.isSaving = false;
-          alert('Errore durante la creazione del macchinario. Verifica che il nome non sia già in uso e riprova.');
           console.error('Error creating tool:', err);
           this.cdr.detectChanges();
         }

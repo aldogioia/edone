@@ -183,7 +183,6 @@ export class RoomsPage implements OnInit, OnDestroy{
         },
         error: (err) => {
           this.isSaving = false;
-          alert("Errore durante l'aggiornamento della stanza. Riprova.")
           console.error('Failed to update room', err)
           this.cdr.detectChanges();
         }
@@ -197,7 +196,6 @@ export class RoomsPage implements OnInit, OnDestroy{
         },
         error: (err) => {
           this.isSaving = false;
-          alert("Errore durante la creazione della stanza. Riprova.")
           console.error('Failed to create room', err)
           this.cdr.detectChanges();
         }

@@ -224,7 +224,6 @@ export class ServicesPage implements OnInit, OnDestroy {
         },
         error: (err) => {
           this.isSaving = false;
-          alert("Errore durante l'aggiornamento del servizio.");
           console.error(err);
           this.cdr.detectChanges();
         }
@@ -244,7 +243,6 @@ export class ServicesPage implements OnInit, OnDestroy {
         },
         error: (err) => {
           this.isSaving = false;
-          alert("Errore durante la creazione del servizio.");
           console.error(err);
           this.cdr.detectChanges();
         }

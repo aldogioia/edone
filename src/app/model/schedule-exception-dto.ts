@@ -17,3 +17,14 @@ export interface CreateScheduleExceptionDto {
   afternoonStart?: string;
   afternoonEnd?: string;
 }
+
+export interface UpdateScheduleExceptionDto {
+  id: string;
+  operatorId: string;
+  startDate: string;
+  endDate?: string;
+  morningStart?: string;
+  morningEnd?: string;
+  afternoonStart?: string;
+  afternoonEnd?: string;
+}

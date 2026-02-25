@@ -27,16 +27,16 @@
   <div class="list">
     @if (selectedOperator && !isLoadingExceptions) {
       @for (ex of exceptions; track ex.id) {
-        <app-list-item [title]="formatDateRange(ex.startDate, ex.endDate)" [icon]="CalendarBlock01Icon" [action]="'Elimina'" (click)="deleteException(ex.id, $event)">
+        <app-list-item [title]="formatDateRange(ex.startDate, ex.endDate)" [icon]="CalendarBlock01Icon" (click)="editException(ex)">
           <div class="shifts">
             <div class="shift" data-shift="M">
               <p class="text-small mono">
-                {{ ex.morningStart ? ex.morningStart.substring(0,5) + ' - ' + ex.morningEnd?.substring(0,5) : 'Riposo' }}
+                {{ ex.morningStart ? ex.morningStart + ' - ' + ex.morningEnd : 'Riposo' }}
               </p>
             </div>
             <div class="shift" data-shift="P">
               <p class="text-small mono">
-                {{ ex.afternoonStart ? ex.afternoonStart.substring(0,5) + ' - ' + ex.afternoonEnd?.substring(0,5) : 'Riposo' }}
+                {{ ex.afternoonStart ? ex.afternoonStart + ' - ' + ex.afternoonEnd : 'Riposo' }}
               </p>
             </div>
           </div>
@@ -54,19 +54,19 @@
 
 <form [formGroup]="exceptionForm" [class.open]="isFormOpen" class="side-form" (ngSubmit)="onSubmit()">
   <div class="header">
-    <h2>Aggiungi Eccezione</h2>
+    <h2>{{ editingExceptionId ? 'Modifica Eccezione' : 'Aggiungi Eccezione' }}</h2>
   </div>
 
   <div class="form-groups">
     <div class="form-group">
       <div class="form-group row">
-        <div class="form-group flex-1">
+        <div class="form-group">
           <label for="startDate">Data Inizio</label>
           <input id="startDate" type="date" formControlName="startDate"
                  [class.invalid]="getFormControl('startDate')?.invalid && getFormControl('startDate')?.touched">
         </div>
 
-        <div class="form-group flex-1">
+        <div class="form-group">
           <label for="endDate">Data Fine (Opzionale)</label>
           <input id="endDate" type="date" formControlName="endDate"
                  [class.invalid]="exceptionForm.hasError('invalidPeriod') && getFormControl('endDate')?.touched">
@@ -138,7 +138,14 @@
 
   <div class="form-controls">
     <button class="primary" type="submit" [disabled]="exceptionForm.invalid || isSaving">
-      @if (isSaving) { Attendere... } @else { Aggiungi Eccezione }
+      @if (isSaving) {
+        Attendere...
+      } @else {
+        {{ editingExceptionId ? 'Aggiorna Eccezione' : 'Aggiungi Eccezione' }}
+      }
     </button>
+    @if (editingExceptionId) {
+      <button type="button" class="danger" (click)="deleteException($event)" [disabled]="isSaving">Elimina</button>
+    }
   </div>
 </form>

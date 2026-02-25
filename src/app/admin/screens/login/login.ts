@@ -111,7 +111,6 @@ export class Login {
           ).then();
         },
         error: () => {
-          alert('Credenziali non valide o errore di rete');
           this.loading = false;
         }
       });
@@ -132,7 +131,6 @@ export class Login {
         error: (error) => {
           this.loading = false;
           console.error(error);
-          alert('Impossibile inviare la richiesta. Riprova.');
         }
       });
     } else {
@@ -147,12 +145,11 @@ export class Login {
         next: () => {
           this.loading = false;
           alert('Password aggiornata con successo. Effettua il login.');
-          this.goBack(); // Torna al form di login
+          this.goBack();
         },
         error: (error) => {
           this.loading = false;
           console.error(error);
-          alert('Token non valido o scaduto.');
         }
       });
     } else {
