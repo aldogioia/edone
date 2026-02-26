@@ -1,84 +1,65 @@
-<div class="privacy-container">
+<section class="container">
 
-  <div class="privacy-header">
+  <header>
     <h1>Privacy Policy</h1>
-    <p class="last-update">Ultimo aggiornamento: {{ lastUpdate }}</p>
-  </div>
+    <p class="last-update">Ultimo aggiornamento: {{ Environment.getInstance().lastUpdate }}</p>
+  </header>
 
   <section>
     <h2>1. Titolare del trattamento</h2>
     <p>
-      Il Titolare del trattamento dei dati è il Centro Estetico [NOME CENTRO],
-      con sede in [INDIRIZZO], contattabile all’indirizzo email: [EMAIL].
+      Il Titolare del trattamento dei dati è il Centro Estetico Edoné,
+      con sede in Via Santa Rita 2 87046 Stazione Montalto-Coretto CS, contattabile al numero di telefono: 3295965256.
     </p>
   </section>
 
   <section>
-    <h2>2. Tipologia di applicazione</h2>
+    <h2>2. Tipologia di applicazione e Accessi</h2>
     <p>
-      La presente applicazione è un gestionale interno utilizzato esclusivamente
-      dall’amministrazione del centro estetico per la gestione operativa delle attività.
-      L’accesso è consentito unicamente agli amministratori autorizzati.
-      Clienti e operatori non hanno accesso diretto alla piattaforma.
+      La presente piattaforma è un sistema gestionale utilizzato per l'amministrazione del centro estetico e la prenotazione dei trattamenti.
+      Il sistema gestisce i profili dell'amministrazione, degli operatori del centro e della clientela. L'accesso diretto alla piattaforma tramite account protetto è fornito al personale autorizzato e, laddove previsto dalle piattaforme client (es. app mobile), ai clienti per la consultazione del proprio storico.
     </p>
   </section>
 
   <section>
     <h2>3. Dati trattati</h2>
+    <p>Per il funzionamento della piattaforma e l'erogazione dei servizi, raccogliamo e trattiamo i seguenti dati:</p>
     <ul>
-      <li>Dati anagrafici dei clienti (nome, cognome)</li>
-      <li>Numero di telefono</li>
-      <li>Storico appuntamenti</li>
-      <li>Servizi prenotati</li>
-      <li>Operatori assegnati</li>
-      <li>Turni di lavoro degli operatori</li>
-      <li>Gestione stanze e macchinari</li>
+      <li><strong>Dati anagrafici e di contatto:</strong> Nome, cognome, numero di telefono dei clienti e dello staff.</li>
+      <li><strong>Dati di autenticazione:</strong> Credenziali di accesso (password salvate esclusivamente in formato crittografato) per gli utenti abilitati al login.</li>
+      <li><strong>Dati operativi:</strong> Storico appuntamenti, servizi prenotati, assegnazione di stanze e macchinari.</li>
+      <li><strong>Dati del personale (Operatori):</strong> Turni di lavoro, assenze/ferie e immagini del profilo.</li>
     </ul>
   </section>
 
   <section>
     <h2>4. Finalità del trattamento</h2>
-    <h2>4. Finalità del trattamento</h2>
-
     <p>
       I dati personali sono trattati esclusivamente per finalità connesse
-      alla gestione operativa e amministrativa del centro estetico.
+      alla fornitura del servizio e alla gestione operativa del centro estetico:
     </p>
-
     <ul>
-      <li>Gestione e pianificazione degli appuntamenti</li>
-      <li>Organizzazione dei servizi offerti</li>
-      <li>Assegnazione degli operatori ai trattamenti</li>
-      <li>Gestione dei turni di lavoro del personale</li>
-      <li>Ottimizzazione dell’utilizzo di stanze e macchinari</li>
-      <li>Invio di promemoria relativi agli appuntamenti tramite WhatsApp</li>
+      <li>Creazione e gestione delle anagrafiche e degli account utente.</li>
+      <li>Gestione, pianificazione e storico delle prenotazioni.</li>
+      <li>Organizzazione dei turni del personale e delle risorse fisiche (stanze, macchinari).</li>
+      <li>Invio di comunicazioni di servizio (conferme, promemoria, cancellazioni e recupero password) tramite WhatsApp.</li>
     </ul>
-
     <p>
-      I dati non vengono utilizzati per finalità di marketing,
-      profilazione o comunicazioni promozionali.
+      I dati <strong>non</strong> vengono in alcun modo ceduti a terzi o utilizzati per finalità di marketing, profilazione commerciale o spam.
     </p>
   </section>
 
   <section>
-    <h2>5. Utilizzo di WhatsApp</h2>
+    <h2>5. Utilizzo di WhatsApp Business API</h2>
     <p>
-      L’applicazione utilizza esclusivamente le API ufficiali di WhatsApp Business
-      fornite da Meta Platforms, Inc. per l’invio automatico di promemoria
-      relativi agli appuntamenti.
+      La piattaforma è integrata con le API ufficiali di WhatsApp Business fornite da Meta Platforms, Inc. L'utilizzo di WhatsApp è strettamente limitato a messaggi di utilità, sicurezza e servizio. Nello specifico, il sistema invia messaggi automatici per:
     </p>
-
+    <ul>
+      <li><strong>Utilità:</strong> Conferma, promemoria e cancellazione degli appuntamenti estetici.</li>
+      <li><strong>Autenticazione:</strong> Invio di codici temporanei (Token/OTP) per il recupero in sicurezza della password d'accesso, ove applicabile.</li>
+    </ul>
     <p>
-      L’utilizzo di WhatsApp avviene unicamente per comunicazioni di servizio
-      connesse agli appuntamenti prenotati (es. promemoria data e orario).
-      Non vengono effettuate attività di marketing, profilazione o invio
-      di comunicazioni promozionali.
-    </p>
-
-    <p>
-      Il trattamento dei dati tramite WhatsApp avviene nel rispetto dei
-      termini e delle condizioni previste da Meta e secondo quanto
-      stabilito dalla normativa vigente in materia di protezione dei dati personali.
+      Non verranno inviati messaggi promozionali. Il cliente, fornendo il proprio numero in fase di prenotazione o registrazione, riceverà tali comunicazioni essenziali per la corretta fruizione del servizio.
     </p>
   </section>
 
@@ -86,84 +67,38 @@
     <h2>6. Base giuridica</h2>
     <p>
       Il trattamento dei dati si basa sull’esecuzione di misure precontrattuali
-      e contrattuali richieste dal cliente al momento della prenotazione
-      del servizio.
+      e contrattuali (erogazione del servizio di trattamento estetico e prenotazione) richieste dall'utente, nonché sul legittimo interesse del Titolare a garantire l'efficienza organizzativa e la sicurezza informatica.
     </p>
   </section>
 
   <section>
-    <h2>7. Conservazione dei dati</h2>
+    <h2>7. Conservazione e Sicurezza dei dati</h2>
     <p>
-      I dati vengono conservati per il tempo necessario alla gestione
-      amministrativa e fiscale del centro estetico, nel rispetto della
-      normativa vigente.
+      I dati vengono conservati per il tempo strettamente necessario alla gestione amministrativa e fiscale.
+      Il Titolare adotta misure tecniche avanzate per la protezione dei dati (es. protocollo HTTPS, password crittografate tramite algoritmi di hashing, token JWT per le sessioni).
     </p>
   </section>
 
   <section>
-    <h2>8. Sicurezza dei dati</h2>
-
+    <h2>8. Infrastruttura e localizzazione dei server</h2>
     <p>
-      Il Titolare adotta misure tecniche e organizzative adeguate
-      per garantire un livello di sicurezza adeguato al rischio,
-      ai sensi dell’art. 32 del Regolamento (UE) 2016/679.
+      Per garantire alti standard di affidabilità e sicurezza, l'infrastruttura si avvale di fornitori cloud certificati operanti all'interno dell'Unione Europea, nel pieno rispetto del Regolamento (UE) 2016/679 (GDPR):
     </p>
-
-    <p>
-      Tali misure includono, a titolo esemplificativo:
-    </p>
-
     <ul>
-      <li>Accesso alla piattaforma tramite autenticazione con credenziali riservate</li>
-      <li>Limitazione degli accessi ai soli soggetti autorizzati</li>
-      <li>Protezione dei dati tramite protocolli di comunicazione sicuri (HTTPS)</li>
-      <li>Backup periodici dei dati</li>
+      <li><strong>Server e Database:</strong> I dati personali testuali e l'applicativo principale sono ospitati su server cloud forniti da <strong>IONOS</strong> (infrastruttura situata in UE).</li>
+      <li><strong>File Multimediali:</strong> Le immagini (es. foto profilo degli operatori o dei servizi) sono ospitate in modo sicuro sull'infrastruttura <strong>Amazon Web Services (AWS S3)</strong>, fisicamente localizzata nella regione EU-North-1 (Svezia).</li>
     </ul>
   </section>
 
   <section>
     <h2>9. Diritti dell’interessato</h2>
     <p>
-      Gli interessati possono esercitare i diritti previsti dal Regolamento (UE) 2016/679 (GDPR),
-      tra cui accesso, rettifica, cancellazione, limitazione del trattamento
-      e opposizione, contattando il Titolare del trattamento.
+      Gli interessati possono esercitare in qualsiasi momento i diritti previsti dal GDPR (accesso, rettifica, cancellazione/oblio, limitazione) contattando il Titolare telefonicamente al numero indicato.
     </p>
   </section>
 
-  <section>
-    <h2>10. Modifiche alla presente informativa</h2>
-    <p>
-      Il Titolare si riserva il diritto di aggiornare la presente Privacy Policy.
-      Eventuali modifiche verranno pubblicate su questa pagina.
-    </p>
-  </section>
-
-  <section>
-    <h2>11. Infrastruttura e localizzazione dei server</h2>
-
-    <p>
-      I dati personali trattati tramite l’applicazione sono ospitati su
-      server situati in [PAESE] presso infrastrutture fornite da [NOME PROVIDER].
-    </p>
-
-    <p>
-      L’infrastruttura cloud utilizzata garantisce adeguati standard di
-      sicurezza fisica e logica, conformemente alle normative vigenti
-      in materia di protezione dei dati personali.
-    </p>
-
-    <p>
-      Qualora i dati siano trasferiti verso Paesi situati al di fuori
-      dell’Unione Europea o dello Spazio Economico Europeo,
-      tale trasferimento avverrà nel rispetto delle disposizioni
-      previste dal Regolamento (UE) 2016/679 (GDPR),
-      inclusa l’adozione di clausole contrattuali standard
-      o altre garanzie adeguate previste dalla normativa.
-    </p>
-  </section>
-
-  <div class="privacy-footer">
+  <footer>
     <button (click)="scrollToTop()">Torna su</button>
-  </div>
+  </footer>
 
-</div>
+</section>

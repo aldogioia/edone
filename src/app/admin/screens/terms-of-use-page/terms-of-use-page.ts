@@ -2,17 +2,17 @@ import { Component } from '@angular/core';
 import {Environment} from '../../../utils/environment';
 
 @Component({
-  selector: 'app-privacy-policy',
+  selector: 'app-terms-of-use-page',
   standalone: false,
-  templateUrl: './privacy-policy.html',
+  templateUrl: './terms-of-use-page.html',
   styleUrls: [
-    './privacy-policy.css',
+    './terms-of-use-page.css',
     '../../../../../public/css/terms&policy.css',
     '../../../../../public/css/typography.css',
     '../../../../../public/css/form.css'
   ],
 })
-export class PrivacyPolicy {
+export class TermsOfUsePage {
 
   protected readonly Environment = Environment;
 

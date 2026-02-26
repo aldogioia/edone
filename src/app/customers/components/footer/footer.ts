@@ -5,7 +5,10 @@ import {Facebook01Icon, InstagramFreeIcons, Location01Icon, SmartPhone02Icon} fr
   selector: 'app-footer',
   standalone: false,
   templateUrl: './footer.html',
-  styleUrl: './footer.css',
+  styleUrls:[
+    './footer.css',
+    '../../../../../public/css/typography-landing.css'
+  ],
 })
 export class Footer {
 

@@ -24,7 +24,10 @@ class Feature {
   selector: 'app-home',
   standalone: false,
   templateUrl: './home.html',
-  styleUrl: './home.css',
+  styleUrls: [
+    './home.css',
+    '../../../../../public/css/typography-landing.css'
+  ],
 })
 export class Home {
   protected readonly SparklesFreeIcons = SparklesFreeIcons;

@@ -4,7 +4,10 @@ import {Component, input} from '@angular/core';
   selector: 'app-rating',
   standalone: false,
   templateUrl: './rating.html',
-  styleUrls: ['./rating.css'],
+  styleUrls:[
+    './rating.css',
+    '../../../../../public/css/typography-landing.css'
+  ],
 })
 export class Rating {
   rating = input.required<number>();
