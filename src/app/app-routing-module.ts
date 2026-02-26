@@ -16,7 +16,7 @@ import {PrivacyPolicy} from './admin/screens/privacy-policy/privacy-policy';
 import {TermsOfUsePage} from './admin/screens/terms-of-use-page/terms-of-use-page';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'admin', pathMatch: 'full' }, // TODO: Change to home after development
+  { path: '', redirectTo: 'home', pathMatch: 'full' }, // TODO: Change to home after development
   { path: 'home', component: Home, title: 'Home Page'},
   { path: 'login', component: Login, title: 'Login' },
   { path: 'privacy-policy', component: PrivacyPolicy, title: 'Privacy Policy' },
