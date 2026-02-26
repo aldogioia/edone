@@ -1,0 +1,282 @@
+.form-groups, .form-group, .form-controls {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 16pt;
+}
+
+.form-groups p.error, .form-group p.error {
+  color: var(--error-strong);
+  width: 100%;
+}
+
+.form-group {
+  gap: 2pt;
+}
+
+.form-group.row {
+  flex-direction: row;
+}
+
+.form-controls {
+  gap: 8pt;
+}
+
+label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-strong);
+  letter-spacing: 0.01em;
+  padding-left: 4pt;
+}
+
+.services {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 8pt;
+}
+
+.services > .checkbox {
+  display: flex;
+  align-items: center;
+  gap: 4pt;
+  background-color: var(--fill-dark);
+  border: 1px solid var(--stroke-weak);
+  padding: 4pt 8pt 4pt 4pt;
+  border-radius: 8pt;
+  transition: all .2s ease-in-out;
+  cursor: pointer;
+}
+
+.services > .checkbox:has(input:checked) {
+  background-color: var(--brand-fill);
+  border-color: var(--brand-stroke-weak);
+}
+
+.error-message {
+  color: var(--error-strong);
+}
+
+input[type="text"],
+input[type="search"],
+input[type="tel"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+select,
+textarea {
+  width: 100%;
+  padding: 4pt 8pt;
+  font-size: 0.9375rem;
+  color: var(--text-strong);
+  background: var(--admin-background);
+  border: 1px solid var(--stroke-strong);
+  border-radius: 8pt;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  height: 36px;
+}
+
+input::placeholder {
+  color: var(--stroke-strong);
+  opacity: 0.7;
+}
+
+input[type="checkbox"] {
+  accent-color: var(--admin-brand-weak);
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--stroke-strong);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all .3s ease-in-out;
+}
+
+input[type="checkbox"]:checked {
+  border-color: var(--admin-brand-weak);
+  background-color: var(--admin-brand-weak);
+}
+
+/* Focus state - Importante per accessibilità e UX */
+input:focus, select:focus, textarea:focus {
+  border-color: var(--brand-strong);
+  box-shadow: 0 0 0 3px var(--brand-fill);
+}
+
+input.invalid,
+select.invalid,
+textarea.invalid {
+  border: 1px solid var(--error-stroke-strong);
+}
+
+input.invalid:focus,
+select.invalid:focus,
+textarea.invalid:focus{
+  box-shadow: 0 0 0 3px var(--error-fill);
+}
+
+input:disabled {
+  background-color: var(--stroke-weak);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+
+button,
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  padding: 8pt;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+
+  border: none;
+  border-radius: 8pt;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+  line-height: 1;
+  text-wrap: nowrap;
+}
+
+/* Button Primary (Accent) */
+button.primary,
+.button.primary {
+  background-color: var(--brand-strong);
+  color: var(--text-on-black-strong);
+}
+
+button.primary:hover,
+.button.primary:hover {
+  background-color: var(--brand-weak);
+}
+
+button:disabled, button:disabled:hover {
+  background-color: var(--stroke-strong);
+  cursor: not-allowed;
+}
+
+/* Button Secondary (Outline/Ghost) */
+button.secondary,
+.button.secondary {
+  background-color: var(--brand-fill);
+  color: var(--text-weak);
+}
+
+button.secondary:hover,
+.button.secondary:hover {
+  color: var(--admin-brand-strong);
+}
+
+/* Button Danger (Delete actions) */
+button.danger,
+.button.danger {
+  background-color: var(--fill-dark);
+  color: var(--error-weak);
+  border: 1px solid var(--stroke-weak);
+}
+
+button.danger:hover,
+.button.danger:hover {
+  background-color: var(--error-fill);
+  color: var(--error-strong);
+  border: 1px solid var(--error-stroke-weak);
+}
+
+::ng-deep .ng-select.ng-select-single .ng-select-container {
+  height: 36px;
+  min-height: 36px;
+  padding: 0 8pt;
+  border: 1px solid var(--stroke-strong);
+  border-radius: 8pt;
+  background-color: var(--admin-background);
+  color: var(--text-strong);
+  box-shadow: none;
+  transition: .2s ease-in-out;
+  cursor: pointer;
+}
+
+::ng-deep .ng-select .ng-select-container .ng-value-container {
+  padding: 0 !important;
+  align-items: center;
+  position: relative;
+}
+
+::ng-deep .ng-select .ng-select-container .ng-value-container .ng-placeholder {
+  color: var(--stroke-strong);
+  font-size: 0.9375rem;
+  position: absolute;
+  left: 0;
+}
+
+::ng-deep .ng-select-container.ng-has-value .ng-placeholder {
+  display: none !important;
+}
+
+::ng-deep .ng-select .ng-select-container .ng-value-container .ng-value {
+  font-size: 0.9375rem;
+  color: var(--text-strong);
+  position: absolute;
+  left: 0;
+  pointer-events: none;
+}
+
+::ng-deep .ng-select.ng-select-opened .ng-value {
+  display: none;
+}
+
+::ng-deep .ng-select .ng-select-container .ng-value-container .ng-input {
+  padding: 0 !important;
+  left: 0 !important;
+  width: 100%;
+}
+
+::ng-deep .ng-select .ng-select-container .ng-value-container .ng-input > input {
+  padding: 0 !important;
+  font-size: 0.9375rem;
+  color: var(--text-strong);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+::ng-deep .ng-dropdown-panel {
+  background-color: var(--admin-background);
+  border: 1px solid var(--stroke-weak);
+  border-radius: 8pt;
+  margin-top: 4px;
+  padding: 4pt;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+  background-color: transparent;
+  color: var(--text-strong);
+  padding: 8px 12px;
+  border-radius: 4pt;
+  font-size: 0.9375rem;
+}
+
+::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option:hover,
+::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked,
+::ng-deep .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected {
+  background-color: var(--brand-fill) !important;
+}
+
+::ng-deep .ng-select.ng-select-disabled > .ng-select-container {
+  background-color: var(--stroke-weak);
+  cursor: not-allowed;
+}

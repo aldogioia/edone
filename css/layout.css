@@ -1,0 +1,156 @@
+.list-section{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 8pt 0 8pt 8pt;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  min-width: 0;
+}
+
+.list-section::-webkit-scrollbar {
+  display: none;
+}
+
+.header {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 8pt;
+
+  min-width: 0;
+}
+
+.search-section {
+  display: flex;
+  gap: 8pt;
+  padding: 0 8pt 0 0;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+
+  overflow: hidden;
+}
+
+.search-section input {
+  width: 100%;
+  max-width: 450px;
+}
+
+.list {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8pt;
+  padding: 16pt 8pt 0 0;
+}
+
+.controls {
+  display: flex;
+  gap: 8pt;
+}
+
+.search-section button {
+  background: var(--fill-dark);
+  backdrop-filter: blur(10px);
+  stroke: var(--admin-brand-strong);
+  border: 1px solid var(--stroke-weak);
+  padding: 4pt;
+}
+
+.search-section button:hover {
+  background: var(--brand-fill);
+  border: 1px solid var(--brand-stroke-weak);
+}
+
+.search-section button.open {
+  transform: translateX(calc((50%)));
+  stroke: var(--error-strong);
+  z-index: 99;
+}
+
+.search-section button.open:hover {
+  background: var(--error-fill);
+  border: 1px solid var(--error-stroke-weak);
+}
+
+.side-form {
+  display: none;
+  flex-direction: column;
+  gap: 24pt;
+  width: 0;
+  background: var(--fill-dark);
+  border-left: 1px solid var(--stroke-weak);
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.side-form::-webkit-scrollbar {
+  display: none;
+}
+
+.side-form.open {
+  display: flex;
+  padding: 8pt 8pt;
+  width: 400px;
+  min-width: 400px;
+}
+
+.side-list {
+  display: flex;
+  width: 100%;
+  gap: 8pt;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.side-list::-webkit-scrollbar {
+  display: none;
+}
+
+.side-list-item {
+  display: flex;
+  align-items: center;
+  gap: 8pt;
+  padding: 2pt 8pt 2pt 2pt;
+  border-radius: 16pt;
+  transition: .3s ease-in-out;
+}
+
+.side-list-item > p {
+  color: var(--text-weak);
+  transition: color .3s ease-in-out;
+  text-wrap: nowrap;
+}
+
+.side-list-item > img{
+  width: 24pt;
+  height: 24pt;
+  object-fit: cover;
+  border-radius: 50%;
+  object-position: center;
+  filter: grayscale(100%);
+  transition: .3s ease-in-out;
+}
+
+.side-list-item:hover {
+  cursor: pointer;
+}
+
+.side-list-item:hover > img, .side-list-item.selected > img{
+  filter: grayscale(0%);
+}
+
+.side-list-item:hover > p, .side-list-item.selected > p  {
+  color: var(--text-strong);
+}
+
+.side-list-item.selected {
+  background-color: var(--fill-dark);
+}
+
