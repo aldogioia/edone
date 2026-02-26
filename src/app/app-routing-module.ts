@@ -12,15 +12,11 @@ import {StandardSchedulePage} from './admin/screens/standard-schedule-page/stand
 import {ServicesPage} from './admin/screens/services-page/services-page';
 import {ScheduleExceptionPage} from './admin/screens/schedule-exception-page/schedule-exception-page';
 import {BookingPage} from './admin/screens/booking-page/booking-page';
-import {PrivacyPolicy} from './admin/screens/privacy-policy/privacy-policy';
-import {TermsOfUsePage} from './admin/screens/terms-of-use-page/terms-of-use-page';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' }, // TODO: Change to home after development
   { path: 'home', component: Home, title: 'Home Page'},
   { path: 'login', component: Login, title: 'Login' },
-  { path: 'privacy-policy', component: PrivacyPolicy, title: 'Privacy Policy' },
-  { path: 'terms-of-use', component: TermsOfUsePage, title: 'Terms of Use' },
   {
     path: 'admin',
     canActivate: [authGuard],
