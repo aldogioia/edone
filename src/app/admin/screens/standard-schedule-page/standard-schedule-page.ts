@@ -317,7 +317,7 @@ export class StandardSchedulePage implements OnInit, OnDestroy{
     if(!this.scheduleForm.valid || this.isSaving) return
 
     this.isSaving = true;
-    const formValue = this.scheduleForm.value;
+    const formValue = this.scheduleForm.getRawValue();
 
     const scheduleData = {
       morningStart: formValue.isMorningOff ? undefined : formValue.morningStart,
