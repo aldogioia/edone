@@ -4,7 +4,10 @@ import {Component, input} from '@angular/core';
   selector: 'app-service',
   standalone: false,
   templateUrl: './service.html',
-  styleUrl: './service.css',
+  styleUrls:[
+    './service.css',
+    '../../../../../public/css/typography-landing.css'
+  ],
 })
 export class Service {
   name = input.required<string>();

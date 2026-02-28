@@ -5,7 +5,10 @@ import {IconSvgObject} from '@hugeicons/angular';
   selector: 'app-app-feature',
   standalone: false,
   templateUrl: './app-feature.html',
-  styleUrl: './app-feature.css',
+  styleUrls:[
+    './app-feature.css',
+    '../../../../../public/css/typography-landing.css'
+  ],
 })
 export class AppFeature {
   @Input({required:true}) icon!: IconSvgObject

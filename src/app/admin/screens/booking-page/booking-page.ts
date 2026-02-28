@@ -354,7 +354,6 @@ export class BookingPage implements OnInit, OnDestroy {
       },
       error: (err) => {
         this.isSaving = false;
-        alert("Errore durante la creazione dell'appuntamento.");
         console.error(err);
       }
     });
@@ -373,7 +372,6 @@ export class BookingPage implements OnInit, OnDestroy {
       },
       error: (err) => {
         this.isSaving = false;
-        alert("Errore nell'eliminazione.");
         console.error(err);
       }
     });

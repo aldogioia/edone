@@ -4,7 +4,11 @@ import { Subject, takeUntil } from 'rxjs';
 import { ScheduleExceptionService } from '../../../service/schedule-exception-service';
 import { OperatorsService } from '../../../service/operators-service';
 import { OperatorDto } from '../../../model/operator-dto';
-import { ScheduleExceptionDto, CreateScheduleExceptionDto } from '../../../model/schedule-exception-dto';
+import {
+  ScheduleExceptionDto,
+  CreateScheduleExceptionDto,
+  UpdateScheduleExceptionDto
+} from '../../../model/schedule-exception-dto';
 import { periodValidator, scheduleInfoValidator } from '../../../validators/schedule-exception-validators';
 import {Add01Icon, Cancel01Icon, Refresh01Icon, CalendarBlock01Icon} from '@hugeicons/core-free-icons';
 
@@ -21,6 +25,11 @@ import {Add01Icon, Cancel01Icon, Refresh01Icon, CalendarBlock01Icon} from '@huge
   ]
 })
 export class ScheduleExceptionPage implements OnInit, OnDestroy {
+  protected readonly Refresh01Icon = Refresh01Icon;
+  protected readonly Cancel01Icon = Cancel01Icon;
+  protected readonly Add01Icon = Add01Icon;
+  protected readonly CalendarBlock01Icon = CalendarBlock01Icon;
+
   operators: OperatorDto[] = [];
   selectedOperator: OperatorDto | null = null;
   exceptions: ScheduleExceptionDto[] = [];
@@ -31,11 +40,9 @@ export class ScheduleExceptionPage implements OnInit, OnDestroy {
   isLoadingExceptions = false;
   isSaving = false;
 
-  private destroy$ = new Subject<void>();
+  editingExceptionId: string | null = null;
 
-  protected readonly Refresh01Icon = Refresh01Icon;
-  protected readonly Cancel01Icon = Cancel01Icon;
-  protected readonly Add01Icon = Add01Icon;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -163,14 +170,37 @@ export class ScheduleExceptionPage implements OnInit, OnDestroy {
       return;
     }
     this.isFormOpen = true;
+    this.editingExceptionId = null;
     this.exceptionForm.reset({
       isMorningOff: true,
       isAfternoonOff: true
     });
   }
 
+  editException(ex: ScheduleExceptionDto) {
+    if (!this.selectedOperator) return;
+
+    this.isFormOpen = true;
+    this.editingExceptionId = ex.id;
+
+    const isMorningOff = !ex.morningStart && !ex.morningEnd;
+    const isAfternoonOff = !ex.afternoonStart && !ex.afternoonEnd;
+
+    this.exceptionForm.patchValue({
+      startDate: ex.startDate,
+      endDate: ex.endDate,
+      isMorningOff: isMorningOff,
+      morningStart: isMorningOff ? '' : ex.morningStart?.substring(0, 5),
+      morningEnd: isMorningOff ? '' : ex.morningEnd?.substring(0, 5),
+      isAfternoonOff: isAfternoonOff,
+      afternoonStart: isAfternoonOff ? '' : ex.afternoonStart?.substring(0, 5),
+      afternoonEnd: isAfternoonOff ? '' : ex.afternoonEnd?.substring(0, 5)
+    });
+  }
+
   closeForm() {
     this.isFormOpen = false;
+    this.editingExceptionId = null;
     this.exceptionForm.reset();
   }
 
@@ -180,7 +210,7 @@ export class ScheduleExceptionPage implements OnInit, OnDestroy {
     this.isSaving = true;
     const val = this.exceptionForm.getRawValue();
 
-    const dto: CreateScheduleExceptionDto = {
+    const baseDto = {
       operatorId: this.selectedOperator.id,
       startDate: val.startDate,
       endDate: val.endDate ? val.endDate : undefined,
@@ -190,30 +220,40 @@ export class ScheduleExceptionPage implements OnInit, OnDestroy {
       afternoonEnd: val.isAfternoonOff ? undefined : val.afternoonEnd
     };
 
-    this.exceptionService.createScheduleException(dto).subscribe({
-      next: () => {
-        this.isSaving = false;
-        this.closeForm();
-        this.loadExceptions(this.selectedOperator!.id);
-      },
-      error: (err) => {
-        this.isSaving = false;
-        alert("Impossibile salvare l'eccezione. Verifica che le date non si accavallino con altre eccezioni.");
-        console.error(err);
-        this.cdr.detectChanges();
-      }
-    });
+    if (this.editingExceptionId) {
+      const updateDto: UpdateScheduleExceptionDto = {...baseDto, id: this.editingExceptionId};
+      this.exceptionService.updateScheduleException(updateDto).subscribe({
+        next: () => {
+          this.isSaving = false;
+          this.closeForm();
+          this.loadExceptions(this.selectedOperator!.id);
+        },
+        error: (err) => this.handleSaveError(err)
+      });
+    } else {
+      const createDto: CreateScheduleExceptionDto = baseDto;
+      this.exceptionService.createScheduleException(createDto).subscribe({
+        next: () => {
+          this.isSaving = false;
+          this.closeForm();
+          this.loadExceptions(this.selectedOperator!.id);
+        },
+        error: (err) => this.handleSaveError(err)
+      });
+    }
   }
 
-  deleteException(id: string, event: Event) {
+  deleteException(event: Event) {
     event.stopPropagation();
     if (!confirm('Sei sicuro di voler eliminare questa eccezione/ferie?')) return;
 
+    if (this.editingExceptionId === null) return;
+
     this.isSaving = true;
-    this.exceptionService.deleteScheduleException(id).subscribe({
+    this.exceptionService.deleteScheduleException(this.editingExceptionId).subscribe({
       next: () => {
         this.isSaving = false;
-        this.exceptions = this.exceptions.filter(e => e.id !== id);
+        this.exceptions = this.exceptions.filter(e => e.id !== this.editingExceptionId);
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -269,5 +309,9 @@ export class ScheduleExceptionPage implements OnInit, OnDestroy {
     return this.exceptionForm.hasError('overlap') && (!!mEnd || !!pStart);
   }
 
-  protected readonly CalendarBlock01Icon = CalendarBlock01Icon;
+  private handleSaveError(err: any) {
+    this.isSaving = false;
+    console.error(err);
+    this.cdr.detectChanges();
+  }
 }

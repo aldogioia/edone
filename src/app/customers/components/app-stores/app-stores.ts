@@ -4,7 +4,10 @@ import { Component } from '@angular/core';
   selector: 'app-app-stores',
   standalone: false,
   templateUrl: './app-stores.html',
-  styleUrl: './app-stores.css',
+  styleUrls:[
+    './app-stores.css',
+    '../../../../../public/css/typography-landing.css'
+  ],
 })
 export class AppStores {
 

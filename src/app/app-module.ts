@@ -27,7 +27,6 @@ import { ScheduleExceptionPage } from './admin/screens/schedule-exception-page/s
 import { BookingPage } from './admin/screens/booking-page/booking-page';
 import {FullCalendarModule} from '@fullcalendar/angular';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { PrivacyPolicy } from './admin/screens/privacy-policy/privacy-policy';
 
 @NgModule({
   declarations: [
@@ -51,7 +50,6 @@ import { PrivacyPolicy } from './admin/screens/privacy-policy/privacy-policy';
     ServicesPage,
     ScheduleExceptionPage,
     BookingPage,
-    PrivacyPolicy,
   ],
   imports: [
     BrowserModule,

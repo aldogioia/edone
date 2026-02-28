@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { ScheduleExceptionDto, CreateScheduleExceptionDto } from '../model/schedule-exception-dto';
+import { ScheduleExceptionDto, CreateScheduleExceptionDto, UpdateScheduleExceptionDto } from '../model/schedule-exception-dto';
 import { Environment } from '../utils/environment';
 
 @Injectable({
@@ -38,6 +38,21 @@ export class ScheduleExceptionService {
         if (this.currentOperatorIdLoaded === dto.operatorId) {
           const currentList = this.exceptionsSubject.getValue();
           this.exceptionsSubject.next([...currentList, newException]);
+        }
+      })
+    );
+  }
+
+  updateScheduleException(dto: UpdateScheduleExceptionDto): Observable<ScheduleExceptionDto> {
+    return this.http.put<ScheduleExceptionDto>(this.baseUrl, dto).pipe(
+      tap(updatedException => {
+        if (this.currentOperatorIdLoaded === dto.operatorId) {
+          const currentList = this.exceptionsSubject.getValue();
+          const index = currentList.findIndex(e => e.id === updatedException.id);
+          if (index !== -1) {
+            currentList[index] = updatedException;
+            this.exceptionsSubject.next([...currentList]);
+          }
         }
       })
     );

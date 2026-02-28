@@ -317,7 +317,7 @@ export class StandardSchedulePage implements OnInit, OnDestroy{
     if(!this.scheduleForm.valid || this.isSaving) return
 
     this.isSaving = true;
-    const formValue = this.scheduleForm.value;
+    const formValue = this.scheduleForm.getRawValue();
 
     const scheduleData = {
       morningStart: formValue.isMorningOff ? undefined : formValue.morningStart,
@@ -344,7 +344,6 @@ export class StandardSchedulePage implements OnInit, OnDestroy{
         },
         error: (err) => {
           this.isSaving = false;
-          alert('Errore durante l\'aggiornamento del Turno. ' + err);
           console.error('Error updating tool:', err);
           this.cdr.detectChanges();
         }
@@ -364,7 +363,6 @@ export class StandardSchedulePage implements OnInit, OnDestroy{
         },
         error: (err) => {
           this.isSaving = false;
-          alert('Errore durante la creazione del macchinario. Verifica che il nome non sia già in uso e riprova.');
           console.error('Error creating tool:', err);
           this.cdr.detectChanges();
         }
