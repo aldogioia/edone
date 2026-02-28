@@ -5,12 +5,14 @@ export interface ServiceDto {
   imgUrl?: string;
   name: string;
   price: number;
+  persistenceDuration: number;
   tools: SummaryToolDto[];
 }
 
 export interface CreateServiceDto {
   name: string;
   price: number;
+  persistenceDuration: number;
   tools: string[];
 }
 
@@ -18,6 +20,7 @@ export interface UpdateServiceDto {
   id: string;
   name: string;
   price: number;
+  persistenceDuration: number;
   tools: string[];
 }
 
