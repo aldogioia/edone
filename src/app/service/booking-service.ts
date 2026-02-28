@@ -12,8 +12,10 @@ export class BookingService {
 
   constructor(private http: HttpClient) {}
 
-  getBookingsByDate(date: string, operatorId?: string): Observable<BookingDto[]> {
-    let params = new HttpParams().set('date', date);
+  getBookingsByRange(startDate: string, endDate: string, operatorId?: string): Observable<BookingDto[]> {
+    let params = new HttpParams()
+      .set('startDate', startDate)
+      .set('endDate', endDate);
 
     if (operatorId) {
       params = params.set('operatorId', operatorId);

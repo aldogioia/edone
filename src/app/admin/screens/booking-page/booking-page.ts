@@ -205,7 +205,6 @@ export class BookingPage implements OnInit, OnDestroy {
     serviceCtrl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(serviceId => {
       if (this.isViewMode) return;
 
-      // FIX: Usiamo setValue('') invece di reset() per matchare l'option value=""
       operatorCtrl.setValue('');
       operatorCtrl.markAsUntouched();
 
@@ -243,7 +242,6 @@ export class BookingPage implements OnInit, OnDestroy {
             this.availableTimes = times;
             this.isLoadingTimes = false;
 
-            // FIX: Assicuriamoci che torni sul placeholder quando carica i nuovi orari
             timeCtrl.setValue('');
             timeCtrl.markAsUntouched();
 
@@ -266,45 +264,44 @@ export class BookingPage implements OnInit, OnDestroy {
   }
 
   fetchEvents(fetchInfo: EventSourceFuncArg, successCallback: any, _: any) {
-    const requests: Observable<BookingDto[]>[] = [];
-    let current = new Date(fetchInfo.start);
-    const end = new Date(fetchInfo.end);
+    const formatDate = (d: Date) => {
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
 
-    while (current < end) {
-      const year = current.getFullYear();
-      const month = String(current.getMonth() + 1).padStart(2, '0');
-      const day = String(current.getDate()).padStart(2, '0');
-      const dateStr = `${year}-${month}-${day}`;
+    const startStr = formatDate(fetchInfo.start);
 
-      const req = this.bookingService.getBookingsByDate(dateStr).pipe(
-        catchError(() => of([] as BookingDto[]))
-      );
-      requests.push(req);
-      current.setDate(current.getDate() + 1);
-    }
+    const endD = new Date(fetchInfo.end);
+    endD.setDate(endD.getDate() - 1);
+    const endStr = formatDate(endD);
 
-    forkJoin(requests).subscribe(results => {
-      let allBookings = results.flat();
+    this.bookingService.getBookingsByRange(startStr, endStr).subscribe({
+      next: (allBookings) => {
 
-      if (this.selectedOperator !== null) {
-        allBookings = allBookings.filter(b => b.operator?.id === this.selectedOperator!.id);
+        if (this.selectedOperator !== null) {
+          allBookings = allBookings.filter(b => b.operator?.id === this.selectedOperator!.id);
+        }
+
+        const calendarEvents = allBookings.map(b => {
+          return {
+            id: b.id,
+            title: `${b.customer?.name} - ${b.service?.name}` + (!this.selectedOperator ? ` (${b.operator?.name})` : ''),
+            start: `${b.date}T${b.time}`,
+            end: `${b.date}T${b.end}`,
+            extendedProps: { booking: b }
+          };
+        });
+
+        successCallback(calendarEvents);
+      },
+      error: () => {
+        successCallback([]);
       }
-
-      const calendarEvents = allBookings.map(b => {
-        return {
-          id: b.id,
-          title: `${b.customer?.name} - ${b.service?.name}` + (!this.selectedOperator ? ` (${b.operator?.name})` : ''),
-          start: `${b.date}T${b.time}`,
-          end: `${b.date}T${b.end}`,
-          extendedProps: { booking: b }
-        };
-      });
-
-      successCallback(calendarEvents);
     });
   }
 
-  // Helper per calcolare i minuti tra due orari "HH:mm:ss"
   private calculateDurationMinutes(start: string, end: string): number {
     const parseTime = (t: string) => {
       const [h, m] = t.split(':').map(Number);
@@ -332,7 +329,6 @@ export class BookingPage implements OnInit, OnDestroy {
       customer: booking.customer?.id
     });
 
-    // Disabilita tutto, MA riabilita la durata per permetterne la modifica
     this.bookingForm.disable();
     this.bookingForm.get('duration')?.enable();
   }
@@ -378,10 +374,9 @@ export class BookingPage implements OnInit, OnDestroy {
     if (this.bookingForm.invalid || this.isSaving) return;
 
     this.isSaving = true;
-    const val = this.bookingForm.getRawValue(); // Prende anche i valori disabled
+    const val = this.bookingForm.getRawValue();
 
     if (this.selectedBookingId) {
-      // UPDATE: Stiamo modificando la durata di un appuntamento esistente
       const updateDto: UpdateBookingDto = {
         id: this.selectedBookingId,
         duration: val.duration
@@ -401,7 +396,6 @@ export class BookingPage implements OnInit, OnDestroy {
       });
 
     } else {
-      // CREATE: Nuova prenotazione
       const createDto: CreateBookingDto = {
         date: val.date,
         time: val.time,
