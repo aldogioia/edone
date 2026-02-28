@@ -67,6 +67,7 @@ export class ServicesPage implements OnInit, OnDestroy {
       id: [null],
       name: ['', [Validators.required, noOnlySpacesValidator(), Validators.minLength(1), Validators.maxLength(50)]],
       price: [1, [Validators.required, Validators.min(1)]],
+      persistenceDuration: [null, [Validators.required]],
       selectedToolIds: [[]]
     });
   }
@@ -173,6 +174,7 @@ export class ServicesPage implements OnInit, OnDestroy {
       id: service.id,
       name: service.name,
       price: service.price,
+      persistenceDuration: service.persistenceDuration,
       selectedToolIds: toolIds
     });
   }
@@ -213,7 +215,8 @@ export class ServicesPage implements OnInit, OnDestroy {
         id: formValue.id,
         name: formValue.name,
         price: formValue.price,
-        tools: formValue.selectedToolIds
+        tools: formValue.selectedToolIds,
+        persistenceDuration: formValue.persistenceDuration
       };
 
       this.serviceService.updateService(updateDto, this.selectedImageFile).subscribe({
@@ -232,7 +235,8 @@ export class ServicesPage implements OnInit, OnDestroy {
       const createDto: CreateServiceDto = {
         name: formValue.name,
         price: formValue.price,
-        tools: formValue.selectedToolIds
+        tools: formValue.selectedToolIds,
+        persistenceDuration: formValue.persistenceDuration
       };
 
       this.serviceService.createService(createDto, this.selectedImageFile!).subscribe({

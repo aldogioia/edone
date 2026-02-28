@@ -99,6 +99,26 @@
     </div>
 
     <div class="form-group">
+      <label for="persistenceDuration">Durata persistenza booking per questo servizio</label>
+      <select
+        id="persistenceDuration"
+        formControlName="persistenceDuration"
+        [class.invalid]="getFormControl('persistenceDuration')?.invalid && (getFormControl('persistenceDuration')?.dirty || getFormControl('persistenceDuration')?.touched)">
+        <option [value]="null" disabled selected>Seleziona la persistenza</option>
+        <option [value]="1">1 Mese</option>
+        <option [value]="2">2 Mesi</option>
+        <option [value]="3">3 Mesi</option>
+        <option [value]="6">6 Mesi</option>
+        <option [value]="12">12 Mesi</option>
+      </select>
+      @if (getFormControl('persistenceDuration')?.invalid && (getFormControl('persistenceDuration')?.dirty || getFormControl('persistenceDuration')?.touched)) {
+        <div class="error-message">
+          @if (getFormControl('persistenceDuration')?.errors?.['required']) { <small>La durata di persistenza dei booking è obbligatoria</small> }
+        </div>
+      }
+    </div>
+
+    <div class="form-group">
       <label>Macchinari Necessari (Opzionale)</label>
       <div class="services">
         @for (tool of tools; track tool.id) {

@@ -44,6 +44,7 @@ export class ServiceService {
 
     formData.append('name', dto.name);
     formData.append('price', dto.price.toString());
+    formData.append('persistenceDuration', dto.persistenceDuration.toString());
 
     if (dto.tools && dto.tools.length > 0) {
       dto.tools.forEach(toolId => {
@@ -67,6 +68,7 @@ export class ServiceService {
     formData.append('id', dto.id);
     formData.append('name', dto.name);
     formData.append('price', dto.price.toString());
+    formData.append('persistenceDuration', dto.persistenceDuration.toString());
 
     if (dto.tools && dto.tools.length > 0) {
       dto.tools.forEach(toolId => {
