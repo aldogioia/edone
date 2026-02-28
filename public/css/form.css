@@ -59,6 +59,14 @@ label {
   color: var(--error-strong);
 }
 
+input, select, textarea {
+  cursor: pointer;
+}
+
+input:disabled, select:disabled, textarea:disabled {
+  cursor: not-allowed;
+}
+
 input[type="text"],
 input[type="search"],
 input[type="tel"],
@@ -86,9 +94,12 @@ select {
   height: 36px;
 }
 
+.color-option {
+  color: var(--text-weak);
+}
+
 input::placeholder {
-  color: var(--stroke-strong);
-  opacity: 0.7;
+  color: var(--text-weak);
 }
 
 input[type="checkbox"] {
@@ -129,7 +140,6 @@ input:disabled {
   cursor: not-allowed;
   opacity: 0.7;
 }
-
 
 button,
 .button {
@@ -216,7 +226,7 @@ button.danger:hover,
 }
 
 ::ng-deep .ng-select .ng-select-container .ng-value-container .ng-placeholder {
-  color: var(--stroke-strong);
+  color: var(--text-weak);
   font-size: 0.9375rem;
   position: absolute;
   left: 0;

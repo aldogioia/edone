@@ -78,7 +78,7 @@
 
     <div class="form-group">
       <label for="service">Servizio</label>
-      <select id="service" formControlName="service" [class.invalid]="getFormControl('service')?.invalid && getFormControl('service')?.touched">
+      <select id="service" formControlName="service" [class.color-option]="!getFormControl('service')?.value" [class.invalid]="getFormControl('service')?.invalid && getFormControl('service')?.touched">
         <option value="" disabled>Seleziona il servizio</option>
         @for (service of services; track service.id) {
           <option [value]="service.id">{{ service.name }}</option>
@@ -88,9 +88,13 @@
 
     <div class="form-group">
       <label for="operator">Operatore</label>
-      <select id="operator" formControlName="operator" [class.invalid]="getFormControl('operator')?.invalid && getFormControl('operator')?.touched">
+      <select id="operator" formControlName="operator" [class.color-option]="!getFormControl('operator')?.value" [class.invalid]="getFormControl('operator')?.invalid && getFormControl('operator')?.touched">
         <option value="" disabled>
-          {{ getFormControl('service')?.value ? 'Seleziona operatore' : 'Seleziona prima un servizio' }}
+          @if (getFormControl('service')?.value) {
+            Seleziona un operatore
+          } @else {
+            Seleziona prima un servizio
+          }
         </option>
         @for (op of (isViewMode ? operators : filteredOperatorsForForm); track op.id) {
           <option [value]="op.id">{{ op.name }} {{ op.surname }}</option>
@@ -104,13 +108,32 @@
     <div class="form-group">
       <label for="date">Data</label>
       <input id="date" type="date" formControlName="date" [class.invalid]="getFormControl('date')?.invalid && getFormControl('date')?.touched">
+      @if (getFormControl('date')?.invalid && getFormControl('date')?.touched) {
+        <small class="error-message">La data è obbligatoria.</small>
+      }
     </div>
 
     <div class="form-group">
-      <label for="time">Orari Disponibili</label>
-      <select id="time" formControlName="time" [class.invalid]="getFormControl('time')?.invalid && getFormControl('time')?.touched">
+      <label for="duration">Durata (minuti)</label>
+      <input id="duration" type="number" step="5" formControlName="duration" [class.invalid]="getFormControl('duration')?.invalid && getFormControl('duration')?.touched">
+      @if (getFormControl('duration')?.invalid && getFormControl('duration')?.touched) {
+        <small class="error-message">Inserisci una durata valida (es. 30).</small>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="time">Orario</label>
+      <select id="time" formControlName="time" [class.color-option]="!getFormControl('time')?.value" [class.invalid]="getFormControl('time')?.invalid && getFormControl('time')?.touched">
         <option value="" disabled>
-          {{ isLoadingTimes ? 'Ricerca orari...' : (isViewMode ? 'Orario prenotato' : 'Scegli la data e l\'operatore') }}
+          @if (isLoadingTimes) {
+            Ricerca orari in corso...
+          } @else if (isViewMode) {
+            Orario prenotato
+          } @else if (availableTimes.length > 0) {
+            Seleziona un orario
+          } @else {
+            Scegli data e operatore
+          }
         </option>
         @for (time of availableTimes; track time) {
           <option [value]="time">{{ time.substring(0, 5) }}</option>
@@ -124,13 +147,17 @@
   </div>
 
   <div class="form-controls">
-    @if (!isViewMode) {
+    @if (!selectedBookingId) {
       <button class="primary" type="submit" [disabled]="bookingForm.invalid || isSaving">
         @if (isSaving) { Attendere... } @else { Conferma Prenotazione }
       </button>
     } @else {
-      <button class="danger" style="width: 100%;" type="button" (click)="deleteBooking($event)" [disabled]="isSaving">
-        @if (isSaving) { Attendere... } @else { Elimina Appuntamento }
+      <button class="primary" type="submit" [disabled]="bookingForm.invalid || isSaving">
+        @if (isSaving) { ... } @else { Aggiorna Durata }
+      </button>
+
+      <button class="danger" (click)="deleteBooking($event)" [disabled]="isSaving">
+        @if (isSaving) { ... } @else { Elimina Appuntamento }
       </button>
     }
   </div>

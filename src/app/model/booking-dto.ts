@@ -1,6 +1,6 @@
-import {ServiceDto} from './service-dto';
-import {SummaryOperatorDto} from './operator-dto';
-import {SummaryCustomerDto} from './customer-dto';
+import { ServiceDto } from './service-dto';
+import { SummaryOperatorDto } from './operator-dto';
+import { SummaryCustomerDto } from './customer-dto';
 
 export class BookingDto {
   id: string;
@@ -8,9 +8,9 @@ export class BookingDto {
   time: string;
   end: string;
   service: ServiceDto;
-  operator: SummaryOperatorDto
-  room: string
-  customer: SummaryCustomerDto
+  operator: SummaryOperatorDto;
+  room: string;
+  customer: SummaryCustomerDto;
 
   constructor(data: any) {
     this.id = data.id;
@@ -27,7 +27,13 @@ export class BookingDto {
 export interface CreateBookingDto {
   date: string;
   time: string;
+  duration: number;
   service: string;
   operator: string;
   customer: string;
+}
+
+export interface UpdateBookingDto {
+  id: string;
+  duration: number;
 }

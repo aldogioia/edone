@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { BookingDto, CreateBookingDto } from '../model/booking-dto';
+import {BookingDto, CreateBookingDto, UpdateBookingDto} from '../model/booking-dto';
 import { Environment } from '../utils/environment';
 
 @Injectable({
@@ -29,6 +29,10 @@ export class BookingService {
 
   createBooking(dto: CreateBookingDto): Observable<BookingDto> {
     return this.http.post<BookingDto>(this.baseUrl, dto);
+  }
+
+  updateBookingDuration(dto: UpdateBookingDto): Observable<BookingDto> {
+    return this.http.patch<BookingDto>(this.baseUrl, dto);
   }
 
   deleteBooking(bookingId: string): Observable<void> {

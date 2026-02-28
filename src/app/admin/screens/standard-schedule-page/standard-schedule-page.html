@@ -81,7 +81,7 @@
 
     <div class="form-group">
       <label for="days">Giorno della settimana</label>
-      <select id="days" formControlName="day">
+      <select id="days" [class.color-option]="!getFormControl('days')?.value" formControlName="day">
         <option value="" disabled>Seleziona un giorno</option>
 
         @if (isEditMode) {

@@ -4,15 +4,15 @@ import { FullCalendarComponent } from '@fullcalendar/angular';
 import { CalendarOptions, EventClickArg, EventSourceFuncArg } from '@fullcalendar/core';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import {forkJoin, Observable, of, Subject, combineLatest, tap} from 'rxjs';
-import {catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap, takeUntil} from 'rxjs/operators';
+import { forkJoin, Observable, of, Subject, combineLatest } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import { BookingService } from '../../../service/booking-service';
 import { OperatorsService } from '../../../service/operators-service';
 import { ServiceService } from '../../../service/service-service';
 import { CustomersService } from '../../../service/customers-service';
 
-import { BookingDto, CreateBookingDto } from '../../../model/booking-dto';
+import { BookingDto, CreateBookingDto, UpdateBookingDto } from '../../../model/booking-dto';
 import { OperatorDto } from '../../../model/operator-dto';
 import { ServiceDto } from '../../../model/service-dto';
 import { CustomerDto } from '../../../model/customer-dto';
@@ -117,6 +117,7 @@ export class BookingPage implements OnInit, OnDestroy {
       operator: [{ value: '', disabled: true }, [Validators.required]],
       date: ['', [Validators.required]],
       time: [{ value: '', disabled: true }, [Validators.required]],
+      duration: [30, [Validators.required, Validators.min(1)]],
       customer: ['', [Validators.required]]
     });
   }
@@ -182,17 +183,34 @@ export class BookingPage implements OnInit, OnDestroy {
     return this.selectedOperator?.id === operator.id;
   }
 
+  recommendedDuration(): number {
+    const serviceId = this.getFormControl('service')?.value;
+    const operatorId = this.getFormControl('operator')?.value;
+    if (!serviceId || !operatorId) return 30;
+
+    const operator = this.operators.find(o => o.id === operatorId);
+    if (!operator) return 30;
+
+    const operatorService = operator.operatorServices?.find(os => os.serviceId === serviceId);
+    return operatorService?.duration ?? 30;
+  }
+
   private setupFormListeners() {
     const serviceCtrl = this.bookingForm.get('service')!;
     const operatorCtrl = this.bookingForm.get('operator')!;
     const dateCtrl = this.bookingForm.get('date')!;
     const timeCtrl = this.bookingForm.get('time')!;
+    const durationCtrl = this.bookingForm.get('duration')!;
 
     serviceCtrl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(serviceId => {
       if (this.isViewMode) return;
 
-      operatorCtrl.reset();
-      timeCtrl.reset();
+      // FIX: Usiamo setValue('') invece di reset() per matchare l'option value=""
+      operatorCtrl.setValue('');
+      operatorCtrl.markAsUntouched();
+
+      timeCtrl.setValue('');
+      timeCtrl.markAsUntouched();
 
       if (serviceId) {
         this.filteredOperatorsForForm = this.operators.filter(op =>
@@ -212,6 +230,10 @@ export class BookingPage implements OnInit, OnDestroy {
     ]).pipe(takeUntil(this.destroy$)).subscribe(([serviceId, operatorId, date]) => {
       if (this.isViewMode) return;
 
+      if (serviceId && operatorId) {
+        durationCtrl.setValue(this.recommendedDuration());
+      }
+
       if (serviceId && operatorId && date) {
         this.isLoadingTimes = true;
         timeCtrl.disable();
@@ -220,6 +242,11 @@ export class BookingPage implements OnInit, OnDestroy {
           next: (times) => {
             this.availableTimes = times;
             this.isLoadingTimes = false;
+
+            // FIX: Assicuriamoci che torni sul placeholder quando carica i nuovi orari
+            timeCtrl.setValue('');
+            timeCtrl.markAsUntouched();
+
             if (times.length > 0) timeCtrl.enable();
             this.cdr.detectChanges();
           },
@@ -231,7 +258,8 @@ export class BookingPage implements OnInit, OnDestroy {
         });
       } else {
         this.availableTimes = [];
-        timeCtrl.reset();
+        timeCtrl.setValue('');
+        timeCtrl.markAsUntouched();
         timeCtrl.disable();
       }
     });
@@ -263,7 +291,6 @@ export class BookingPage implements OnInit, OnDestroy {
       }
 
       const calendarEvents = allBookings.map(b => {
-
         return {
           id: b.id,
           title: `${b.customer?.name} - ${b.service?.name}` + (!this.selectedOperator ? ` (${b.operator?.name})` : ''),
@@ -277,6 +304,15 @@ export class BookingPage implements OnInit, OnDestroy {
     });
   }
 
+  // Helper per calcolare i minuti tra due orari "HH:mm:ss"
+  private calculateDurationMinutes(start: string, end: string): number {
+    const parseTime = (t: string) => {
+      const [h, m] = t.split(':').map(Number);
+      return h * 60 + m;
+    };
+    return parseTime(end) - parseTime(start);
+  }
+
   handleEventClick(arg: EventClickArg) {
     const booking: BookingDto = arg.event.extendedProps['booking'];
 
@@ -285,16 +321,20 @@ export class BookingPage implements OnInit, OnDestroy {
     this.selectedBookingId = booking.id;
 
     this.availableTimes = [booking.time.substring(0, 5)];
+    const durationMins = this.calculateDurationMinutes(booking.time, booking.end);
 
     this.bookingForm.patchValue({
       service: booking.service?.id,
       operator: booking.operator?.id,
       date: booking.date,
       time: booking.time.substring(0, 5),
-      customer: booking.customer?.id // ng-select userà questo ID
+      duration: durationMins,
+      customer: booking.customer?.id
     });
 
+    // Disabilita tutto, MA riabilita la durata per permetterne la modifica
     this.bookingForm.disable();
+    this.bookingForm.get('duration')?.enable();
   }
 
   openCreateForm() {
@@ -309,7 +349,8 @@ export class BookingPage implements OnInit, OnDestroy {
       service: '',
       operator: '',
       date: '',
-      time: ''
+      time: '',
+      duration: 30
     });
 
     this.bookingForm.get('operator')?.disable();
@@ -323,7 +364,8 @@ export class BookingPage implements OnInit, OnDestroy {
       service: '',
       operator: '',
       date: '',
-      time: ''
+      time: '',
+      duration: 30
     });
     this.bookingForm.enable();
   }
@@ -336,27 +378,52 @@ export class BookingPage implements OnInit, OnDestroy {
     if (this.bookingForm.invalid || this.isSaving) return;
 
     this.isSaving = true;
-    const val = this.bookingForm.getRawValue();
+    const val = this.bookingForm.getRawValue(); // Prende anche i valori disabled
 
-    const dto: CreateBookingDto = {
-      date: val.date,
-      time: val.time,
-      service: val.service,
-      customer: val.customer,
-      operator: val.operator
-    };
+    if (this.selectedBookingId) {
+      // UPDATE: Stiamo modificando la durata di un appuntamento esistente
+      const updateDto: UpdateBookingDto = {
+        id: this.selectedBookingId,
+        duration: val.duration
+      };
 
-    this.bookingService.createBooking(dto).subscribe({
-      next: () => {
-        this.isSaving = false;
-        this.closeForm();
-        this.forceRefreshList();
-      },
-      error: (err) => {
-        this.isSaving = false;
-        console.error(err);
-      }
-    });
+      this.bookingService.updateBookingDuration(updateDto).subscribe({
+        next: () => {
+          this.isSaving = false;
+          this.closeForm();
+          this.forceRefreshList();
+        },
+        error: (err) => {
+          this.isSaving = false;
+          alert(err.error?.message || "Errore: impossibile aggiornare la durata (potrebbe esserci un conflitto).");
+          console.error(err);
+        }
+      });
+
+    } else {
+      // CREATE: Nuova prenotazione
+      const createDto: CreateBookingDto = {
+        date: val.date,
+        time: val.time,
+        duration: val.duration,
+        service: val.service,
+        customer: val.customer,
+        operator: val.operator
+      };
+
+      this.bookingService.createBooking(createDto).subscribe({
+        next: () => {
+          this.isSaving = false;
+          this.closeForm();
+          this.forceRefreshList();
+        },
+        error: (err) => {
+          this.isSaving = false;
+          alert(err.error?.message || "Errore durante la creazione dell'appuntamento.");
+          console.error(err);
+        }
+      });
+    }
   }
 
   deleteBooking(event: Event) {
