@@ -222,22 +222,29 @@ export class BookingPage implements OnInit, OnDestroy {
       }
     });
 
+    operatorCtrl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(operatorId => {
+      if (this.isViewMode) return;
+      if (operatorId && serviceCtrl.value) {
+        durationCtrl.setValue(this.recommendedDuration());
+      }
+    });
+
     combineLatest([
       serviceCtrl.valueChanges.pipe(startWith(serviceCtrl.value)),
       operatorCtrl.valueChanges.pipe(startWith(operatorCtrl.value)),
-      dateCtrl.valueChanges.pipe(startWith(dateCtrl.value))
-    ]).pipe(takeUntil(this.destroy$)).subscribe(([serviceId, operatorId, date]) => {
+      dateCtrl.valueChanges.pipe(startWith(dateCtrl.value)),
+      durationCtrl.valueChanges.pipe(startWith(durationCtrl.value))
+    ]).pipe(
+      takeUntil(this.destroy$),
+      debounceTime(300)
+    ).subscribe(([serviceId, operatorId, date, duration]) => {
       if (this.isViewMode) return;
 
-      if (serviceId && operatorId) {
-        durationCtrl.setValue(this.recommendedDuration());
-      }
-
-      if (serviceId && operatorId && date) {
+      if (serviceId && operatorId && date && duration) {
         this.isLoadingTimes = true;
         timeCtrl.disable();
 
-        this.operatorService.getAvailableTimes(operatorId, date, serviceId).subscribe({
+        this.operatorService.getAvailableTimes(operatorId, date, serviceId, duration).subscribe({
           next: (times) => {
             this.availableTimes = times;
             this.isLoadingTimes = false;
