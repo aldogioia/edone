@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import {
   BrushIcon, Calendar01Icon,
-  CalendarBlock01Icon, DateTimeIcon,
+  CalendarBlock01Icon, Cancel01Icon, DateTimeIcon,
   Door01Icon, Leaf01Icon,
-  Logout02Icon,
+  Logout02Icon, Menu11Icon,
   UserIcon,
   UserMultipleIcon
 } from '@hugeicons/core-free-icons';
@@ -28,6 +28,8 @@ export class AdminHome {
   protected readonly DateTimeIcon = DateTimeIcon;
   protected readonly Leaf01Icon = Leaf01Icon;
 
+  menuOpen: boolean = false;
+
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -44,4 +46,6 @@ export class AdminHome {
     });
   }
 
+  protected readonly Menu11Icon = Menu11Icon;
+  protected readonly Cancel01Icon = Cancel01Icon;
 }

@@ -3,8 +3,6 @@
   display: flex;
   gap: 8pt;
   width: 100%;
-  flex: 1 1 calc(50% - 4pt);
-  min-width: min(250px, 100%);
   align-items: self-start;
   background-color: var(--fill-dark);
 
@@ -63,12 +61,3 @@ hugeicons-icon {
   display: flex;
   flex-direction: column;
 }
-
-@media (min-width: 800px) {
-  :host {
-    max-width: calc(50% - 4pt);
-  }
-
-}
-
-

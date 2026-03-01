@@ -114,3 +114,15 @@ button {
   color: var(--text-weak);
   line-height: 1.4;
 }
+
+
+@media (max-width: 768px) {
+  .box {
+    border: none;
+    background: none;
+  }
+
+  .back-btn {
+    top: unset;
+  }
+}

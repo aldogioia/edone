@@ -1,7 +1,6 @@
 export class Environment {
   private static instance: Environment | null = null;
-  private _apiUrl = 'http://localhost:8080/api/v1/';
-  private _lastUpdate: string = '26 Febbraio 2026';
+  private _apiUrl = 'http://192.168.1.10:8080/api/v1/';
 
   private constructor() {}
 
@@ -14,9 +13,5 @@ export class Environment {
 
   get apiUrl(): string {
     return this._apiUrl;
-  }
-
-  get lastUpdate(): string {
-    return this._lastUpdate;
   }
 }

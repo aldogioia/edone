@@ -15,10 +15,24 @@ nav {
   width: 250px;
   min-width: 250px;
   background: var(--fill-dark);
+  backdrop-filter: blur(32pt);
   border-right: 1px solid var(--stroke-weak);
   overflow-y: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
+}
+
+.nav-header {
+  display: none;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-header > hugeicons-icon {
+  stroke: var(--text-strong);
+  cursor: pointer;
+  display: none;
 }
 
 nav::-webkit-scrollbar {
@@ -95,14 +109,23 @@ li.danger:hover{
 }
 
 .page {
+  position: relative;
   display: flex;
   gap: 0;
   width: 100%;
+  height: 100%;
   max-width: calc(100vw - 250px);
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.page::-webkit-scrollbar {
+  display: none;
 }
 
 
-@media (max-width: 700px) {
+@media (max-width: 982px) {
   nav {
     width: fit-content;
     min-width: fit-content;
@@ -128,5 +151,85 @@ li.danger:hover{
 
   .page {
     max-width: calc(100vw - 72px);
+  }
+}
+
+@media (max-width: 768px) {
+  :host {
+    flex-direction: column;
+    position: relative;
+  }
+
+  nav {
+    width: 100%;
+    height: fit-content;
+  }
+
+  .links > img {
+    display: none;
+  }
+
+  .nav-header {
+    display: flex;
+  }
+
+  .nav-header > .logo-large {
+    display: initial;
+    width: 100px;
+    padding: 0;
+  }
+
+  .nav-header > hugeicons-icon {
+    display: flex;
+  }
+
+  .links {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  ul:first-of-type {
+    margin-top: 16pt;
+  }
+
+  .links > ul, .links > .separator, .danger {
+    display: none;
+  }
+
+  /* NAV OPEN */
+
+  nav.open {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 99;
+  }
+
+  nav.open .links > ul, nav.open .links > nav.open .separator, nav.open .danger {
+    display: flex;
+  }
+
+  nav.open .links {
+    flex-direction: column;
+    justify-content: initial;
+    width: 100%;
+  }
+
+  nav.open li {
+    justify-content: initial;
+  }
+
+  nav.open p {
+    display: initial;
+  }
+
+  nav.open .danger {
+    width: 100%;
+  }
+
+  .page {
+    max-width: 100%;
   }
 }

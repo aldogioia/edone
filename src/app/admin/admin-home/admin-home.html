@@ -1,7 +1,11 @@
-<nav>
+<nav [class.open]="menuOpen" (click)="menuOpen = !menuOpen">
   <div class="links">
     <img class="logo-large" src="logo.png" alt="logo">
     <img class="logo-small" src="img.png" alt="logo">
+    <div class="nav-header">
+      <img class="logo-large" src="logo.png" alt="logo">
+      <hugeicons-icon [icon]="menuOpen ? Cancel01Icon : Menu11Icon"></hugeicons-icon>
+    </div>
     <ul>
       <p class="text-small">Appuntamenti</p>
       <li routerLinkActive="active" title="Calendario" routerLink="bookings">
