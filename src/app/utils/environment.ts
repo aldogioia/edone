@@ -1,6 +1,6 @@
 export class Environment {
   private static instance: Environment | null = null;
-  private _apiUrl = 'http://192.168.1.10:8080/api/v1/';
+  private _apiUrl = 'https://api.xn--centroesteticoedon-8vb.com/api/v1/';
 
   private constructor() {}
 
