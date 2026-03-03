@@ -11,6 +11,7 @@ import {
 } from '../../../model/customer-dto';
 import {Add01Icon, Cancel01Icon, UserIcon} from '@hugeicons/core-free-icons';
 import {disabled} from '@angular/forms/signals';
+import {pastDateValidator} from '../../../validators/date-validators';
 
 @Component({
   selector: 'app-customers-page',
@@ -59,6 +60,7 @@ export class CustomersPage implements OnInit {
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       surname: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       phoneNumber: ['', [Validators.required, Validators.pattern('^\\+?[0-9]{10,15}$')]],
+      birthDate: [null, [Validators.required, pastDateValidator()]]
     });
   }
 
@@ -157,7 +159,8 @@ export class CustomersPage implements OnInit {
       id: customer.id,
       name: customer.name,
       surname: customer.surname,
-      phoneNumber: customer.phoneNumber
+      phoneNumber: customer.phoneNumber,
+      birthDate: customer.birthDate
     });
     this.isFormOpen = true;
   }
@@ -177,7 +180,8 @@ export class CustomersPage implements OnInit {
         id: formValue.id,
         name: formValue.name,
         surname: formValue.surname,
-        phoneNumber: formValue.phoneNumber
+        phoneNumber: formValue.phoneNumber,
+        birthDate: formValue.birthDate
       };
 
       this.customersService.updateCustomer(updateDto).subscribe({
@@ -185,6 +189,7 @@ export class CustomersPage implements OnInit {
           this.refreshListAfterChange();
           this.isSaving = false;
           this.closeForm();
+          this.cdr.detectChanges()
         },
         error: (err) => {
           this.isSaving = false;
@@ -196,7 +201,8 @@ export class CustomersPage implements OnInit {
       const createDto: CreateCustomerWithoutPasswordDto = {
         name: formValue.name,
         surname: formValue.surname,
-        phoneNumber: formValue.phoneNumber
+        phoneNumber: formValue.phoneNumber,
+        birthDate: formValue.birthDate
       };
 
       this.customersService.createCustomer(createDto).subscribe({
@@ -204,6 +210,7 @@ export class CustomersPage implements OnInit {
           this.customers = [newCustomer, ...this.customers];
           this.isSaving = false;
           this.closeForm();
+          this.cdr.detectChanges()
         },
         error: (err) => {
           this.isSaving = false;

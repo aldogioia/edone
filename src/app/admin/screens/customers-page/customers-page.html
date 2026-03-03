@@ -91,6 +91,22 @@
         </div>
       }
     </div>
+
+    <div class="form-group">
+      <label for="birth-date">Data di nascita</label>
+      <input
+        formControlName="birthDate"
+        id="birth-date"
+        type="date"
+        [class.invalid]="getFormControl('birthDate')?.invalid && (getFormControl('birthDate')?.dirty || getFormControl('birthDate')?.touched)">
+
+      @if (getFormControl('birthDate')?.invalid && (getFormControl('birthDate')?.dirty || getFormControl('birthDate')?.touched)) {
+        <div class="error-message">
+          @if (getFormControl('birthDate')?.errors?.['required']) { <small>la data di nascita è obbligatoria.</small> }
+          @if (getFormControl('birthDate')?.errors?.['notInPast']) { <small>la data di nascita deve essere precedente alla data odierna.</small> }
+        </div>
+      }
+    </div>
   </div>
 
   <div class="form-controls">

@@ -3,12 +3,14 @@ export class CustomerDto {
   name: string;
   surname: string;
   phoneNumber: string;
+  birthDate: Date;
 
   constructor(data: any) {
     this.id = data.id;
     this.name = data.name;
     this.surname = data.surname;
     this.phoneNumber = data.phoneNumber;
+    this.birthDate = data.birthDate
   }
 }
 
@@ -16,6 +18,7 @@ export interface CreateCustomerWithoutPasswordDto {
   name: string;
   surname: string;
   phoneNumber: string;
+  birthDate: Date;
 }
 
 export interface UpdateCustomerDto {
@@ -23,6 +26,7 @@ export interface UpdateCustomerDto {
   name?: string;
   surname?: string;
   phoneNumber?: string;
+  birthDate?: Date;
 }
 
 export interface Page<T> {
