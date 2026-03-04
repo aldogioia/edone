@@ -41,7 +41,7 @@ export class BookingPage implements OnInit, OnDestroy {
   services: ServiceDto[] = [];
   customers: CustomerDto[] = [];
 
-  selectedOperator: OperatorDto | null = null;
+  selectedOperators: OperatorDto[] = [];
   filteredOperatorsForForm: OperatorDto[] = [];
   availableTimes: string[] = [];
   isLoadingTimes = false;
@@ -114,7 +114,8 @@ export class BookingPage implements OnInit, OnDestroy {
   private initForm() {
     this.bookingForm = this.formBuilder.group({
       service: ['', [Validators.required]],
-      operator: [{ value: '', disabled: true }, [Validators.required]],
+      operator1: [{ value: '', disabled: true }, [Validators.required]],
+      operator2: [{ value: '', disabled: true }],
       date: ['', [Validators.required]],
       time: [{ value: '', disabled: true }, [Validators.required]],
       duration: [30, [Validators.required, Validators.min(1)]],
@@ -123,6 +124,13 @@ export class BookingPage implements OnInit, OnDestroy {
   }
 
   getFormControl(name: string) { return this.bookingForm.get(name); }
+
+  get isMultiOperatorService(): boolean {
+    const serviceId = this.bookingForm.get('service')?.value;
+    if (!serviceId) return false;
+    const service = this.services.find(s => s.id === serviceId);
+    return service?.multiOperator || false;
+  }
 
   loadAllData() {
     this.isLoadingData = true;
@@ -172,20 +180,31 @@ export class BookingPage implements OnInit, OnDestroy {
   }
 
   selectOperator(operator: OperatorDto | null) {
-    this.selectedOperator = operator;
+    if (operator === null) {
+      this.selectedOperators = [];
+    } else {
+      const index = this.selectedOperators.findIndex(o => o.id === operator.id);
+
+      if (index > -1) {
+        this.selectedOperators.splice(index, 1);
+      } else {
+        this.selectedOperators.push(operator);
+      }
+    }
+
     if (this.calendarComponent) {
       this.calendarComponent.getApi().refetchEvents();
     }
   }
 
-  isOperatorSelected(operator: OperatorDto | null) {
-    if (operator === null) return this.selectedOperator === null;
-    return this.selectedOperator?.id === operator.id;
+  isOperatorSelected(operator: OperatorDto | null): boolean {
+    if (operator === null) return this.selectedOperators.length === 0;
+    return this.selectedOperators.some(o => o.id === operator.id);
   }
 
   recommendedDuration(): number {
     const serviceId = this.getFormControl('service')?.value;
-    const operatorId = this.getFormControl('operator')?.value;
+    const operatorId = this.getFormControl('operator1')?.value;
     if (!serviceId || !operatorId) return 30;
 
     const operator = this.operators.find(o => o.id === operatorId);
@@ -197,7 +216,8 @@ export class BookingPage implements OnInit, OnDestroy {
 
   private setupFormListeners() {
     const serviceCtrl = this.bookingForm.get('service')!;
-    const operatorCtrl = this.bookingForm.get('operator')!;
+    const operator1Ctrl = this.bookingForm.get('operator1')!;
+    const operator2Ctrl = this.bookingForm.get('operator2')!;
     const dateCtrl = this.bookingForm.get('date')!;
     const timeCtrl = this.bookingForm.get('time')!;
     const durationCtrl = this.bookingForm.get('duration')!;
@@ -205,24 +225,37 @@ export class BookingPage implements OnInit, OnDestroy {
     serviceCtrl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(serviceId => {
       if (this.isViewMode) return;
 
-      operatorCtrl.setValue('');
-      operatorCtrl.markAsUntouched();
-
+      operator1Ctrl.setValue('');
+      operator2Ctrl.setValue('');
       timeCtrl.setValue('');
+
+      operator1Ctrl.markAsUntouched();
+      operator2Ctrl.markAsUntouched();
       timeCtrl.markAsUntouched();
 
       if (serviceId) {
+        const selectedService = this.services.find(s => s.id === serviceId);
+
+        if (selectedService?.multiOperator) {
+          operator2Ctrl.setValidators([Validators.required]);
+        } else {
+          operator2Ctrl.clearValidators();
+        }
+        operator2Ctrl.updateValueAndValidity();
+
         this.filteredOperatorsForForm = this.operators.filter(op =>
           op.operatorServices?.some((os: any) => os.serviceId === serviceId)
         );
-        operatorCtrl.enable();
+        operator1Ctrl.enable();
+        operator2Ctrl.enable();
       } else {
         this.filteredOperatorsForForm = [];
-        operatorCtrl.disable();
+        operator1Ctrl.disable();
+        operator2Ctrl.disable();
       }
     });
 
-    operatorCtrl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(operatorId => {
+    operator1Ctrl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(operatorId => {
       if (this.isViewMode) return;
       if (operatorId && serviceCtrl.value) {
         durationCtrl.setValue(this.recommendedDuration());
@@ -231,27 +264,28 @@ export class BookingPage implements OnInit, OnDestroy {
 
     combineLatest([
       serviceCtrl.valueChanges.pipe(startWith(serviceCtrl.value)),
-      operatorCtrl.valueChanges.pipe(startWith(operatorCtrl.value)),
+      operator1Ctrl.valueChanges.pipe(startWith(operator1Ctrl.value)),
+      operator2Ctrl.valueChanges.pipe(startWith(operator2Ctrl.value)),
       dateCtrl.valueChanges.pipe(startWith(dateCtrl.value)),
       durationCtrl.valueChanges.pipe(startWith(durationCtrl.value))
     ]).pipe(
       takeUntil(this.destroy$),
       debounceTime(300)
-    ).subscribe(([serviceId, operatorId, date, duration]) => {
+    ).subscribe(([serviceId, op1, op2, date, duration]) => {
       if (this.isViewMode) return;
 
-      if (serviceId && operatorId && date && duration) {
+      if (serviceId && op1 && date && duration) {
         this.isLoadingTimes = true;
         timeCtrl.disable();
 
-        this.operatorService.getAvailableTimes(operatorId, date, serviceId, duration).subscribe({
+        const selectedOps = op2 ? [op1, op2] : [op1];
+
+        this.operatorService.getAvailableTimes(selectedOps, date, serviceId, duration).subscribe({
           next: (times) => {
             this.availableTimes = times;
             this.isLoadingTimes = false;
-
             timeCtrl.setValue('');
             timeCtrl.markAsUntouched();
-
             if (times.length > 0) timeCtrl.enable();
             this.cdr.detectChanges();
           },
@@ -279,33 +313,34 @@ export class BookingPage implements OnInit, OnDestroy {
     };
 
     const startStr = formatDate(fetchInfo.start);
-
     const endD = new Date(fetchInfo.end);
     endD.setDate(endD.getDate() - 1);
     const endStr = formatDate(endD);
 
     this.bookingService.getBookingsByRange(startStr, endStr).subscribe({
       next: (allBookings) => {
-
-        if (this.selectedOperator !== null) {
-          allBookings = allBookings.filter(b => b.operator?.id === this.selectedOperator!.id);
+        if (this.selectedOperators.length > 0) {
+          allBookings = allBookings.filter(b =>
+            b.operators?.some(bookingOp =>
+              this.selectedOperators.some(selOp => selOp.id === bookingOp.id)
+            )
+          );
         }
 
         const calendarEvents = allBookings.map(b => {
+          const opNames = b.operators?.map(op => op.name).join(', ');
+
           return {
             id: b.id,
-            title: `${b.customer?.name} - ${b.service?.name}` + (!this.selectedOperator ? ` (${b.operator?.name})` : ''),
+            title: `${b.customer?.name} - ${b.service?.name}` + (this.selectedOperators.length !== 1 ? ` (${opNames})` : ''),
             start: `${b.date}T${b.time}`,
             end: `${b.date}T${b.end}`,
             extendedProps: { booking: b }
           };
         });
-
         successCallback(calendarEvents);
       },
-      error: () => {
-        successCallback([]);
-      }
+      error: () => successCallback([])
     });
   }
 
@@ -329,7 +364,8 @@ export class BookingPage implements OnInit, OnDestroy {
 
     this.bookingForm.patchValue({
       service: booking.service?.id,
-      operator: booking.operator?.id,
+      operator1: booking.operators && booking.operators.length > 0 ? booking.operators[0].id : '',
+      operator2: booking.operators && booking.operators.length > 1 ? booking.operators[1].id : '',
       date: booking.date,
       time: booking.time.substring(0, 5),
       duration: durationMins,
@@ -350,13 +386,15 @@ export class BookingPage implements OnInit, OnDestroy {
     this.bookingForm.reset({
       customer: null,
       service: '',
-      operator: '',
+      operator1: '',
+      operator2: '',
       date: '',
       time: '',
       duration: 30
     });
 
-    this.bookingForm.get('operator')?.disable();
+    this.bookingForm.get('operator1')?.disable();
+    this.bookingForm.get('operator2')?.disable();
     this.bookingForm.get('time')?.disable();
   }
 
@@ -366,6 +404,7 @@ export class BookingPage implements OnInit, OnDestroy {
       customer: '',
       service: '',
       operator: '',
+      operator2: '',
       date: '',
       time: '',
       duration: 30
@@ -397,19 +436,22 @@ export class BookingPage implements OnInit, OnDestroy {
         },
         error: (err) => {
           this.isSaving = false;
-          alert(err.error?.message || "Errore: impossibile aggiornare la durata (potrebbe esserci un conflitto).");
           console.error(err);
         }
       });
 
     } else {
+      const opsToSave = [];
+      if (val.operator1) opsToSave.push(val.operator1);
+      if (val.operator2) opsToSave.push(val.operator2);
+
       const createDto: CreateBookingDto = {
         date: val.date,
         time: val.time,
         duration: val.duration,
         service: val.service,
         customer: val.customer,
-        operator: val.operator
+        operators: opsToSave
       };
 
       this.bookingService.createBooking(createDto).subscribe({
@@ -420,7 +462,6 @@ export class BookingPage implements OnInit, OnDestroy {
         },
         error: (err) => {
           this.isSaving = false;
-          alert(err.error?.message || "Errore durante la creazione dell'appuntamento.");
           console.error(err);
         }
       });

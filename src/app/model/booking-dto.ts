@@ -8,7 +8,7 @@ export class BookingDto {
   time: string;
   end: string;
   service: ServiceDto;
-  operator: SummaryOperatorDto;
+  operators: SummaryOperatorDto[];
   room: string;
   customer: SummaryCustomerDto;
 
@@ -18,7 +18,7 @@ export class BookingDto {
     this.time = data.time;
     this.end = data.end;
     this.service = data.service;
-    this.operator = data.operator;
+    this.operators = data.operators;
     this.room = data.room;
     this.customer = data.customer;
   }
@@ -29,7 +29,7 @@ export interface CreateBookingDto {
   time: string;
   duration: number;
   service: string;
-  operator: string;
+  operators: string[];
   customer: string;
 }
 

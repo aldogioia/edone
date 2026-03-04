@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import {Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject, combineLatest, takeUntil } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -21,6 +21,8 @@ import {CreateOperatorServiceDto, UpdateOperatorServiceDto} from '../../../model
   ],
 })
 export class OperatorsPage implements OnInit, OnDestroy {
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+
   operatorForm!: FormGroup;
   searchControl = new FormControl('');
 
@@ -217,6 +219,10 @@ export class OperatorsPage implements OnInit, OnDestroy {
     this.isFormOpen = false;
     this.operatorForm.reset();
     this.selectedImageFile = undefined;
+
+    if (this.fileInput) {
+      this.fileInput.nativeElement.value = '';
+    }
   }
 
   getFormControl(controlName: string) {

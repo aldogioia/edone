@@ -44,6 +44,11 @@
     <input type="hidden" formControlName="id">
 
     <div class="form-group">
+      <label for="imageFile">Immagine Profilo</label>
+      <input type="file" id="imageFile" (change)="onFileSelected($event)" #fileInput accept="image/*">
+    </div>
+
+    <div class="form-group">
       <label for="name">Nome</label>
       <input
         formControlName="name"
@@ -92,11 +97,6 @@
           @if (getFormControl('phoneNumber')?.errors?.['pattern']) { <small>Inserisci un numero di 10 cifre valido (no lettere).</small> }
         </div>
       }
-    </div>
-
-    <div class="form-group">
-      <label for="imageFile">Immagine Profilo</label>
-      <input type="file" id="imageFile" (change)="onFileSelected($event)" accept="image/*">
     </div>
 
     <div class="form-group">

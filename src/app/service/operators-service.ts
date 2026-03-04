@@ -50,9 +50,9 @@ export class OperatorsService {
     return this.http.get<SummaryOperatorDto[]>(`${this.baseUrl}/byService`, { params });
   }
 
-  getAvailableTimes(operatorId: string, date: string, serviceId: string, duration?: number): Observable<string[]> {
+  getAvailableTimes(operatorIds: string[], date: string, serviceId: string, duration?: number): Observable<string[]> {
     let params = new HttpParams()
-      .set('operatorId', operatorId)
+      .set('operatorIds', operatorIds.join(','))
       .set('date', date)
       .set('serviceId', serviceId);
 

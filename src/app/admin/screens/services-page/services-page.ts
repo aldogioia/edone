@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import {Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subject, combineLatest, takeUntil } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -22,6 +22,8 @@ import {noOnlySpacesValidator} from '../../../validators/no-only-space-validator
   ],
 })
 export class ServicesPage implements OnInit, OnDestroy {
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+
   protected services: ServiceDto[] = [];
   protected searchedServices: ServiceDto[] = [];
   protected tools: ToolDto[] = [];
@@ -68,6 +70,7 @@ export class ServicesPage implements OnInit, OnDestroy {
       name: ['', [Validators.required, noOnlySpacesValidator(), Validators.minLength(1), Validators.maxLength(50)]],
       price: [1, [Validators.required, Validators.min(1)]],
       persistenceDuration: [null, [Validators.required]],
+      multiOperator: [false, [Validators.required]],
       selectedToolIds: [[]]
     });
   }
@@ -174,6 +177,7 @@ export class ServicesPage implements OnInit, OnDestroy {
       id: service.id,
       name: service.name,
       price: service.price,
+      multiOperator: service.multiOperator,
       persistenceDuration: service.persistenceDuration,
       selectedToolIds: toolIds
     });
@@ -183,6 +187,10 @@ export class ServicesPage implements OnInit, OnDestroy {
     this.isFormOpen = false;
     this.serviceForm.reset();
     this.selectedImageFile = undefined;
+
+    if (this.fileInput) {
+      this.fileInput.nativeElement.value = '';
+    }
   }
 
   isToolSelected(toolId: string) {
@@ -216,6 +224,7 @@ export class ServicesPage implements OnInit, OnDestroy {
         name: formValue.name,
         price: formValue.price,
         tools: formValue.selectedToolIds,
+        multiOperator: formValue.multiOperator,
         persistenceDuration: formValue.persistenceDuration
       };
 
@@ -236,8 +245,11 @@ export class ServicesPage implements OnInit, OnDestroy {
         name: formValue.name,
         price: formValue.price,
         tools: formValue.selectedToolIds,
+        multiOperator: formValue.multiOperator,
         persistenceDuration: formValue.persistenceDuration
       };
+
+
 
       this.serviceService.createService(createDto, this.selectedImageFile!).subscribe({
         next: () => {

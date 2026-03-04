@@ -87,8 +87,8 @@
     </div>
 
     <div class="form-group">
-      <label for="operator">Operatore</label>
-      <select id="operator" formControlName="operator" [class.color-option]="!getFormControl('operator')?.value" [class.invalid]="getFormControl('operator')?.invalid && getFormControl('operator')?.touched">
+      <label for="operator1">Operatore</label>
+      <select id="operator1" formControlName="operator1" [class.color-option]="!getFormControl('operator1')?.value" [class.invalid]="getFormControl('operator1')?.invalid && getFormControl('operator1')?.touched">
         <option value="" disabled>
           @if (getFormControl('service')?.value) {
             Seleziona un operatore
@@ -104,6 +104,23 @@
         <small class="error-message">Nessun operatore fornisce questo servizio.</small>
       }
     </div>
+
+    @if (isMultiOperatorService) {
+      <div class="form-group">
+        <label for="operator2">Secondo Operatore</label>
+        <select id="operator2" formControlName="operator2" [class.color-option]="!getFormControl('operator2')?.value" [class.invalid]="getFormControl('operator2')?.invalid && getFormControl('operator2')?.touched">
+          <option value="" disabled>Seleziona il secondo operatore</option>
+          @for (op of (isViewMode ? operators : filteredOperatorsForForm); track op.id) {
+            @if (op.id !== getFormControl('operator1')?.value) {
+              <option [value]="op.id">{{ op.name }} {{ op.surname }}</option>
+            }
+          }
+        </select>
+        @if (getFormControl('operator2')?.invalid && getFormControl('operator2')?.touched) {
+          <small class="error-message">Il secondo operatore è obbligatorio per questo servizio.</small>
+        }
+      </div>
+    }
 
     <div class="form-group">
       <label for="date">Data</label>
@@ -131,6 +148,8 @@
             Orario prenotato
           } @else if (availableTimes.length > 0) {
             Seleziona un orario
+          } @else if (getFormControl('date')?.value && getFormControl('operator1')?.value) {
+            Nessun orario disponibile!
           } @else {
             Scegli data e operatore
           }
@@ -139,8 +158,8 @@
           <option [value]="time">{{ time.substring(0, 5) }}</option>
         }
       </select>
-      @if (!isViewMode && availableTimes.length === 0 && getFormControl('date')?.value && getFormControl('operator')?.value && !isLoadingTimes) {
-        <small class="error-message">Nessun orario disponibile per questa data.</small>
+      @if (!isViewMode && availableTimes.length === 0 && getFormControl('date')?.value && getFormControl('operator1')?.value && !isLoadingTimes) {
+        <small class="error-message">Nessun orario disponibile per questa data o operatore.</small>
       }
     </div>
 

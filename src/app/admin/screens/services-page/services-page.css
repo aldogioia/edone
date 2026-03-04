@@ -11,3 +11,12 @@
 .text-small.green {
   color: var(--admin-brand-strong);
 }
+
+.multi-operator {
+  display: flex;
+  align-items: flex-start;
+  gap: 2pt;
+}
+input[type="checkbox"] {
+  margin-top: 2px;
+}
