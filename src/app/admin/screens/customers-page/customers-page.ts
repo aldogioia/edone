@@ -60,7 +60,7 @@ export class CustomersPage implements OnInit {
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       surname: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       phoneNumber: ['', [Validators.required, Validators.pattern('^\\+?[0-9]{10,15}$')]],
-      birthDate: [null, [Validators.required, pastDateValidator()]]
+      birthDate: [null, [pastDateValidator()]]
     });
   }
 
