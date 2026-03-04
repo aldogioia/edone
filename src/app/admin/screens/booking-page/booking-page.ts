@@ -210,6 +210,7 @@ export class BookingPage implements OnInit, OnDestroy {
     const operator = this.operators.find(o => o.id === operatorId);
     if (!operator) return 30;
 
+    // todo non so se è un problema
     const operatorService = operator.operatorServices?.find(os => os.serviceId === serviceId);
     return operatorService?.duration ?? 30;
   }
@@ -330,18 +331,39 @@ export class BookingPage implements OnInit, OnDestroy {
         const calendarEvents = allBookings.map(b => {
           const opNames = b.operators?.map(op => op.name).join(', ');
 
+          const operatorColor = (b.operators && b.operators.length > 0)
+            ? b.operators[0].bookingColor
+            : '#202020';
+
           return {
             id: b.id,
             title: `${b.customer?.name} - ${b.service?.name}` + (this.selectedOperators.length !== 1 ? ` (${opNames})` : ''),
             start: `${b.date}T${b.time}`,
             end: `${b.date}T${b.end}`,
-            extendedProps: { booking: b }
+            extendedProps: {
+              booking: b,
+              opColor: operatorColor
+            },
+
+            backgroundColor: operatorColor,
+            textColor: this.getContrastYIQ(operatorColor),
           };
         });
         successCallback(calendarEvents);
       },
       error: () => successCallback([])
     });
+  }
+
+  private getContrastYIQ(hexcolor: string): string {
+    if (!hexcolor) return '#ffffff';
+    hexcolor = hexcolor.replace("#", "");
+    if (hexcolor.length === 3) hexcolor = hexcolor.split('').map(s => s + s).join('');
+    const r = parseInt(hexcolor.substr(0, 2), 16);
+    const g = parseInt(hexcolor.substr(2, 2), 16);
+    const b = parseInt(hexcolor.substr(4, 2), 16);
+    const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+    return (yiq >= 128) ? '#000000' : '#ffffff';
   }
 
   private calculateDurationMinutes(start: string, end: string): number {

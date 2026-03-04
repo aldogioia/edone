@@ -67,6 +67,7 @@ export class OperatorsPage implements OnInit, OnDestroy {
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       surname: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       phoneNumber: ['', [Validators.required, Validators.pattern('^\\+?[0-9]{10}$')]],
+      bookingColor: ['#202020', [Validators.required]],
       operatorServices: [[]]
     });
   }
@@ -191,7 +192,10 @@ export class OperatorsPage implements OnInit, OnDestroy {
 
   openCreateForm() {
     this.isEditMode = false;
-    this.operatorForm.reset();
+    this.operatorForm.reset({
+      bookingColor: '#202020',
+      operatorServices: []
+    });
     this.selectedImageFile = undefined;
     this.isFormOpen = true;
   }
@@ -210,6 +214,7 @@ export class OperatorsPage implements OnInit, OnDestroy {
       name: operator.name,
       surname: operator.surname,
       phoneNumber: operator.phoneNumber,
+      bookingColor: operator.bookingColor,
       operatorServices: servicesForForm
     });
     this.isFormOpen = true;
@@ -235,6 +240,8 @@ export class OperatorsPage implements OnInit, OnDestroy {
     this.isSaving = true;
     const formValue = this.operatorForm.value;
 
+    console.log(formValue)
+
     if (this.isEditMode) {
       const mappedUpdateServices: UpdateOperatorServiceDto[] = (formValue.operatorServices || []).map((s: any) => ({
         operatorId: formValue.id,
@@ -247,13 +254,15 @@ export class OperatorsPage implements OnInit, OnDestroy {
         name: formValue.name,
         surname: formValue.surname,
         phoneNumber: formValue.phoneNumber,
-        operatorServices: mappedUpdateServices
+        operatorServices: mappedUpdateServices,
+        bookingColor: formValue.bookingColor
       };
 
       this.operatorsService.updateOperator(updateDto, this.selectedImageFile).subscribe({
         next: () => {
           this.closeForm();
           this.isSaving = false;
+          this.cdr.detectChanges()
         },
         error: (err) => {
           console.error(err);
@@ -271,13 +280,15 @@ export class OperatorsPage implements OnInit, OnDestroy {
         name: formValue.name,
         surname: formValue.surname,
         phoneNumber: formValue.phoneNumber,
-        operatorServices: mappedCreateServices
+        operatorServices: mappedCreateServices,
+        bookingColor: formValue.bookingColor
       };
 
       this.operatorsService.createOperator(createDto, this.selectedImageFile).subscribe({
         next: () => {
           this.closeForm();
           this.isSaving = false;
+          this.cdr.detectChanges()
         },
         error: (err) => {
           console.error(err);

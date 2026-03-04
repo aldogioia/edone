@@ -100,6 +100,21 @@
     </div>
 
     <div class="form-group">
+      <label for="booking-color">Colore appuntamenti</label>
+      <input
+        formControlName="bookingColor"
+        id="booking-color"
+        type="color"
+        [class.invalid]="getFormControl('bookingColor')?.invalid && (getFormControl('bookingColor')?.dirty || getFormControl('bookingColor')?.touched)">
+
+      @if (getFormControl('bookingColor')?.invalid && (getFormControl('bookingColor')?.dirty || getFormControl('bookingColor')?.touched)) {
+        <div class="error-message">
+          @if (getFormControl('bookingColor')?.errors?.['required']) { <small>Il colore degli appuntamenti obbligatorio.</small> }
+        </div>
+      }
+    </div>
+
+    <div class="form-group">
       <label>Servizi e Durata</label>
       @if (isLoadingServices) {
         <small>Caricamento servizi...</small>

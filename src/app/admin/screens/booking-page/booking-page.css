@@ -82,7 +82,7 @@
    ========================================= */
 ::ng-deep .fc-timegrid-event,
 ::ng-deep .fc-v-event {
-  background-color: var(--fill-dark) !important;
+  /* background-color: var(--fill-dark) !important; */
   border: 1px solid var(--stroke-strong) !important;
   border-radius: 4pt !important;
   padding: 4pt !important;
@@ -94,12 +94,12 @@
 
 ::ng-deep .fc-timegrid-event:hover {
   border-color: var(--brand-stroke-strong) !important;
-  background-color: var(--brand-fill) !important;
+  opacity: 0.85;
 }
 
 /* Testo dentro l'evento */
 ::ng-deep .fc-event-main {
-  color: var(--text-strong) !important;
+  /* color: var(--text-strong) !important; */
   font-size: 0.75rem;
   font-weight: 500;
   line-height: 1.3;
