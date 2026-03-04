@@ -83,6 +83,7 @@
 ::ng-deep .fc-timegrid-event,
 ::ng-deep .fc-v-event {
   /* background-color: var(--fill-dark) !important; */
+  opacity: 0.65;
   border: 1px solid var(--stroke-strong) !important;
   border-radius: 4pt !important;
   padding: 4pt !important;
@@ -94,7 +95,7 @@
 
 ::ng-deep .fc-timegrid-event:hover {
   border-color: var(--brand-stroke-strong) !important;
-  opacity: 0.85;
+  opacity: 0.75;
 }
 
 /* Testo dentro l'evento */
