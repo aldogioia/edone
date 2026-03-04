@@ -10,8 +10,12 @@
   width: 100%;
 }
 
+.form-groups {
+  gap: 24pt;
+}
+
 .form-group {
-  gap: 2pt;
+  gap: 4pt;
 }
 
 .form-group.row, .form-group.row-check {
@@ -63,6 +67,12 @@ input, select, textarea {
   cursor: pointer;
 }
 
+input[type="file"] {
+  max-height: 30pt;
+  padding: 6pt !important;
+  color: var(--text-weak);
+}
+
 input:disabled, select:disabled, textarea:disabled {
   cursor: not-allowed;
 }
@@ -74,13 +84,15 @@ input[type="password"],
 input[type="number"],
 input[type="date"],
 input[type="time"],
+input[type="file"],
 select,
 textarea {
   width: 100%;
+  min-height: 30pt;
   padding: 4pt 8pt;
   font-size: 0.9375rem;
   color: var(--text-strong);
-  background: var(--admin-background);
+  background: var(--background);
   border: 1px solid var(--stroke-strong);
   border-radius: 8pt;
   transition: all 0.2s ease-in-out;
@@ -212,7 +224,7 @@ button.danger:hover,
   padding: 0 8pt;
   border: 1px solid var(--stroke-strong);
   border-radius: 8pt;
-  background-color: var(--admin-background);
+  background-color: var(--background);
   color: var(--text-strong);
   box-shadow: none;
   transition: .2s ease-in-out;
@@ -263,7 +275,7 @@ button.danger:hover,
 }
 
 ::ng-deep .ng-dropdown-panel {
-  background-color: var(--admin-background);
+  background-color: var(--background);
   border: 1px solid var(--stroke-weak);
   border-radius: 8pt;
   margin-top: 4px;

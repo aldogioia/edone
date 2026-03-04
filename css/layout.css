@@ -1,18 +1,40 @@
 .list-section{
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding: 8pt 0 8pt 8pt;
+  gap: 8pt;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-.header {
+.list-section::-webkit-scrollbar {
+  display: none;
+}
+
+.list-section > .header {
+  position: sticky;
+  top: 0;
   display: flex;
   width: 100%;
   flex-direction: column;
   gap: 8pt;
+  background: var(--background-trasparent);
+  backdrop-filter: blur(8px);
+  z-index: 10;
+  padding: 8pt 0 8pt 8pt;
+}
 
-  min-width: 0;
+.header::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 8pt;
+  width: calc(100% - 16pt);
+  height: 1px;
+  background: var(--stroke-weak);
 }
 
 .search-section {
@@ -36,7 +58,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 8pt;
-  padding: 16pt 8pt 0 0;
+  padding: 0 16pt;
 }
 
 .controls {
@@ -157,7 +179,7 @@
     left: 0;
     height: 100%;
     width: 100%;
-    background: var(--admin-background);
+    background: var(--background);
     min-width: unset;
     z-index: 98;
   }
