@@ -61,3 +61,29 @@ hugeicons-icon {
   display: flex;
   flex-direction: column;
 }
+
+
+
+:host(.warning) {
+  background-color: var(--warning-fill);
+}
+
+:host(.warning) p {
+  color: var(--warning-text);
+}
+
+
+:host(.warning) .text-small {
+  color: var(--warning-text);
+  opacity: 0.8;
+}
+
+:host(.warning) hugeicons-icon {
+  background: #EAB30822;
+  color: var(--warning-strong);
+  stroke: var(--warning-strong);
+}
+
+:host(.warning) > small:not(.danger) {
+  color: var(--warning-strong);
+}

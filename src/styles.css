@@ -36,6 +36,10 @@
 
   --btn-strong: #F1F5F9;
   --btn-weak: #F8FAFC;
+
+  --warning-strong: #EAB308;
+  --warning-fill: #EAB30812;
+  --warning-text: #854D0E;
 }
 
 * {

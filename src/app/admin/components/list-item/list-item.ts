@@ -9,10 +9,14 @@ import {IconSvgObject} from '@hugeicons/angular';
     './list-item.css',
     '../../../../../public/css/typography.css'
   ],
+  host: {
+    '[class.warning]': 'warning()'
+  }
 })
 export class ListItem {
   title = input.required<string>();
   icon = input<IconSvgObject>();
   imageUrl = input<string>();
   action= input<string>();
+  warning = input<boolean>(false);
 }
