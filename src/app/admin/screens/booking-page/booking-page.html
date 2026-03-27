@@ -49,7 +49,6 @@
         id="customer"
         [items]="(customers$ | async) || []"
         bindLabel="name"
-        bindValue="id"
         formControlName="customer"
         placeholder="Seleziona cliente..."
         [typeahead]="customerInput$"

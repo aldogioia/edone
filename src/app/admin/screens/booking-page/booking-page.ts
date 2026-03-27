@@ -401,7 +401,7 @@ export class BookingPage implements OnInit, OnDestroy {
       date: booking.date,
       time: booking.time.substring(0, 5),
       duration: durationMins,
-      customer: booking.customer?.id
+      customer: booking.customer
     });
 
     this.bookingForm.disable();
@@ -482,7 +482,7 @@ export class BookingPage implements OnInit, OnDestroy {
         time: val.time,
         duration: val.duration,
         service: val.service,
-        customer: val.customer,
+        customer: typeof val.customer === 'object' && val.customer !== null ? val.customer.id : val.customer,
         operators: opsToSave
       };
 
