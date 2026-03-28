@@ -27,6 +27,7 @@ import { ScheduleExceptionPage } from './admin/screens/schedule-exception-page/s
 import { BookingPage } from './admin/screens/booking-page/booking-page';
 import {FullCalendarModule} from '@fullcalendar/angular';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { CustomerBookings } from './admin/screens/customer-bookings/customer-bookings';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     ServicesPage,
     ScheduleExceptionPage,
     BookingPage,
+    CustomerBookings,
   ],
   imports: [
     BrowserModule,

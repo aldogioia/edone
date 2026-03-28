@@ -1,0 +1,92 @@
+:host {
+  width: 100%;
+  display: flex;
+}
+
+.list-section > button {
+  width: fit-content;
+}
+
+.list-section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 8pt;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 16pt;
+}
+
+.list-section::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- HEADER --- */
+.list-section > .header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 8pt;
+  background: var(--background-trasparent);
+  backdrop-filter: blur(8px);
+  z-index: 10;
+  padding: 8pt 0 8pt 8pt;
+}
+
+.header::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 8pt;
+  width: calc(100% - 16pt);
+  height: 1px;
+  background: var(--stroke-weak);
+}
+
+.search-section {
+  display: flex;
+  gap: 8pt;
+  padding: 0 8pt 0 0;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search-section ng-select {
+  width: 100%;
+  max-width: 450px;
+}
+
+.search-section button {
+  background: var(--fill-dark);
+  backdrop-filter: blur(10px);
+  stroke: var(--admin-brand-strong);
+  border: 1px solid var(--stroke-weak);
+  padding: 4pt;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.search-section button:hover {
+  background: var(--brand-fill);
+  border: 1px solid var(--brand-stroke-weak);
+}
+
+.list {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8pt;
+  padding: 0 16pt;
+}
+
+@media (max-width: 768px) {
+  .list {
+    grid-template-columns: 1fr;
+  }
+}

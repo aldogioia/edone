@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import {
   BrushIcon, Calendar01Icon,
-  CalendarBlock01Icon, Cancel01Icon, DateTimeIcon,
+  CalendarBlock01Icon, CalendarUserIcon, Cancel01Icon, DateTimeIcon,
   Door01Icon, Leaf01Icon,
   Logout02Icon, Menu11Icon,
   UserIcon,
@@ -48,4 +48,5 @@ export class AdminHome {
 
   protected readonly Menu11Icon = Menu11Icon;
   protected readonly Cancel01Icon = Cancel01Icon;
+  protected readonly CalendarUserIcon = CalendarUserIcon;
 }

@@ -1,0 +1,68 @@
+<section class="list-section">
+  <div class="header">
+    <h2>Appuntamenti Cliente</h2>
+    <div class="search-section">
+
+      <ng-select
+        id="customer"
+        [items]="(customers$ | async) || []"
+        [formControl]="customerControl"
+        bindLabel="name"
+        placeholder="Seleziona cliente..."
+        [typeahead]="customerInput$"
+        [loading]="isCustomersLoading"
+        notFoundText="Nessun cliente trovato"
+        [clearable]="false"
+        appendTo="body">
+
+        <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+          <div>
+            <span>{{ item.name }} {{ item.surname }}</span>
+            <span style="color: var(--text-weak); font-size: 0.8em; margin-left: 8px;">{{ item.phoneNumber }}</span>
+          </div>
+        </ng-template>
+
+        <ng-template ng-label-tmp let-item="item">
+          {{ item.name }} {{ item.surname }} ({{ item.phoneNumber }})
+        </ng-template>
+
+      </ng-select>
+
+      <button (click)="forceRefreshList()" title="Aggiorna lista" [disabled]="!customerControl.value">
+        <hugeicons-icon [icon]="Refresh01Icon"></hugeicons-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="list">
+    @if (!customerControl.value) {
+      <p class="empty-state">Seleziona un cliente per visualizzare i suoi appuntamenti.</p>
+    } @else {
+
+      @for (item of bookings; track item.id) {
+        <app-list-item
+          [title]="item.service!.name"
+          [imageUrl]="item.service!.imgUrl"
+          [action]="'Elimina'"
+          (click)="deleteBooking(item.id)">
+          <p class="text-small">
+            Data: <strong>{{ item.date }}</strong> alle <strong>{{ item.time.substring(0, 5) }}</strong>
+          </p>
+          <p class="text-small" style="color: var(--text-weak)">
+            Operatori: {{ getOperatorNames(item) }}
+          </p>
+        </app-list-item>
+      } @empty {
+        @if (!isLoading) {
+          <p class="empty-state">Nessun appuntamento trovato per questo cliente.</p>
+        }
+      }
+
+    }
+
+    @if (isLoading) {
+      <div class="loading">Caricamento in corso...</div>
+    }
+  </div>
+
+</section>

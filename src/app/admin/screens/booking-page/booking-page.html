@@ -45,17 +45,18 @@
     <div class="form-group">
       <label for="customer">Cliente</label>
 
-      <ng-select
-        id="customer"
-        [items]="(customers$ | async) || []"
-        bindLabel="name"
-        formControlName="customer"
-        placeholder="Seleziona cliente..."
-        [typeahead]="customerInput$"
-        [loading]="isCustomersLoading"
-        notFoundText="Nessun cliente trovato"
-        [clearable]="false"  [class.invalid]="getFormControl('customer')?.invalid && getFormControl('customer')?.touched"
-        [readonly]="isViewMode">
+        <ng-select
+          id="customer"
+          [items]="(customers$ | async) || []"
+          bindLabel="name"
+          [compareWith]="compareCustomers"
+          formControlName="customer"
+          placeholder="Seleziona cliente..."
+          [typeahead]="customerInput$"
+          [loading]="isCustomersLoading"
+          notFoundText="Nessun cliente trovato"
+          [clearable]="false" [class.invalid]="getFormControl('customer')?.invalid && getFormControl('customer')?.touched"
+          [readonly]="isViewMode">
 
         <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
           <div>

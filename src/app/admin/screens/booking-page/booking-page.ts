@@ -62,7 +62,7 @@ export class BookingPage implements OnInit, OnDestroy {
 
   calendarOptions: CalendarOptions = {
     plugins: [timeGridPlugin, interactionPlugin],
-    initialView: 'timeGridDay',
+    initialView: 'timeGridWeek',
     headerToolbar: {
       left: 'prev,next title',
       right: 'timeGridDay,timeGridWeek'
@@ -88,7 +88,6 @@ export class BookingPage implements OnInit, OnDestroy {
     events: this.fetchEvents.bind(this),
     eventClick: this.handleEventClick.bind(this),
 
-    // --- AGGIUNGI QUESTO BLOCCO ---
     eventContent: (arg) => {
       const timeText = arg.timeText;
       const titleText = arg.event.title;
@@ -141,6 +140,10 @@ export class BookingPage implements OnInit, OnDestroy {
     });
   }
 
+  compareCustomers(c1: CustomerDto | null, c2: CustomerDto | null): boolean {
+    return c1 && c2 ? c1.id === c2.id : c1 === c2;
+  }
+
   getFormControl(name: string) { return this.bookingForm.get(name); }
 
   get isMultiOperatorService(): boolean {
@@ -168,7 +171,7 @@ export class BookingPage implements OnInit, OnDestroy {
 
   private setupCustomerSearch() {
     this.customers$ = combineLatest([
-      this.customerService.getCustomersPage(0, 50).pipe(map(page => page.content)),
+      this.customerService.getCustomersPage(0, 100).pipe(map(page => page.content)),
       this.customerInput$.pipe(
         startWith(''),
         debounceTime(300),
@@ -181,7 +184,7 @@ export class BookingPage implements OnInit, OnDestroy {
               tap(() => this.isCustomersLoading = false)
             );
           } else {
-            return this.customerService.getCustomersPage(0, 50).pipe(
+            return this.customerService.getCustomersPage(0, 100).pipe(
               map(page => page.content),
               catchError(() => of([])),
               tap(() => this.isCustomersLoading = false)

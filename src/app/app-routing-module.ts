@@ -12,9 +12,10 @@ import {StandardSchedulePage} from './admin/screens/standard-schedule-page/stand
 import {ServicesPage} from './admin/screens/services-page/services-page';
 import {ScheduleExceptionPage} from './admin/screens/schedule-exception-page/schedule-exception-page';
 import {BookingPage} from './admin/screens/booking-page/booking-page';
+import {CustomerBookings} from './admin/screens/customer-bookings/customer-bookings';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' }, // TODO: Change to home after development
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: Home, title: 'Home Page'},
   { path: 'login', component: Login, title: 'Login' },
   {
@@ -31,7 +32,8 @@ const routes: Routes = [
       { path: 'rooms', component: RoomsPage, title: 'Rooms Page' },
       { path: 'schedules', component: StandardSchedulePage, title: 'Standard Schedule Page' },
       { path: 'exceptions', component: ScheduleExceptionPage, title: 'Schedule Exception Page' },
-      { path: 'bookings', component: BookingPage, title: 'Booking Page' }
+      { path: 'bookings', component: BookingPage, title: 'Booking Page' },
+      { path: 'customer-bookings', component: CustomerBookings, title: 'Customer Booking Page' }
     ]
   },
 ];
