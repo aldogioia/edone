@@ -91,6 +91,7 @@ export class BookingPage implements OnInit, OnDestroy {
     eventContent: (arg) => {
       const timeText = arg.timeText;
       const titleText = arg.event.title;
+      const roomName = arg.event.extendedProps['booking']?.room;
       const opColor = arg.event.extendedProps['opColor'];
 
       return {
@@ -98,6 +99,7 @@ export class BookingPage implements OnInit, OnDestroy {
           <div class="fc-event-main-frame">
             ${timeText ? `<div class="fc-event-time" style="color: ${opColor}; font-weight: 700; font-size: 0.9em;">${timeText}</div>` : ''}
             <div class="fc-event-title-container">
+              ${roomName ? `<div class="fc-event-room" style="font-size: 0.8em; color: #666; font-style: italic;">Stanza: ${roomName}</div>` : ''}
               <div class="fc-event-title fc-sticky" style="color: #333333; font-weight: 500;">${titleText}</div>
             </div>
           </div>
