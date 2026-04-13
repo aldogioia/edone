@@ -122,6 +122,20 @@
       </div>
     }
 
+    @if (isViewMode) {
+      <div class="form-group">
+        <label for="room">Stanza assegnata</label>
+        <input
+          id="room"
+          type="text"
+          formControlName="room"
+          readonly
+          class="readonly-field"
+          placeholder="Nessuna stanza">
+        <small class="info-message">La stanza è assegnata automaticamente dal sistema.</small>
+      </div>
+    }
+
     <div class="form-group">
       <label for="date">Data</label>
       <input id="date" type="date" formControlName="date" [class.invalid]="getFormControl('date')?.invalid && getFormControl('date')?.touched">

@@ -138,7 +138,8 @@ export class BookingPage implements OnInit, OnDestroy {
       date: ['', [Validators.required]],
       time: [{ value: '', disabled: true }, [Validators.required]],
       duration: [30, [Validators.required, Validators.min(1)]],
-      customer: ['', [Validators.required]]
+      customer: ['', [Validators.required]],
+      room: [{ value: '', disabled: true }]
     });
   }
 
@@ -406,7 +407,8 @@ export class BookingPage implements OnInit, OnDestroy {
       date: booking.date,
       time: booking.time.substring(0, 5),
       duration: durationMins,
-      customer: booking.customer
+      customer: booking.customer,
+      room: booking.room || 'Non assegnata'
     });
 
     this.bookingForm.disable();
